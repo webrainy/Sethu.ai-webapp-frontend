@@ -1,0 +1,13 @@
+.home-hero-section {
+  background-image: url(./assets/Home\ cover.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.footer-section {
+  background-image: url("./assets/footer.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
