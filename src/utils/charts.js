@@ -1,40 +1,88 @@
-import React from "react";
+export const lineChartData = [
+  {
+    name: "Total Batches",
+    data: [10, 41, 35, 51, 49, 62, 69, 91, 148, 35, 51, 49],
+  },
+  {
+    name: "Total Students",
+    data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 13, 56, 77],
+  },
+];
 
-function charts() {
-  const [state, setState] = React.useState({
-    series: [44, 55, 41, 17, 15],
-    options: {
-      chart: {
-        type: "donut",
-      },
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200,
-            },
-            legend: {
-              position: "bottom",
-            },
-          },
-        },
-      ],
+export const lineChartOptions = {
+  chart: {
+    toolbar: {
+      show: false,
     },
-  });
-
-  return (
-    <div>
-      <div id="chart">
-        <ReactApexChart
-          options={state.options}
-          series={state.series}
-          type="donut"
-        />
-      </div>
-      <div id="html-dist"></div>
-    </div>
-  );
-}
-
-export default charts;
+  },
+  tooltip: {
+    theme: "light",
+  },
+  dataLabels: {
+    enabled: false,
+  },
+  stroke: {
+    curve: "smooth",
+    width: 2,
+  },
+  xaxis: {
+    type: "category",
+    categories: [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ],
+    axisTicks: {
+      show: false,
+    },
+    axisBorder: {
+      show: false,
+    },
+    labels: {
+      style: {
+        colors: "#545353",
+        fontSize: "12px",
+        fontFamily: "Public Sans",
+      },
+    },
+  },
+  yaxis: {
+    labels: {
+      style: {
+        colors: "#545353",
+        fontSize: "12px",
+        fontFamily: "Public Sans",
+      },
+    },
+  },
+  legend: {
+    show: true,
+    fontFamily: "Public Sans",
+  },
+  grid: {
+    strokeDashArray: 4,
+  },
+  fill: {
+    type: "gradient",
+    gradient: {
+      shade: "light",
+      type: "vertical",
+      shadeIntensity: 0.5,
+      inverseColors: true,
+      opacityFrom: 0.5,
+      opacityTo: 0,
+      stops: [],
+    },
+    colors: ["#00a76f", "#ffab00", "#fb6584"],
+  },
+  colors: ["#00a76f", "#ffab00", "#fb6584"],
+};
