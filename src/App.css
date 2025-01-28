@@ -1,5 +1,5 @@
 .home-hero-section {
-  background-image: url(./assets/Home\ cover.jpg);
+  background-image: url("./assets/Home\ cover.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -14,6 +14,27 @@
 
 .home-third-sec {
   background-image: url("./assets/what_we_do_bg.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.blog-section {
+  background-image: url("./assets/blog_bg.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.our-programs-hero-section {
+  background-image: url("./assets/our_programs_cover.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.join-a-movement-section {
+  background-image: url("./assets/join_a_movement_bg.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;

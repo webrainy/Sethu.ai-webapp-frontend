@@ -1,5 +1,5 @@
 import { Button } from "@material-tailwind/react";
-import React from "react";
+import React, { useRef } from "react";
 import Footer from "../../components/common/Footer";
 import SecondSecBg from "../../assets/nurturing_tomorrow.png";
 import BridgingSvg from "../../assets/bridging_the_gap_between.svg";
@@ -8,12 +8,35 @@ import RevitalizingSvg from "../../assets/revitalizing_rural.svg";
 import UpArrowSvg from "../../assets/up_arrow.svg";
 import EmpoweringYouthImg from "../../assets/empowering_youth.jpg";
 import RevitalisingEducationImg from "../../assets/revitalising_education.jpg";
+import EngageOrientSvg from "../../assets/engage_orient.svg";
+import MasterTechnicalSvg from "../../assets/master_technical_skills.svg";
+import DevelopSoftSkillsSvg from "../../assets/develop_soft_skills.svg";
+import InspireValuesSvg from "../../assets/inspire_through_values.svg";
+import PlacementCareerSvg from "../../assets/placement_career_support.svg";
+import BlogThumbnailImg from "../../assets/blog_thumbnail.jpg";
+import DownArrowSvg from "../../assets/down_arrow.svg";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Keyboard, Scrollbar } from "swiper/modules";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/scrollbar";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import UserNavbar from "../../components/navbars/UserNavbar";
 
 function UserHomePage() {
+  const ref = useRef(null);
+
+  const ScrollToNextSection = () => {
+    ref.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <>
+      <UserNavbar />
       <div className="flex flex-col justify-center items-center px-2 lg:px-0 home-hero-section">
-        <div className="max-w-[1180px] w-full h-[60vh] sm:h-screen flex justify-center flex-col text-white gap-1">
+        <div className="max-w-[1180px] w-full h-[60vh] sm:h-screen flex justify-center flex-col text-white gap-1 relative">
           <p className="text-4xl sm:text-7xl font-ddin">Where Skills</p>
           <p className="text-4xl sm:text-7xl font-ddin">Meet Values,</p>
           <p className="text-4xl sm:text-7xl font-semibold font-ddin text-yellow-400">
@@ -32,11 +55,22 @@ function UserHomePage() {
               Register
             </Button>
           </div>
+          <div className="absolute right-0 bottom-10">
+            <img
+              src={DownArrowSvg}
+              alt="sethu.ai"
+              className="cursor-pointer w-10 sm:w-auto"
+              onClick={ScrollToNextSection}
+            />
+          </div>
         </div>
       </div>
 
       {/* second section */}
-      <div className="flex items-center justify-center px-5 lg:px-0">
+      <div ref={ref}
+        className="flex items-center justify-center px-5 lg:px-0"
+        id="second-section"
+      >
         <div className="max-w-[1180px] w-full flex items-center lg:items-end flex-col lg:flex-row">
           <img src={SecondSecBg} alt="sethu.ai" />
           <div className="pb-10 lg:-ml-10">
@@ -138,13 +172,13 @@ function UserHomePage() {
       {/* fourth section */}
       <div className="px-5 lg:px-0 flex justify-center">
         <div className="max-w-[1180px] w-full h-full py-16">
-          <p className="text-center text-[#E68242] font-ddin text-4xl sm:text-5xl md:text-[62px]/[55px] font-light">
+          <p className="text-center text-[#E68242] font-ddin text-[34px]/[32px] sm:text-5xl md:text-[62px]/[55px] font-light">
             Every Day is a Chance at
             <br />
             <span className="font-semibold">Something Better</span>
           </p>
 
-          <div className="grid lg:grid-cols-2 items-center gap-5 lg:gap-3 mt-8">
+          <div className="grid lg:grid-cols-2 items-center gap-5 lg:gap-3 mt-5 sm:mt-8">
             <div className="flex flex-col gap-2">
               <img src={EmpoweringYouthImg} alt="sethu.ai" />
               <p className="text-2xl/6 text-[#DD4633] font-semibold font-myriad">
@@ -178,6 +212,156 @@ function UserHomePage() {
         </div>
       </div>
 
+      {/* fifth section */}
+      <div className="px-5 lg:px-0 flex justify-center">
+        <div className="max-w-[1180px] w-full h-full pt-8 pb-24">
+          <p className="text-center text-[#E68242] font-ddin text-[30px]/[32px] sm:text-5xl md:text-[62px]/[55px] font-light">
+            A Comprehensive Journey <br />
+            from <span className="font-semibold">Learning to Leadership</span>
+          </p>
+          <p className="text-center text-[19px]/[22px] mt-4 font-myriad font-light">
+            Our program is thoughtfully designed to nurture youth every step of
+            the way:
+          </p>
+          <div className="flex flex-col md:flex-row justify-center flex-wrap gap-6 mt-8">
+            <div
+              className="md:w-[31%] bg-white py-4 px-3 flex flex-col items-center justify-start gap-3"
+              style={{ boxShadow: "0px 3px 6px #00000029" }}
+            >
+              <img src={EngageOrientSvg} alt="sethu.ai" className="w-[85px]" />
+              <p className="text-[25px] font-myriad font-semibold text-[#DD4633] text-center">
+                Engage & Orient
+              </p>
+              <p className="text-center text-lg/[22px] text-[#2C2C2C] font-myriad font-light">
+                Students are welcomed through an immersive orientation, setting
+                the stage for holistic growth.
+              </p>
+            </div>
+            <div
+              className="md:w-[31%] bg-white py-4 px-3 flex flex-col items-center justify-start gap-3"
+              style={{ boxShadow: "0px 3px 6px #00000029" }}
+            >
+              <img
+                src={MasterTechnicalSvg}
+                alt="sethu.ai"
+                className="w-[85px]"
+              />
+              <p className="text-[25px] font-myriad font-semibold text-[#DD4633] text-center">
+                Master Technical Skills
+              </p>
+              <p className="text-center text-lg/[22px] text-[#2C2C2C] font-myriad font-light">
+                Hands-on learning in Python, SQL, Power BI, and more equips
+                students with in-demand skills.
+              </p>
+            </div>
+            <div
+              className="md:w-[31%] bg-white py-4 px-3 flex flex-col items-center justify-start gap-3"
+              style={{ boxShadow: "0px 3px 6px #00000029" }}
+            >
+              <img
+                src={DevelopSoftSkillsSvg}
+                alt="sethu.ai"
+                className="w-[85px]"
+              />
+              <p className="text-[25px] font-myriad font-semibold text-[#DD4633] text-center">
+                Develop Soft Skills
+              </p>
+              <p className="text-center text-lg/[22px] text-[#2C2C2C] font-myriad font-light">
+                Workshops in communication, leadership, and teamwork ensure
+                personal and professional growth.
+              </p>
+            </div>
+            <div
+              className="md:w-[31%] bg-white py-4 px-3 flex flex-col items-center justify-start gap-3"
+              style={{ boxShadow: "0px 3px 6px #00000029" }}
+            >
+              <img src={InspireValuesSvg} alt="sethu.ai" className="w-[85px]" />
+              <p className="text-[25px] font-myriad font-semibold text-[#DD4633] text-center">
+                Inspire through Values
+              </p>
+              <p className="text-center text-lg/[22px] text-[#2C2C2C] font-myriad font-light">
+                Grounded in Swamy's teachings, our value-based sessions instill
+                purpose, ethics, and social responsibility.
+              </p>
+            </div>
+            <div
+              className="md:w-[31%] bg-white py-4 px-3 flex flex-col items-center justify-start gap-3"
+              style={{ boxShadow: "0px 3px 6px #00000029" }}
+            >
+              <img
+                src={PlacementCareerSvg}
+                alt="sethu.ai"
+                className="w-[85px]"
+              />
+              <p className="text-[25px] font-myriad font-semibold text-[#DD4633] text-center">
+                Placement & Career Support
+              </p>
+              <p className="text-center text-lg/[22px] text-[#2C2C2C] font-myriad font-light">
+                Upon completion, we provide placement assistance, connecting
+                students with our industry partners to launch successful
+                careers.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* sixth section */}
+      <div className="px-5 lg:px-0 flex justify-center blog-section">
+        <div className="max-w-[1180px] w-full h-full py-36">
+          <p className="text-center text-[#E68242] font-ddin text-[30px]/[32px] sm:text-5xl md:text-[62px]/[55px] font-light mb-12">
+            Blog
+          </p>
+          <div>
+            <Swiper
+              slidesPerView={3}
+              centeredSlides={false}
+              slidesPerGroupSkip={1}
+              grabCursor={true}
+              keyboard={{
+                enabled: true,
+              }}
+              breakpoints={{
+                1200: {
+                  slidesPerView: 3,
+                  slidesPerGroup: 2,
+                },
+                769: {
+                  slidesPerView: 2,
+                  slidesPerGroup: 2,
+                },
+                300: {
+                  slidesPerView: 1,
+                  slidesPerGroup: 2,
+                },
+              }}
+              scrollbar={false}
+              modules={[Keyboard, Scrollbar]}
+              className="mySwiper"
+            >
+              {Array.from({ length: 5 }).map((item, i) => (
+                <SwiperSlide key={i}>
+                  <div className="px-2 flex flex-col gap-1">
+                    <img src={BlogThumbnailImg} alt="sethu.ai" />
+                    <div className="flex justify-between items-center text-[#FFE200] font-myriad font-semibold text-xl">
+                      <p>[Event Name]</p>
+                      <p>Date</p>
+                    </div>
+                    <p className="text-white font-myriad font-light">
+                      a sentence about the event, Date
+                    </p>
+                    <Button className="bg-transparent text-left text-lg capitalize font-myriad font-semibold w-fit px-0 py-0 mt-3 rounded-none shadow-none hover:shadow-none">
+                      Read Blog
+                    </Button>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        </div>
+      </div>
+
+      {/* seventh section */}
       <div className="h-[50vh] lg:h-[85vh] relative">
         <video
           src="assets/ready_to_transform_low.mp4"
