@@ -30,8 +30,6 @@ const studentsData = [
   },
 ];
 
-console.log(studentsData);
-
 function AdminDashboard() {
   return (
     <div>

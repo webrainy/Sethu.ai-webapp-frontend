@@ -7,6 +7,7 @@ import { Toaster } from "react-hot-toast";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminLayout from "./components/layouts/AdminLayout";
 import "./styles.scss";
+import CourseRegister from "./pages/common/CourseRegister";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/login" element={<Login />} />
           </Route>
           <Route path="/" element={<Navigate to={"/login"} />} />
+          <Route path="/course_registration" element={<CourseRegister />} />
           {/* <Route path="/" element={<UserHomePage />} /> */}
           <Route element={<AdminLayout />}>
             <Route path="/admin/dashboard" element={<AdminDashboard />} />

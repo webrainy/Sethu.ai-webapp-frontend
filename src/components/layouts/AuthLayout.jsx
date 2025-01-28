@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import LoginImg from "../../assets/orange_bg.jpg"
+import LoginImg from "../../assets/orange_bg.jpg";
 
 function AuthLayout() {
   return (
@@ -16,14 +16,17 @@ function AuthLayout() {
       <div className="w-auto max-w-4xl shadow-2xl flex flex-col items-center justify-center py-8 pb-3 px-3 bg-white">
         <div className="w-72 lg:w-96 mb-8 text-center">
           <p className="font-bold text-2xl sm:text-4xl text-gray-500 uppercase">
-            Sethu{" "}<span className="font-bold text-2xl sm:text-4xl text-black uppercase">ai</span>
+            Sethu{" "}
+            <span className="font-bold text-2xl sm:text-4xl text-black uppercase">
+              ai
+            </span>
           </p>
-         
+
           <p className="tracking-[3px] text-gray-500 text-xs sm:text-base">
             Unlock Your Learning Journey
           </p>
         </div>
-          <div className="w-72 lg:w-96 text-center">
+        <div className="w-72 lg:w-96 text-center">
           {/* <p className="text-[#008080] font-bold text-2xl sm:text-4xl font-montserrat">
             Learn. Grow. Log In.
           </p> */}
@@ -31,7 +34,7 @@ function AuthLayout() {
             Thank you for getting back, please log in to your account by filling
             out this form:
           </p>
-        </div> 
+        </div>
         <Outlet />
       </div>
     </div>
