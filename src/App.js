@@ -17,8 +17,6 @@ function App() {
           <Route element={<AuthLayout />}>
             <Route path="/login" element={<Login />} />
           </Route>
-
-          <Route path="/" element={<Navigate to={"/login"} />} />
           <Route path="/course_registration" element={<CourseRegister />} />
 
           <Route path="/" element={<UserHomePage />} />

@@ -5,6 +5,9 @@ import SecondSecBg from "../../assets/nurturing_tomorrow.png";
 import BridgingSvg from "../../assets/bridging_the_gap_between.svg";
 import FosteringSvg from "../../assets/fostering_character.svg";
 import RevitalizingSvg from "../../assets/revitalizing_rural.svg";
+import UpArrowSvg from "../../assets/up_arrow.svg";
+import EmpoweringYouthImg from "../../assets/empowering_youth.jpg";
+import RevitalisingEducationImg from "../../assets/revitalising_education.jpg";
 
 function UserHomePage() {
   return (
@@ -64,46 +67,111 @@ function UserHomePage() {
           <p className="capitalize text-center text-white text-4xl sm:text-5xl md:text-[62px]/[55px] font-light font-ddin py-12">
             What we <span className="font-semibold">do</span>
           </p>
-          <div className="flex items-center justify-center gap-24 pb-32 relative h-[690px]">
+          <div className="flex items-center justify-center flex-col md:flex-row gap-5 pb-20 md:pb-32 md:h-[690px] relative">
             {/* 1st card */}
-            <div className="flex items-start flex-col justify-end h-full gap-2">
-              <img src={BridgingSvg} alt="sethu.ai" className="w-16" />
-              <p className="text-[#FFE200] text-xl font-semibold font-myriad">
+            <div className="flex items-start flex-col justify-end h-full gap-1 md:gap-2">
+              <img src={BridgingSvg} alt="sethu.ai" className="w-12 md:w-16" />
+              <p className="text-[#FFE200] text-lg md:text-xl font-semibold font-myriad">
                 Bridging the Gap Between
                 <br /> Industry and Opportunity
               </p>
-              <p className="text-base font-myriad font-light text-white">
+              <p className="text-sm md:text-base font-myriad font-light text-white">
                 We provide essential skill-based training that
-                <br /> directly addresses unemployment, preparing
-                <br /> youth for the demands of the modern workforce.
+                <br className="hidden lg:block" /> directly addresses
+                unemployment, preparing
+                <br className="hidden lg:block" /> youth for the demands of the
+                modern workforce.
               </p>
             </div>
 
             {/* 2nd card */}
-            <div className="flex items-start justify-center flex-col h-full gap-2">
-              <img src={FosteringSvg} alt="sethu.ai" className="w-16" />
-              <p className="text-[#FFE200] text-xl font-semibold font-myriad">
+            <div className="flex items-start justify-center flex-col h-full gap-1 md:gap-2">
+              <img src={FosteringSvg} alt="sethu.ai" className="w-12 md:w-16" />
+              <p className="text-[#FFE200] text-lg md:text-xl font-semibold font-myriad">
                 Fostering Character
-                <br /> through Compassion
+                <br className="hidden lg:block" /> through Compassion
               </p>
-              <p className="text-base font-myriad font-light text-white">
+              <p className="text-sm md:text-base font-myriad font-light text-white">
                 Our value-based education nurtures not just
-                <br /> careers, but characters—grounding students in
-                <br /> ethics, empathy, and the spirit of service.
+                <br className="hidden lg:block" /> careers, but
+                characters—grounding students in
+                <br className="hidden lg:block" /> ethics, empathy, and the
+                spirit of service.
               </p>
             </div>
 
             {/* 3rd card */}
-            <div className="flex items-start justify-start flex-col h-full gap-2">
-              <img src={RevitalizingSvg} alt="sethu.ai" className="w-16" />
-              <p className="text-[#FFE200] text-xl font-semibold font-myriad">
+            <div className="flex items-start justify-start flex-col h-full gap-1 md:gap-2">
+              <img
+                src={RevitalizingSvg}
+                alt="sethu.ai"
+                className="w-12 md:w-16"
+              />
+              <p className="text-[#FFE200] text-lg md:text-xl font-semibold font-myriad">
                 Revitalizing Rural Communities
               </p>
-              <p className="text-base font-myriad font-light text-white">
+              <p className="text-sm md:text-base font-myriad font-light text-white">
                 Through our rural development initiatives, we
-                <br /> are revitalizing schools and uplifting
-                <br /> communities, ensuring that education and
-                <br /> growth reach even the most remote areas.
+                <br className="hidden lg:block" /> are revitalizing schools and
+                uplifting
+                <br className="hidden lg:block" /> communities, ensuring that
+                education and
+                <br className="hidden lg:block" /> growth reach even the most
+                remote areas.
+              </p>
+            </div>
+
+            <img
+              src={UpArrowSvg}
+              alt="sethu.ai"
+              className="absolute left-[28%] bottom-[40%] h-[140px] hidden lg:block"
+            />
+            <img
+              src={UpArrowSvg}
+              alt="sethu.ai"
+              className="absolute right-[38%] top-[14%] h-[140px] hidden lg:block"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* fourth section */}
+      <div className="px-5 lg:px-0 flex justify-center">
+        <div className="max-w-[1180px] w-full h-full py-16">
+          <p className="text-center text-[#E68242] font-ddin text-4xl sm:text-5xl md:text-[62px]/[55px] font-light">
+            Every Day is a Chance at
+            <br />
+            <span className="font-semibold">Something Better</span>
+          </p>
+
+          <div className="grid lg:grid-cols-2 items-center gap-5 lg:gap-3 mt-8">
+            <div className="flex flex-col gap-2">
+              <img src={EmpoweringYouthImg} alt="sethu.ai" />
+              <p className="text-2xl/6 text-[#DD4633] font-semibold font-myriad">
+                Empowering Youth,
+                <br /> One Success Story at a Time
+              </p>
+              <p className="text-[19px] font-myriad text-[#2C2C2C] font-light">
+                Our training programs have positively impacted [Insert Number]
+                young people, helping them secure employment in leading
+                companies. Each individual we train and place is a testament to
+                the transformative power of combining skill development with
+                value-based education.
+              </p>
+            </div>
+            <div className="flex flex-col gap-2">
+              <img src={RevitalisingEducationImg} alt="sethu.ai" />
+              <p className="text-2xl/6 text-[#DD4633] font-semibold font-myriad">
+                Revitalising Education
+                <br /> with Purpose
+              </p>
+              <p className="text-[19px] font-myriad text-[#2C2C2C] font-light">
+                By blending technical expertise, soft skills,
+                <br className="hidden lg:block" /> and values, we have redefined
+                skill education, producing well-rounded
+                <br className="hidden lg:block" /> individuals ready to
+                contribute to society with competence
+                <br className="hidden lg:block" /> and compassion.
               </p>
             </div>
           </div>
