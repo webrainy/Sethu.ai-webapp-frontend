@@ -30,9 +30,9 @@ const studentsData = [
   },
 ];
 
-console.log(studentsData);
-
 function AdminDashboard() {
+  console.log(studentsData);
+
   return (
     <div>
       <div className="bg-white  p-6 grid grid-cols-1 md:grid-cols-3 gap-5 rounded-2xl shadow-md">
