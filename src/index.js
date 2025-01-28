@@ -11,11 +11,9 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
     <React.StrictMode>
-      {/* <StyledEngineProvider injectFirst> */}
       <ThemeProvider>
         <App />
       </ThemeProvider>
-      {/* </StyledEngineProvider> */}
     </React.StrictMode>
   </Provider>
 );

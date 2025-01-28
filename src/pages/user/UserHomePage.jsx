@@ -2,6 +2,9 @@ import { Button } from "@material-tailwind/react";
 import React from "react";
 import Footer from "../../components/common/Footer";
 import SecondSecBg from "../../assets/nurturing_tomorrow.png";
+import BridgingSvg from "../../assets/bridging_the_gap_between.svg";
+import FosteringSvg from "../../assets/fostering_character.svg";
+import RevitalizingSvg from "../../assets/revitalizing_rural.svg";
 
 function UserHomePage() {
   return (
@@ -30,30 +33,80 @@ function UserHomePage() {
       </div>
 
       {/* second section */}
-      <div className="h-[50vh] lg:h-[85vh] grid grid-cols-2 items-end">
-        <div>
-          <img src={SecondSecBg} alt="sethu ai" className="object-cover" />
+      <div className="flex items-center justify-center px-5 lg:px-0">
+        <div className="max-w-[1180px] w-full flex items-center lg:items-end flex-col lg:flex-row">
+          <img src={SecondSecBg} alt="sethu.ai" />
+          <div className="pb-10 lg:-ml-10">
+            <p className="font-ddin text-4xl sm:text-5xl md:text-[62px]/[55px] text-[#E68242]">
+              Nurturing <br />
+              <span className="font-semibold">Tomorrow's Leaders</span>
+            </p>
+            <p className="font-myriad font-light text-base md:text-lg">
+              At the Sri Sathya Sai Skill Development Program our mission is to
+              provide <br className="hidden xl:block" />
+              unemployed youth with professional skills, instill value-based
+              education, <br className="hidden xl:block" />
+              and inspire selfless service. Through this holistic approach, we
+              are
+              <br className="hidden xl:block" />
+              cultivating a generation of compossionate and capable leaders,
+              equipped <br className="hidden xl:block" />
+              to transform their communities and contribute to building the
+              nation.
+            </p>
+          </div>
         </div>
-        <div>
-          <p>
-            Nurturing <br />
-            <span>Tomorrow's Leaders</span>
+      </div>
+
+      {/* third section */}
+      <div className="px-5 lg:px-0 home-third-sec flex justify-center">
+        <div className="max-w-[1180px] w-full h-full">
+          <p className="capitalize text-center text-white text-4xl sm:text-5xl md:text-[62px]/[55px] font-light font-ddin py-12">
+            What we <span className="font-semibold">do</span>
           </p>
-          <p>
-            At the Sri Sathya Sai Skill Development Program our mission is to
-            provide
-            <br />
-            unemployed youth with professional skills, instill value-based
-            education,
-            <br />
-            and inspire selfless service. Through this holistic approach, we are
-            <br />
-            cultivating a generation of compossionate and capable leaders,
-            equipped
-            <br />
-            to transform their communities and contribute to building the
-            nation.
-          </p>
+          <div className="flex items-center justify-center gap-24 pb-32 relative h-[690px]">
+            {/* 1st card */}
+            <div className="flex items-start flex-col justify-end h-full gap-2">
+              <img src={BridgingSvg} alt="sethu.ai" className="w-16" />
+              <p className="text-[#FFE200] text-xl font-semibold font-myriad">
+                Bridging the Gap Between
+                <br /> Industry and Opportunity
+              </p>
+              <p className="text-base font-myriad font-light text-white">
+                We provide essential skill-based training that
+                <br /> directly addresses unemployment, preparing
+                <br /> youth for the demands of the modern workforce.
+              </p>
+            </div>
+
+            {/* 2nd card */}
+            <div className="flex items-start justify-center flex-col h-full gap-2">
+              <img src={FosteringSvg} alt="sethu.ai" className="w-16" />
+              <p className="text-[#FFE200] text-xl font-semibold font-myriad">
+                Fostering Character
+                <br /> through Compassion
+              </p>
+              <p className="text-base font-myriad font-light text-white">
+                Our value-based education nurtures not just
+                <br /> careers, but characters—grounding students in
+                <br /> ethics, empathy, and the spirit of service.
+              </p>
+            </div>
+
+            {/* 3rd card */}
+            <div className="flex items-start justify-start flex-col h-full gap-2">
+              <img src={RevitalizingSvg} alt="sethu.ai" className="w-16" />
+              <p className="text-[#FFE200] text-xl font-semibold font-myriad">
+                Revitalizing Rural Communities
+              </p>
+              <p className="text-base font-myriad font-light text-white">
+                Through our rural development initiatives, we
+                <br /> are revitalizing schools and uplifting
+                <br /> communities, ensuring that education and
+                <br /> growth reach even the most remote areas.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
