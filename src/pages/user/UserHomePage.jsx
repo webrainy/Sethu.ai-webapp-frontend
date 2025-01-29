@@ -393,7 +393,10 @@ function UserHomePage() {
             <br className="hidden sm:block" /> Program. Our doors are open to
             youth eager to learn, grow and make a difference.
           </p>
-          <Button className="capitalize font-myriad font-light hover:font-semibold border py-2 px-12 text-[13px] text-[#DD4633] hover:text-white rounded-[5px] hover:rounded-full transition-all outline-none bg-transparent hover:bg-[#DD4633] shadow-none hover:shadow-none border-[#DD4633]">
+          <Button
+            onClick={() => navigate("/course_registration")}
+            className="capitalize font-myriad font-light hover:font-semibold border py-2 px-12 text-[13px] text-[#DD4633] hover:text-white rounded-[5px] hover:rounded-full transition-all outline-none bg-transparent hover:bg-[#DD4633] shadow-none hover:shadow-none border-[#DD4633]"
+          >
             Register
           </Button>
         </div>

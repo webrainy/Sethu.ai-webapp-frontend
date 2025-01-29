@@ -92,10 +92,10 @@ function AdminDashboard() {
             <h1 className="font-ddin font-semibold text-2xl capitalize">
               Total view performance
             </h1>
-            <div className="mt-4 flex flex-col">
+            <div className="mt-4 flex flex-col bg-white rounded-xl">
               {studentsData.map((student, index) => (
                 <div key={index}>
-                  <div className="flex items-center gap-4 bg-white p-4">
+                  <div className="flex items-center gap-4 p-4">
                     <img
                       src={profile}
                       alt={student.name}
@@ -118,7 +118,10 @@ function AdminDashboard() {
                       </p>
                     </div>
                   </div>
-                  <hr className="border w-full" />
+
+                  {index !== studentsData.length - 1 && (
+                    <hr className="border w-full" />
+                  )}
                 </div>
               ))}
             </div>
