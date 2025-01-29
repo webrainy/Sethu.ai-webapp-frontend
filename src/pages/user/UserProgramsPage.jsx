@@ -21,24 +21,22 @@ import {
 
 const data = [
   {
-    label: "HTML",
-    value: "html",
-    desc: `It really matters and then like it really doesn't matter.
-    What matters is the people who are sparked by it. And the people 
-    who are like offended by it, it doesn't matter.`,
+    label: "Professional Skills",
+    value: "1",
+    head: "Enhancing Personal & Professional Growth",
+    desc: `In today's competitive world, soft skills are just as important as technical knowledge.<br class="hidden md:block" /> Our Soft Skills Training ensures that you excel not just in the workplace, but in life.`,
   },
   {
-    label: "React",
-    value: "react",
-    desc: `Because it's about motivating the doers. Because I'm here
-    to follow my dreams and inspire other people to follow their dreams, too.`,
+    label: "Technical Skills",
+    value: "2",
+    head: "Enhancing Technical Proficiency & Knowledge",
+    desc: `In today's rapidly evolving tech landscape, staying ahead requires continuous learning and hands-on expertise.<br class="hidden md:block" /> Our Technical Skills Training equips you with the latest tools and knowledge to thrive in your career.`,
   },
   {
-    label: "Vue",
-    value: "vue",
-    desc: `We're not always in the position that we want to be at.
-    We're constantly growing. We're constantly making mistakes. We're
-    constantly trying to express ourselves and actualize our dreams.`,
+    label: "Values & Character Building",
+    value: "3",
+    head: "Strengthening Ethical Values & Moral Integrity",
+    desc: `In today's ever-changing world, strong values and character are the foundation of true success.<br class="hidden md:block" /> Our Values & Character Building program nurtures integrity, resilience, and ethical leadership to help you thrive in every aspect of life.`,
   },
 ];
 
@@ -99,47 +97,36 @@ function UserProgramsPage() {
       </div>
 
       {/* third section */}
-      <div className="px-5 lg:px-0 flex justify-center py-12">
+      <div className="px-5 lg:px-0 flex justify-center pt-12 pb-5">
         <div className="max-w-[1180px] w-full h-full">
-          <Tabs value="html">
+          <Tabs value="1">
             <TabsHeader
-              className="bg-transparent text-white"
+              className="bg-transparent gap-4"
               indicatorProps={{
-                className: "bg-[#DD4633] rounded-none shadow-none !text-white",
+                className: "bg-[#DD4633] rounded-none shadow-none",
               }}
             >
               {data.map(({ label, value }) => (
-                <Tab key={value} value={value} className="text-[#DD4633]">
+                <Tab
+                  key={value}
+                  value={value}
+                  className="text-[#DD4633] hover:text-[#DD4633] focus:text-[#DD4633] py-4 text-sm sm:text-base md:text-[19px]/[20px] font-myriad font-semibold relative after:content-[''] after:absolute after:top-1/2 after:-translate-y-1/2 after:-right-[9px] after:h-full after:w-[3px] after:bg-[#EBEBEB] last:after:hidden" // Divider on the right side
+                  activeClassName="!text-white" // Active tab text color
+                >
                   {label}
                 </Tab>
               ))}
             </TabsHeader>
-            <TabsBody>
-              {data.map(({ value, desc }) => (
-                <TabPanel key={value} value={value}>
-                  {desc}
-                </TabPanel>
-              ))}
-            </TabsBody>
-          </Tabs>
-
-          <Tabs value="html">
-            <TabsHeader
-              className="bg-transparent text-white"
-              indicatorProps={{
-                className: "bg-[#DD4633] rounded-none shadow-none !text-white",
-              }}
-            >
-              {data.map(({ label, value }) => (
-                <Tab key={value} value={value} className="text-[color]">
-                  {label}
-                </Tab>
-              ))}
-            </TabsHeader>
-            <TabsBody>
-              {data.map(({ value, desc }) => (
-                <TabPanel key={value} value={value}>
-                  {desc}
+            <TabsBody className="!px-0 py-6">
+              {data.map(({ value, head, desc }) => (
+                <TabPanel key={value} value={value} className="!px-0">
+                  <p className="italic font-myriad font-semibold text-base md:text-[20px]/[20px] text-[#DD4633]">
+                    {head}
+                  </p>
+                  <div
+                    dangerouslySetInnerHTML={{ __html: desc }}
+                    className="mt-3 text-sm md:text-base text-[#2C2C2C] font-myriad font-light"
+                  />
                 </TabPanel>
               ))}
             </TabsBody>
