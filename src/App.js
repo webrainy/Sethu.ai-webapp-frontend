@@ -22,14 +22,18 @@ function App() {
 
           <Route path="/" element={<UserHomePage />} />
           <Route path="/our_programs" element={<UserProgramsPage />} />
-          
+
           <Route element={<AdminLayout />}>
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
           </Route>
         </Routes>
       </BrowserRouter>
 
-      <Toaster position="bottom-right" reverseOrder={false} />
+      <Toaster
+        position="bottom-right"
+        reverseOrder={false}
+        containerClassName="font-ddin"
+      />
     </div>
   );
 }
