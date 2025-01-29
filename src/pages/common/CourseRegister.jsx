@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Button, Input, Textarea } from "@material-tailwind/react";
 import { Select, Option } from "@material-tailwind/react";
-import { mailPattern } from "../../utils/constants";
+import { mailPattern, phoneNumber, strongPwd } from "../../utils/constants";
 import toast from "react-hot-toast";
 import RegisterImg from "../../assets/register_img.png";
+import { useNavigate } from "react-router-dom";
+import { TbEye, TbEyeOff } from "react-icons/tb";
 
 function CourseRegister() {
   const [visibility, setVisibility] = useState({
@@ -14,10 +16,11 @@ function CourseRegister() {
     additional_information: false,
     family_details: false,
   });
-
+  const [passVisible, setPassVisible] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    password: "",
     phone: "",
     location: "",
     education: "",
@@ -28,7 +31,7 @@ function CourseRegister() {
     currentWork: "",
     commitment: "",
     Python: "",
-    SQL: "",
+    Sql: "",
     Java: "",
     AnalyticalSkills: "",
     ProblemSolving: "",
@@ -44,6 +47,8 @@ function CourseRegister() {
     householdIncome: "",
   });
 
+  const navigate = useNavigate();
+
   const expertiseLevels = [
     "Beginner",
     "Intermediate",
@@ -51,6 +56,21 @@ function CourseRegister() {
     "Advanced",
     "Expert",
   ];
+
+  // const handlePasswordChange = (e) => {
+  //   const value = e.target.value;
+
+  //   if (strongPwd.test(value)) {
+  //     setLoginValid({ ...loginValid, password: true });
+  //   } else {
+  //     setLoginValid({ ...loginValid, password: false });
+  //   }
+  //   setLoginData({ ...loginData, password: value });
+  // };
+
+  const handlePasswordVisibility = () => {
+    setPassVisible(!passVisible);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -63,7 +83,6 @@ function CourseRegister() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log("hi");
     const { hobbies, linkedin, github, coverLetter, resume } = formData;
     if (!hobbies || !linkedin || !github || !coverLetter || !resume) {
       toast.error(
@@ -73,10 +92,12 @@ function CourseRegister() {
   };
 
   const handlePersonalInformationButton = () => {
-    const { name, email, phone, location } = formData;
+    const { name, email, password, phone, location } = formData;
     const mailRegex = new RegExp(mailPattern);
+    const phoneRegex = new RegExp(phoneNumber);
+    const passwordRegex = new RegExp(strongPwd);
 
-    if (!name || !email || !phone || !location) {
+    if (!name || !email || !password || !phone || !location) {
       toast.error(
         "Please fill all fields in the Personal Information section."
       );
@@ -85,6 +106,18 @@ function CourseRegister() {
 
     if (!mailRegex.test(email)) {
       toast.error("Please enter a valid email address.");
+      return;
+    }
+
+    if (!phoneRegex.test(phone)) {
+      toast.error("Please enter a valid phone number");
+      return;
+    }
+
+    if (!passwordRegex.test(password)) {
+      toast.error(
+        "Password must have atleast 1 lowercase, number, special characters and minimum 8 characters."
+      );
       return;
     }
 
@@ -137,7 +170,7 @@ function CourseRegister() {
     const {
       Python,
       Java,
-      SQL,
+      Sql,
       AnalyticalSkills,
       ProblemSolving,
       EnglishProficiency,
@@ -146,7 +179,7 @@ function CourseRegister() {
     if (
       !Python ||
       !Java ||
-      !SQL ||
+      !Sql ||
       !AnalyticalSkills ||
       !ProblemSolving ||
       !EnglishProficiency ||
@@ -170,12 +203,25 @@ function CourseRegister() {
 
   const handleAdditionalInformation = () => {
     const { hobbies, linkedin, github, coverLetter, resume } = formData;
+    const urlRegex = /^(https?:\/\/)?([\w\d-]+\.)+[\w]{2,}(\/[\w\d-_.?=]*)*$/;
+
     if (!hobbies || !linkedin || !github || !coverLetter || !resume) {
       toast.error(
-        "Please fill all fields in the  Additional Information section."
+        "Please fill all fields in the Additional Information section."
       );
       return;
     }
+
+    if (!urlRegex.test(linkedin)) {
+      toast.error("Please enter a valid LinkedIn profile URL.");
+      return;
+    }
+
+    if (!urlRegex.test(github)) {
+      toast.error("Please enter a valid GitHub profile URL.");
+      return;
+    }
+
     setVisibility({
       ...visibility,
       personalInfo: false,
@@ -185,6 +231,10 @@ function CourseRegister() {
       additional_information: false,
       family_details: true,
     });
+  };
+
+  const handleButtonNavigate = () => {
+    navigate("/admin/dashboard");
   };
 
   return (
@@ -210,43 +260,91 @@ function CourseRegister() {
             {/* Personal Info */}
             {visibility.personalInfo && (
               <div className="space-y-3">
-                <h3 className="font-bold mb-4">Personal Information</h3>
+                <h3 className="font-bold font-ddin">Personal Information</h3>
                 <Input
                   label="Name"
                   type="text"
                   name="name"
+                  style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   value={formData.name}
                   onChange={handleChange}
+                  containerProps={{
+                    className: "font-ddin",
+                  }}
                   required
                 />
                 <Input
                   label="Email"
                   type="email"
                   name="email"
+                  style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   value={formData.email}
                   onChange={handleChange}
+                  containerProps={{
+                    className: "font-ddin",
+                  }}
                   required
                 />
                 <Input
                   label="Phone"
                   type="tel"
                   name="phone"
+                  style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   value={formData.phone}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, "");
+                    if (value.length <= 10) {
+                      setFormData({ ...formData, phone: value });
+                    }
+                  }}
                   maxLength={10}
+                  containerProps={{
+                    className: "font-ddin",
+                  }}
+                  required
+                />
+                <Input
+                  label="Password"
+                  name="password"
+                  type={!passVisible ? "password" : "text"}
+                  size="lg"
+                  placeholder="********"
+                  style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                  containerProps={{
+                    className: "font-ddin",
+                  }}
+                  icon={
+                    !passVisible ? (
+                      <TbEyeOff
+                        onClick={handlePasswordVisibility}
+                        className="cursor-pointer"
+                      />
+                    ) : (
+                      <TbEye
+                        onClick={handlePasswordVisibility}
+                        className="cursor-pointer"
+                      />
+                    )
+                  }
+                  onChange={handleChange}
+                  value={formData.password}
                   required
                 />
                 <Textarea
                   label="Location"
                   name="location"
-                  required
+                  style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   value={formData.location}
                   onChange={handleChange}
+                  containerProps={{
+                    className: "font-ddin",
+                  }}
+                  required
                 />
                 <div className="flex justify-end">
                   <Button
                     type="button"
-                    className="mt-4 text-[14px] tracking-[3px] font-montserrat font-ddin font-light hover:font-semibold transition-all bg-deep-orange-800 rounded-[10px] px-10 outline-none shadow-none hover:shadow-none border border-[#DD4633] hover:border-[#DD4633] hover:bg-[#DD4633] hover:text-white bg-transparent text-[#DD4633]"
+                    className="text-[14px] tracking-[3px] font-ddin font-light hover:font-semibold transition-all bg-deep-orange-800 rounded-[10px] px-10 outline-none shadow-none hover:shadow-none border border-[#DD4633] hover:border-[#DD4633] hover:bg-[#DD4633] hover:text-white bg-transparent text-[#DD4633]"
                     onClick={handlePersonalInformationButton}
                   >
                     Next
@@ -257,51 +355,124 @@ function CourseRegister() {
 
             {/* Educational Details */}
             {visibility.educationDetails && (
-              <div className="space-y-3">
-                <h3 className="font-bold mb-4">Education Details</h3>
-                Highest Education Completed
-                <div className="flex flex-row gap-3">
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      name="education"
-                      value="Bachelors"
-                      checked={formData.education === "Bachelors"}
-                      onChange={handleChange}
-                      // className="h-4 w-4"
-                    />
-                    Bachelors
-                  </label>
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      name="education"
-                      value="Masters"
-                      checked={formData.education === "Masters"}
-                      onChange={handleChange}
-                      // className="h-4 w-4"
-                    />
-                    Masters
-                  </label>
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      name="education"
-                      value="PhD"
-                      checked={formData.education === "PhD"}
-                      onChange={handleChange}
-                      // className="h-4 w-4"
-                    />
-                    PhD
-                  </label>
-                </div>
+              <div className="space-y-3 font-ddin">
+                <h3 className="font-bold font-ddin">Education Details</h3>
+
+                <fieldset className="flex flex-col gap-3">
+                  <legend className="">
+                    Highest Education Completed{" "}
+                    <span className="text-red-600">*</span>
+                  </legend>
+
+                  <div className="flex flex-row gap-3">
+                    <label
+                      htmlFor="bachelors"
+                      className="flex items-center gap-2"
+                    >
+                      <input
+                        id="bachelors"
+                        type="radio"
+                        name="education"
+                        value="Bachelors"
+                        style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                        containerProps={{
+                          className: "font-ddin",
+                        }}
+                        checked={formData.education === "Bachelors"}
+                        onChange={handleChange}
+                      />
+                      Bachelors
+                    </label>
+
+                    <label
+                      htmlFor="masters"
+                      className="flex items-center gap-2"
+                    >
+                      <input
+                        id="masters"
+                        type="radio"
+                        name="education"
+                        value="Masters"
+                        checked={formData.education === "Masters"}
+                        onChange={handleChange}
+                      />
+                      Masters
+                    </label>
+
+                    <label htmlFor="others" className="flex items-center gap-2">
+                      <input
+                        id="others"
+                        type="radio"
+                        name="education"
+                        value="others"
+                        checked={formData.education === "others"}
+                        onChange={handleChange}
+                      />
+                      others
+                    </label>
+                  </div>
+                </fieldset>
+
                 <Input
                   label="CGPA"
                   type="number"
                   name="cgpa"
                   value={formData.cgpa}
                   onChange={handleChange}
+                  style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                  containerProps={{
+                    className: "font-ddin",
+                  }}
                   className="appearance-none outline-none"
+                  onKeyDown={(e) => {
+                    if (
+                      e.key === "e" ||
+                      e.key === "E" ||
+                      e.key === "-" ||
+                      e.key === "+"
+                    ) {
+                      e.preventDefault();
+                    }
+                  }}
+                  onWheel={(e) => e.target.blur()}
+                  maxLength={10}
+                  required
+                />
+                <Input
+                  label="Year Passed"
+                  type="number"
+                  name="yearPassed"
+                  value={formData.yearPassed}
+                  onChange={handleChange}
+                  style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                  containerProps={{
+                    className: "font-ddin",
+                  }}
+                  onKeyDown={(e) => {
+                    if (
+                      e.key === "e" ||
+                      e.key === "E" ||
+                      e.key === "-" ||
+                      e.key === "+"
+                    ) {
+                      e.preventDefault();
+                    }
+                  }}
+                  onWheel={(e) => e.target.blur()}
+                  maxLength={10}
+                  required
+                />
+                <Input
+                  label="GMAT Score"
+                  type="number"
+                  name="gmatScore"
+                  maxLength={10}
+                  value={formData.gmatScore}
+                  onChange={handleChange}
+                  style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                  containerProps={{
+                    className: "font-ddin",
+                  }}
                   onKeyDown={(e) => {
                     if (
                       e.key === "e" ||
@@ -315,26 +486,10 @@ function CourseRegister() {
                   onWheel={(e) => e.target.blur()}
                   required
                 />
-                <Input
-                  label="Year Passed"
-                  type="number"
-                  name="yearPassed"
-                  value={formData.yearPassed}
-                  onChange={handleChange}
-                  required
-                />
-                <Textarea
-                  label="GMAT Score"
-                  typeof="number"
-                  name="gmatScore"
-                  required
-                  value={formData.gmatScore}
-                  onChange={handleChange}
-                />
                 <div className="flex justify-between">
                   <Button
                     type="button"
-                    className="bg-blue-gray-200 text-blue-gray-900"
+                    className="text-[14px] tracking-[3px] font-ddin font-light hover:font-semibold transition-all bg-[#494848] rounded-[10px] px-5 outline-none shadow-none hover:shadow-none border border-[#9e9b9a] hover:border-[#9e9b9a] hover:bg-[#9e9b9a] hover:text-white bg-transparent text-[#9e9b9a]"
                     onClick={() =>
                       setVisibility({
                         ...visibility,
@@ -349,7 +504,7 @@ function CourseRegister() {
                   </Button>
                   <Button
                     type="button"
-                    className="bg-deep-orange-800"
+                    className="text-[14px] tracking-[3px] font-ddin font-light hover:font-semibold transition-all bg-deep-orange-800 rounded-[10px] px-10 outline-none shadow-none hover:shadow-none border border-[#DD4633] hover:border-[#DD4633] hover:bg-[#DD4633] hover:text-white bg-transparent text-[#DD4633]"
                     onClick={handleEducationDetailButton}
                   >
                     Next
@@ -360,13 +515,17 @@ function CourseRegister() {
 
             {/* Preferences */}
             {visibility.preferences && (
-              <div className="space-y-3">
-                <h3 className="font-bold mb-4">References</h3>
+              <div className="space-y-3 font-ddin">
+                <h3 className="font-bold font-ddin">References</h3>
                 <Input
                   label="Are you preparing for any course?"
                   name="preparingCourse"
                   value={formData.preparingCourse}
                   onChange={handleChange}
+                  style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                  containerProps={{
+                    className: "font-ddin",
+                  }}
                   required
                 />
                 <Input
@@ -374,12 +533,16 @@ function CourseRegister() {
                   name="currentWork"
                   value={formData.currentWork}
                   onChange={handleChange}
+                  style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                  containerProps={{
+                    className: "font-ddin",
+                  }}
                   required
                 />
-                <div className="text-left">
-                  <label className="block mb-1">
+                <div className="text-left ">
+                  <label className="block mb-2">
                     Can you commit 3 months full-time (8 hours/day) in
-                    Hyderabad?
+                    Hyderabad? <span className="text-red-600">*</span>
                   </label>
                   <Select
                     name="commitment"
@@ -388,15 +551,23 @@ function CourseRegister() {
                     onChange={(value) =>
                       setFormData((prev) => ({ ...prev, commitment: value }))
                     }
+                    style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                    containerProps={{
+                      className: "font-ddin",
+                    }}
                   >
-                    <Option value="Yes">Yes</Option>
-                    <Option value="No">No</Option>
+                    <Option value="Yes" style={{ fontFamily: "D-DIN" }}>
+                      Yes
+                    </Option>
+                    <Option value="No" style={{ fontFamily: "D-DIN" }}>
+                      No
+                    </Option>
                   </Select>
                 </div>
                 <div className="flex justify-between">
                   <Button
                     type="button"
-                    className="bg-blue-gray-200 text-blue-gray-900"
+                    className="text-[14px] tracking-[3px] font-ddin font-light hover:font-semibold transition-all bg-[#494848] rounded-[10px] px-5 outline-none shadow-none hover:shadow-none border border-[#9e9b9a] hover:border-[#9e9b9a] hover:bg-[#9e9b9a] hover:text-white bg-transparent text-[#9e9b9a]"
                     onClick={() =>
                       setVisibility({
                         ...visibility,
@@ -411,7 +582,7 @@ function CourseRegister() {
                   </Button>
                   <Button
                     type="button"
-                    className="bg-deep-orange-800"
+                    className="text-[14px] tracking-[3px] font-ddin font-light hover:font-semibold transition-all bg-deep-orange-800 rounded-[10px] px-10 outline-none shadow-none hover:shadow-none border border-[#DD4633] hover:border-[#DD4633] hover:bg-[#DD4633] hover:text-white bg-transparent text-[#DD4633]"
                     onClick={handlePreferenceButton}
                   >
                     Next
@@ -422,8 +593,8 @@ function CourseRegister() {
 
             {/* Skills and Expertise */}
             {visibility.skills_and_expertise && (
-              <div className="space-y-3 max-h-[300px] overflow-y-auto p-2">
-                <h3 className="font-bold mb-4">Skills and Expertise</h3>
+              <div className="space-y-3 max-h-[300px] overflow-y-auto p-2 font-ddin">
+                <h3 className="font-bold font-ddin">Skills and Expertise</h3>
                 {[
                   "Python",
                   "Sql",
@@ -433,20 +604,26 @@ function CourseRegister() {
                   "ProblemSolving",
                 ].map((skill) => (
                   <div key={skill} className="text-left">
-                    <label className="block text-gray-700 mt-3 mb-1">
+                    <label className="block text-gray-700 mt-2 mb-[5px] font-ddin">
                       {skill.replace(/([A-Z])/g, " $1")}
+                      <span className="text-red-600">*</span>
                     </label>
                     <Select
                       name={skill}
-                      className="mb-2"
+                      className="mb-2 font-ddin"
                       label={`Select Expertise for ${skill}`}
                       value={formData[skill]}
                       onChange={(value) =>
                         setFormData((prev) => ({ ...prev, [skill]: value }))
                       }
+                      required
                     >
                       {expertiseLevels.map((level) => (
-                        <Option key={level} value={level}>
+                        <Option
+                          key={level}
+                          value={level}
+                          style={{ fontFamily: "D-DIN" }}
+                        >
                           {level}
                         </Option>
                       ))}
@@ -459,16 +636,21 @@ function CourseRegister() {
                   </label>
                   <Input
                     type="number"
-                    label="Enter your HackerRank Score"
+                    label="HackerRank Score"
                     name="HackerRankScore"
                     value={formData.HackerRankScore}
                     onChange={handleChange}
+                    style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                    containerProps={{
+                      className: "font-ddin",
+                    }}
+                    required
                   />
                 </div>
                 <div className="flex justify-between">
                   <Button
                     type="button"
-                    className="bg-blue-gray-200 text-blue-gray-900"
+                    className="text-[14px] tracking-[3px] font-ddin font-light hover:font-semibold transition-all bg-[#494848] rounded-[10px] px-5 outline-none shadow-none hover:shadow-none border border-[#9e9b9a] hover:border-[#9e9b9a] hover:bg-[#9e9b9a] hover:text-white bg-transparent text-[#9e9b9a]"
                     onClick={() =>
                       setVisibility({
                         ...visibility,
@@ -483,7 +665,7 @@ function CourseRegister() {
                   </Button>
                   <Button
                     type="button"
-                    className="bg-deep-orange-800"
+                    className="text-[14px] tracking-[3px] font-ddin font-light hover:font-semibold transition-all bg-deep-orange-800 rounded-[10px] px-10 outline-none shadow-none hover:shadow-none border border-[#DD4633] hover:border-[#DD4633] hover:bg-[#DD4633] hover:text-white bg-transparent text-[#DD4633]"
                     onClick={handleSkillsandExpertiseButton}
                   >
                     Next
@@ -494,8 +676,8 @@ function CourseRegister() {
 
             {/* Additional Information */}
             {visibility.additional_information && (
-              <div className="space-y-3 max max-h-[300px] overflow-y-auto p-2">
-                <h3 className="font-bold ">Additional Information</h3>
+              <div className="space-y-3 max max-h-[300px] overflow-y-auto p-2 font-ddin">
+                <h3 className="font-bold font-ddin">Additional Information</h3>
                 <div className="text-left">
                   <label className="block mb-1 font-medium">Hobbies</label>
                   <Textarea
@@ -509,10 +691,15 @@ function CourseRegister() {
                         hobbies: e.target.value,
                       }))
                     }
+                    style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                    containerProps={{
+                      className: "font-ddin",
+                    }}
+                    required
                   />
                 </div>
 
-                <div className="text-left">
+                <div className="text-left ">
                   <label className="block mb-1 font-medium">
                     LinkedIn Profile URL
                   </label>
@@ -521,12 +708,17 @@ function CourseRegister() {
                     label="Enter your LinkedIn profile URL"
                     name="linkedin"
                     value={formData.linkedin}
-                    onChange={(e) =>
+                    style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                    containerProps={{
+                      className: "font-ddin",
+                    }}
+                    onChange={(e) => {
                       setFormData((prev) => ({
                         ...prev,
                         linkedin: e.target.value,
-                      }))
-                    }
+                      }));
+                    }}
+                    required
                   />
                 </div>
 
@@ -539,12 +731,17 @@ function CourseRegister() {
                     label="Enter your GitHub or other source code URL"
                     name="github"
                     value={formData.github}
-                    onChange={(e) =>
+                    style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                    containerProps={{
+                      className: "font-ddin",
+                    }}
+                    onChange={(e) => {
                       setFormData((prev) => ({
                         ...prev,
                         github: e.target.value,
-                      }))
-                    }
+                      }));
+                    }}
+                    required
                   />
                 </div>
                 <div className="text-left">
@@ -553,6 +750,7 @@ function CourseRegister() {
                     type="file"
                     label="Upload your resume"
                     name="resume"
+                    required
                     onChange={(e) =>
                       setFormData((prev) => ({
                         ...prev,
@@ -560,6 +758,10 @@ function CourseRegister() {
                       }))
                     }
                     accept=".pdf,.doc,.docx"
+                    style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                    containerProps={{
+                      className: "font-ddin",
+                    }}
                   />
                 </div>
 
@@ -569,6 +771,7 @@ function CourseRegister() {
                     type="file"
                     label="Upload your cover letter"
                     name="coverLetter"
+                    required
                     onChange={(e) =>
                       setFormData((prev) => ({
                         ...prev,
@@ -576,13 +779,17 @@ function CourseRegister() {
                       }))
                     }
                     accept=".pdf,.doc,.docx"
+                    style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                    containerProps={{
+                      className: "font-ddin",
+                    }}
                   />
                 </div>
 
                 <div className="flex justify-between">
                   <Button
                     type="button"
-                    className="bg-blue-gray-200 text-blue-gray-900"
+                    className="text-[14px] tracking-[3px] font-ddin font-light hover:font-semibold transition-all bg-[#494848] rounded-[10px] px-5 outline-none shadow-none hover:shadow-none border border-[#9e9b9a] hover:border-[#9e9b9a] hover:bg-[#9e9b9a] hover:text-white bg-transparent text-[#9e9b9a]"
                     onClick={() =>
                       setVisibility({
                         ...visibility,
@@ -598,7 +805,7 @@ function CourseRegister() {
                   </Button>
                   <Button
                     type="button"
-                    className="bg-deep-orange-800"
+                    className="text-[14px] tracking-[3px] font-ddin font-light hover:font-semibold transition-all bg-deep-orange-800 rounded-[10px] px-10 outline-none shadow-none hover:shadow-none border border-[#DD4633] hover:border-[#DD4633] hover:bg-[#DD4633] hover:text-white bg-transparent text-[#DD4633]"
                     onClick={handleAdditionalInformation}
                   >
                     Next
@@ -609,7 +816,7 @@ function CourseRegister() {
 
             {/* Family Details */}
             {visibility.family_details && (
-              <div className="space-y-3">
+              <div className="space-y-3 font-ddin">
                 <div className="text-left">
                   <label className="block text-gray-700 mb-2">
                     Father's Occupation
@@ -628,6 +835,10 @@ function CourseRegister() {
                         fatherOccupation: e.target.value,
                       }))
                     }
+                    style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                    containerProps={{
+                      className: "font-ddin",
+                    }}
                   />
                 </div>
 
@@ -649,6 +860,10 @@ function CourseRegister() {
                         motherOccupation: e.target.value,
                       }))
                     }
+                    style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                    containerProps={{
+                      className: "font-ddin",
+                    }}
                   />
                 </div>
 
@@ -673,7 +888,11 @@ function CourseRegister() {
                       "10-15 Lakhs",
                       "15+ Lakhs",
                     ].map((income) => (
-                      <Option key={income} value={income}>
+                      <Option
+                        key={income}
+                        value={income}
+                        style={{ fontFamily: "font-ddin" }}
+                      >
                         {income}
                       </Option>
                     ))}
@@ -682,7 +901,7 @@ function CourseRegister() {
                 <div className="flex justify-between">
                   <Button
                     type="button"
-                    className="bg-blue-gray-200 text-blue-gray-900"
+                    className="text-[14px] tracking-[3px] font-ddin font-light hover:font-semibold transition-all bg-[#494848] rounded-[10px] px-5 outline-none shadow-none hover:shadow-none border border-[#9e9b9a] hover:border-[#9e9b9a] hover:bg-[#9e9b9a] hover:text-white bg-transparent text-[#9e9b9a]"
                     onClick={() =>
                       setVisibility({
                         ...visibility,
@@ -697,7 +916,11 @@ function CourseRegister() {
                   >
                     Previous
                   </Button>
-                  <Button type="submit" className="bg-deep-orange-800">
+                  <Button
+                    type="submit"
+                    className="text-[14px] tracking-[3px] font-ddin font-light hover:font-semibold transition-all bg-deep-orange-800 rounded-[10px] px-10 outline-none shadow-none hover:shadow-none border border-[#DD4633] hover:border-[#DD4633] hover:bg-[#DD4633] hover:text-white bg-transparent text-[#DD4633]"
+                    onClick={handleButtonNavigate}
+                  >
                     Submit
                   </Button>
                 </div>
