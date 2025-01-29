@@ -1,5 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
+import LoginImg from "../../assets/login_img.png";
 
 function AuthLayout() {
   return (
@@ -12,12 +13,8 @@ function AuthLayout() {
           <Outlet />
         </div>
 
-        <div className="flex-[1] bg-[#f5f5f5] hidden md:flex justify-center items-center">
-          <img
-            src="https://undraw.co/illustrations/illustration.svg"
-            alt="Sethu AI"
-            className="max-w-full h-auto"
-          />
+        <div className="flex-[1] bg-[#f5f5f5] hidden md:flex justify-center items-center p-8">
+          <img src={LoginImg} alt="Sethu AI" className="max-w-full h-auto" />
         </div>
       </div>
     </div>

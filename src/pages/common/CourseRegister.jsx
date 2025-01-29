@@ -3,6 +3,7 @@ import { Button, Input, Textarea } from "@material-tailwind/react";
 import { Select, Option } from "@material-tailwind/react";
 import { mailPattern } from "../../utils/constants";
 import toast from "react-hot-toast";
+import RegisterImg from "../../assets/register_img.png";
 
 function CourseRegister() {
   const [visibility, setVisibility] = useState({
@@ -706,11 +707,7 @@ function CourseRegister() {
         </div>
 
         <div className="flex-[1] bg-[#f5f5f5] hidden md:flex justify-center items-center">
-          <img
-            src="https://undraw.co/illustrations/illustration.svg"
-            alt="Sethu AI"
-            className="max-w-full h-auto"
-          />
+          <img src={RegisterImg} alt="Sethu AI" className="max-w-full h-auto" />
         </div>
       </div>
     </div>
