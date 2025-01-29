@@ -36,23 +36,35 @@ function Footer() {
                 variant="static"
                 placeholder="Phone"
                 type="tel"
+                style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                containerProps={{
+                  className: "font-ddin",
+                }}
               />
               <Input
                 className="text-center"
                 variant="static"
                 placeholder="Email"
                 type="email"
+                style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                containerProps={{
+                  className: "font-ddin",
+                }}
               />
               <Textarea
                 variant="static"
                 className="text-center"
                 placeholder="Message"
+                style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                containerProps={{
+                  className: "font-ddin",
+                }}
               />
 
               <div className="flex justify-center items-center mt-3">
                 <Button
                   type="submit"
-                  className="capitalize w-fit border py-1 px-12 text-[13px] font-normal rounded-[5px] hover:font-bold hover:rounded-full transition-all outline-none shadow-none hover:shadow-none border-[#DD4633] hover:border-[#DD4633] hover:bg-[#DD4633] hover:text-white bg-transparent text-[#DD4633]"
+                  className="capitalize w-fit border py-1 px-12 text-[13px] font-myriad font-light rounded-[5px] hover:font-bold hover:rounded-full transition-all outline-none shadow-none hover:shadow-none border-[#DD4633] hover:border-[#DD4633] hover:bg-[#DD4633] hover:text-white bg-transparent text-[#DD4633]"
                 >
                   Register Now
                 </Button>

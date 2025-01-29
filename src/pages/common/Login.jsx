@@ -42,7 +42,6 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // console.log(loginData, loginValid);
     if (!loginValid.email) {
       toast.error("Invalid email address.");
     } else if (!loginValid.password) {
@@ -59,21 +58,25 @@ function Login() {
   const handlePasswordVisibility = () => {
     setPassVisible(!passVisible);
   };
+
   return (
     <div>
-      <form
-        className=" max-w-screen-lg w-72 lg:w-96 p-5"
-        onSubmit={handleSubmit}
-      >
+      <h1 className="text-[40px] text-[#333] font-ddin font-semibold">
+        Welcome Back!
+      </h1>
+      <p className="text-[16px] mb-[30px] text-[#333] font-myriad font-light">
+        Sign in to continue to your account.
+      </p>
+      <form className="w-full" onSubmit={handleSubmit}>
         <div className="mb-1 flex flex-col gap-4">
           <Input
             label="Your Email"
             type="email"
             size="lg"
             placeholder="name@mail.com"
-            style={{ fontFamily: "Montserrat", fontWeight: 500 }}
+            style={{ fontFamily: "D-DIN", fontWeight: 500 }}
             containerProps={{
-              className: "font-montserrat",
+              className: "font-ddin",
             }}
             onChange={handleEmailChange}
             value={loginData.email}
@@ -84,9 +87,9 @@ function Login() {
             type={!passVisible ? "password" : "text"}
             size="lg"
             placeholder="********"
-            style={{ fontFamily: "Montserrat", fontWeight: 500 }}
+            style={{ fontFamily: "D-DIN", fontWeight: 500 }}
             containerProps={{
-              className: "font-montserrat",
+              className: "font-ddin",
             }}
             icon={
               !passVisible ? (
@@ -109,7 +112,7 @@ function Login() {
         <div className="flex justify-end">
           <Button
             type="submit"
-            className="mt-4 text-[14px] tracking-[3px] font-montserrat bg-deep-orange-800 rounded-none font-normal px-10 outline-none"
+            className="mt-4 text-[14px] tracking-[3px] font-montserrat font-ddin font-light hover:font-semibold transition-all bg-deep-orange-800 rounded-[10px] px-10 outline-none shadow-none hover:shadow-none border border-[#DD4633] hover:border-[#DD4633] hover:bg-[#DD4633] hover:text-white bg-transparent text-[#DD4633]"
           >
             Login
           </Button>
