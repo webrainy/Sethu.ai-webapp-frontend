@@ -24,9 +24,11 @@ import "swiper/css/scrollbar";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import UserNavbar from "../../components/navbars/UserNavbar";
+import { useNavigate } from "react-router-dom";
 
 function UserHomePage() {
   const ref = useRef(null);
+  const navigate = useNavigate();
 
   const ScrollToNextSection = () => {
     ref.current?.scrollIntoView({ behavior: "smooth" });
@@ -35,6 +37,7 @@ function UserHomePage() {
   return (
     <>
       <UserNavbar />
+
       <div className="flex flex-col justify-center items-center px-2 lg:px-0 home-hero-section">
         <div className="max-w-[1180px] w-full h-[60vh] sm:h-screen flex justify-center flex-col text-white gap-1 relative">
           <p className="text-4xl sm:text-7xl font-ddin">Where Skills</p>
@@ -51,7 +54,10 @@ function UserHomePage() {
             <Button className="capitalize font-myriad font-light border-2 border-[#E68242] py-2 px-4 hover:px-3 text-[13px] rounded-[5px] hover:font-bold hover:rounded-full transition-all outline-none bg-transparent shadow-none hover:shadow-none hover:bg-[#E68242]">
               Discover our programs
             </Button>
-            <Button className="capitalize font-myriad border border-[#B99F6A] py-2 px-12 text-[13px] font-light rounded-[5px] hover:font-bold hover:rounded-full transition-all outline-none bg-transparent hover:bg-[#B99F6A] shadow-none hover:shadow-none">
+            <Button
+              onClick={() => navigate("/course_registration")}
+              className="capitalize font-myriad border border-[#B99F6A] py-2 px-12 text-[13px] font-light rounded-[5px] hover:font-bold hover:rounded-full transition-all outline-none bg-transparent hover:bg-[#B99F6A] shadow-none hover:shadow-none"
+            >
               Register
             </Button>
           </div>
@@ -67,7 +73,8 @@ function UserHomePage() {
       </div>
 
       {/* second section */}
-      <div ref={ref}
+      <div
+        ref={ref}
         className="flex items-center justify-center px-5 lg:px-0"
         id="second-section"
       >
@@ -368,6 +375,7 @@ function UserHomePage() {
           autoPlay
           muted
           loop
+          controlsList="nodownload"
           className="w-full absolute top-0 -z-[1] h-[50vh] lg:h-[80vh] object-cover"
         ></video>
 
@@ -385,7 +393,10 @@ function UserHomePage() {
             <br className="hidden sm:block" /> Program. Our doors are open to
             youth eager to learn, grow and make a difference.
           </p>
-          <Button className="capitalize font-myriad font-light hover:font-semibold border py-2 px-12 text-[13px] text-[#DD4633] hover:text-white rounded-[5px] hover:rounded-full transition-all outline-none bg-transparent hover:bg-[#DD4633] shadow-none hover:shadow-none border-[#DD4633]">
+          <Button
+            onClick={() => navigate("/course_registration")}
+            className="capitalize font-myriad font-light hover:font-semibold border py-2 px-12 text-[13px] text-[#DD4633] hover:text-white rounded-[5px] hover:rounded-full transition-all outline-none bg-transparent hover:bg-[#DD4633] shadow-none hover:shadow-none border-[#DD4633]"
+          >
             Register
           </Button>
         </div>

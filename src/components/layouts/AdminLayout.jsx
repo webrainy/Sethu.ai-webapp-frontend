@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import AdminSidebar from "../sidebars/AdminSidebar";
+import { FaBars } from "react-icons/fa";
 
 function AdminLayout() {
   const [collapsed, setCollapsed] = useState(false);
@@ -22,16 +23,14 @@ function AdminLayout() {
         handleToggleSidebar={handleToggleSidebar}
         handleCollapsedChange={handleCollapsedChange}
       />
-      {/* <AdminNavbar
-      collapsed={collapsed}
-      handleToggleSidebar={handleToggleSidebar}
-    /> */}
-      <main
-        className={`bg-white pt-[50px] lg:pt-[70px] transition-all duration-300`}
-      >
-        <div className="p-2 px-3 md:px-5 pt-3 pb-16">
-          <Outlet />
+      <main className="bg-gray-100">
+        <div className="px-4 py-3">
+          <FaBars
+            className="btn-toggle"
+            onClick={() => handleToggleSidebar(true)}
+          />
         </div>
+        <Outlet />
       </main>
     </div>
   );

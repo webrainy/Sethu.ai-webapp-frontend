@@ -927,6 +927,19 @@ function CourseRegister() {
               </div>
             )}
           </form>
+
+          <div className="text-center mt-4">
+            <p className="font-myriad font-light">
+              Already with us?{" "}
+              <span
+                className="font-ddin font-semibold cursor-pointer hover:text-[#E68242]"
+                onClick={() => navigate("/login")}
+              >
+                Sign in
+              </span>{" "}
+              and continue your journey!
+            </p>
+          </div>
         </div>
 
         <div className="flex-[1] bg-[#f5f5f5] hidden md:flex justify-center items-center">

@@ -9,7 +9,7 @@ import {
 } from "react-pro-sidebar";
 import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 import { MdSpaceDashboard } from "react-icons/md";
-import { PiStudentFill } from "react-icons/pi";
+import { SiGoogleclassroom } from "react-icons/si";
 
 function AdminSidebar({
   collapsed,
@@ -26,11 +26,10 @@ function AdminSidebar({
       link: "/admin/dashboard",
     },
     {
-      title: "Students",
-      icon: <PiStudentFill />,
-      link: "/admin/staff/list",
+      title: "Batch",
+      icon: <SiGoogleclassroom />,
+      link: "/admin/manage_batch",
     },
-   
   ];
 
   return (
@@ -39,13 +38,13 @@ function AdminSidebar({
       toggled={toggled}
       onToggle={handleToggleSidebar}
       breakPoint="lg"
-      style={{backgroundColor:"#032313"}}
+      style={{ backgroundColor: "#032313" }}
       // image={LoginBg}
       //   style={{ color: "white", backgroundColor: "#F5F7F900", border: "none" }}
     >
       {/* Header */}
       <SidebarHeader>
-        <Menu iconShape="circle" style={{ color: "white"}}>
+        <Menu iconShape="circle" style={{ color: "white" }}>
           {collapsed ? (
             <MenuItem
               icon={<FaAngleDoubleRight style={{ color: "#BDBDBD" }} />}
@@ -66,8 +65,8 @@ function AdminSidebar({
                   color: "white",
                 }}
               >
-                <p className="uppercase text-center text-[#F14A00] text-3xl">
-                 Sethu ai
+                <p className="uppercase text-center text-[#E68242] text-3xl font-ddin">
+                  Sethu ai
                 </p>
               </div>
             </MenuItem>
@@ -85,8 +84,8 @@ function AdminSidebar({
               onClick={() => handleToggleSidebar(false)}
               className={`${
                 location.pathname === item.link
-                  ? "bg-[#00a76f14] text-[#FF9D23]"
-                  : "text-[#637381]"
+                  ? "bg-[#00a76f14] text-[#FF9D23] font-ddin"
+                  : "text-[#637381] font-ddin"
               }`}
             >
               {item.title}
