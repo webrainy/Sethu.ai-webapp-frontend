@@ -9,6 +9,7 @@ import "./styles.scss";
 import CourseRegister from "./pages/common/CourseRegister";
 import UserHomePage from "./pages/user/UserHomePage";
 import UserProgramsPage from "./pages/user/UserProgramsPage";
+import AdminStudentsList from "./pages/admin/AdminStudentsList";
 import AdminManageBatch from "./pages/admin/AdminManageBatch";
 
 function App() {
@@ -20,13 +21,14 @@ function App() {
             <Route path="/login" element={<Login />} />
           </Route>
           <Route path="/course_registration" element={<CourseRegister />} />
-
+            
           <Route path="/" element={<UserHomePage />} />
           <Route path="/our_programs" element={<UserProgramsPage />} />
 
           <Route element={<AdminLayout />}>
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/manage_batch" element={<AdminManageBatch />} />
+            <Route path="/admin/students" element={<AdminStudentsList />} />
           </Route>
         </Routes>
       </BrowserRouter>
