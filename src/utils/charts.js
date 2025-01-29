@@ -51,7 +51,8 @@ export const lineChartOptions = {
       style: {
         colors: "#545353",
         fontSize: "12px",
-        fontFamily: "Public Sans",
+        fontFamily: "Myriad Pro",
+        fontWeight: 300,
       },
     },
   },
@@ -60,13 +61,15 @@ export const lineChartOptions = {
       style: {
         colors: "#545353",
         fontSize: "12px",
-        fontFamily: "Public Sans",
+        fontFamily: "Myriad Pro",
+        fontWeight: 300,
       },
     },
   },
   legend: {
     show: true,
-    fontFamily: "Public Sans",
+    fontFamily: "Myriad Pro",
+    fontWeight: 300,
   },
   grid: {
     strokeDashArray: 4,
