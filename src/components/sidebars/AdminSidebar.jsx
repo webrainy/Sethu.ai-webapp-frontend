@@ -45,7 +45,7 @@ function AdminSidebar({
     >
       {/* Header */}
       <SidebarHeader>
-        <Menu iconShape="circle" style={{ color: "white",backgroundColor:"#032313" }}>
+        <Menu iconShape="circle" style={{ color: "white"}}>
           {collapsed ? (
             <MenuItem
               icon={<FaAngleDoubleRight style={{ color: "#BDBDBD" }} />}
@@ -66,7 +66,7 @@ function AdminSidebar({
                   color: "white",
                 }}
               >
-                <p className="uppercase text-center text-[#b9b9b9] text-3xl">
+                <p className="uppercase text-center text-[#F14A00] text-3xl">
                  Sethu ai
                 </p>
               </div>
@@ -85,7 +85,7 @@ function AdminSidebar({
               onClick={() => handleToggleSidebar(false)}
               className={`${
                 location.pathname === item.link
-                  ? "bg-[#00a76f14] text-[#00A76F]"
+                  ? "bg-[#00a76f14] text-[#FF9D23]"
                   : "text-[#637381]"
               }`}
             >
