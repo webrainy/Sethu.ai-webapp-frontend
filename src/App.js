@@ -9,6 +9,7 @@ import "./styles.scss";
 import CourseRegister from "./pages/common/CourseRegister";
 import UserHomePage from "./pages/user/UserHomePage";
 import UserProgramsPage from "./pages/user/UserProgramsPage";
+import AdminStudentsList from "./pages/admin/AdminStudentsList";
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
             <Route path="/login" element={<Login />} />
           </Route>
           <Route path="/course_registration" element={<CourseRegister />} />
-
+          <Route path="/students_list" element={<AdminStudentsList />} />
           <Route path="/" element={<UserHomePage />} />
           <Route path="/our_programs" element={<UserProgramsPage />} />
 
