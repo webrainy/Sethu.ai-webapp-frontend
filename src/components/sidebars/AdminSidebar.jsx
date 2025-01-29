@@ -10,6 +10,7 @@ import {
 import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 import { MdSpaceDashboard } from "react-icons/md";
 import { SiGoogleclassroom } from "react-icons/si";
+import { PiStudentFill } from "react-icons/pi";
 
 function AdminSidebar({
   collapsed,
@@ -29,6 +30,11 @@ function AdminSidebar({
       title: "Batch",
       icon: <SiGoogleclassroom />,
       link: "/admin/manage_batch",
+    },
+    {
+      title: "Student",
+      icon: <PiStudentFill />,
+      link: "/admin/students",
     },
   ];
 
