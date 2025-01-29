@@ -117,6 +117,19 @@ function Login() {
             Login
           </Button>
         </div>
+
+        <div className="text-center mt-4">
+          <p className="font-myriad font-light">
+            New here?{" "}
+            <span
+              className="font-ddin font-semibold cursor-pointer hover:text-[#E68242]"
+              onClick={() => navigate("/course_registration")}
+            >
+              Create an account
+            </span>{" "}
+            and unlock endless possibilities!
+          </p>
+        </div>
       </form>
     </div>
   );

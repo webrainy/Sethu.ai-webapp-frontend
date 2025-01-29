@@ -9,6 +9,7 @@ import "./styles.scss";
 import CourseRegister from "./pages/common/CourseRegister";
 import UserHomePage from "./pages/user/UserHomePage";
 import UserProgramsPage from "./pages/user/UserProgramsPage";
+import AdminManageBatch from "./pages/admin/AdminManageBatch";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
 
           <Route element={<AdminLayout />}>
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/manage_batch" element={<AdminManageBatch />} />
           </Route>
         </Routes>
       </BrowserRouter>
