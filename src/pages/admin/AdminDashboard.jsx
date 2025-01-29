@@ -36,7 +36,7 @@ function AdminDashboard() {
       <div className="flex gap-5 w-full rounded-2xl shadow-md p-3">
         <div className="flex-[3] space-y-5">
           <div className="flex gap-5">
-            <div className="bg-[#032313]  text-white p-4 rounded-xl font-semibold flex-1">
+          <div className="bg-gradient-to-br from-[#FFC324] to-white shadow-lg text-black p-4 rounded-xl font-semibold flex-1">
               <h1 className="text-sm flex items-center gap-2 pt-3 pb-3">
                 <span className="w-2 h-2 rounded-full bg-red-800 shadow-[0px_4px_8px_rgba(270,73,73,1)]"></span>
                 Update
@@ -56,7 +56,7 @@ function AdminDashboard() {
               </Button>
             </div>
 
-            <div className="bg-gray-100  p-4 rounded-xl border-gray-400 border-[0.5px] flex-1">
+            <div className="bg-gray-100 shadow-lg  p-4 rounded-xl border-gray-400 border-[0.5px] flex-1">
               <h1 className="text-xl flex items-center gap-2 pt-3 pb-3 font-semibold">
                 A Snapshot of 15 Active Batches!
               </h1>
