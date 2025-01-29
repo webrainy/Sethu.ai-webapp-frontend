@@ -751,18 +751,27 @@ function CourseRegister() {
                     label="Upload your resume"
                     name="resume"
                     required
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        resume: e.target.files[0],
-                      }))
-                    }
-                    accept=".pdf,.doc,.docx"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file && file.type !== "application/pdf") {
+                        alert("Only PDF files are allowed.");
+                        e.target.value = ""; // Clear the file input
+                      } else {
+                        setFormData((prev) => ({
+                          ...prev,
+                          resume: file,
+                        }));
+                      }
+                    }}
+                    accept=".pdf"
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                     containerProps={{
                       className: "font-ddin",
                     }}
                   />
+                  <span className="font-ddin text-xs text-red-500">
+                    Only PDF files are allowed.
+                  </span>
                 </div>
 
                 <div className="text-left">
@@ -778,12 +787,15 @@ function CourseRegister() {
                         coverLetter: e.target.files[0],
                       }))
                     }
-                    accept=".pdf,.doc,.docx"
+                    accept=".pdf"
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                     containerProps={{
                       className: "font-ddin",
                     }}
                   />
+                  <span className="font-ddin text-xs text-red-500">
+                    Only PDF files are allowed.
+                  </span>
                 </div>
 
                 <div className="flex justify-between">
