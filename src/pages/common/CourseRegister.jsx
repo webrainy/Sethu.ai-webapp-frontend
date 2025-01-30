@@ -593,7 +593,7 @@ function CourseRegister() {
 
             {/* Skills and Expertise */}
             {visibility.skills_and_expertise && (
-              <div className="space-y-3 max-h-[300px] overflow-y-auto p-2 font-ddin">
+              <div className="space-y-3 max-h-[350px] overflow-y-auto p-2 font-ddin">
                 <h3 className="font-bold font-ddin">Skills and Expertise</h3>
                 {[
                   "Python",
@@ -676,7 +676,7 @@ function CourseRegister() {
 
             {/* Additional Information */}
             {visibility.additional_information && (
-              <div className="space-y-3 max max-h-[300px] overflow-y-auto p-2 font-ddin">
+              <div className="space-y-3 max-h-[300px] overflow-y-auto p-2 font-ddin">
                 <h3 className="font-bold font-ddin">Additional Information</h3>
                 <div className="text-left">
                   <label className="block mb-1 font-medium">Hobbies</label>

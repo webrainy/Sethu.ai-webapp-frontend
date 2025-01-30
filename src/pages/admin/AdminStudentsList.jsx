@@ -7,10 +7,15 @@ import {
   CardBody,
   CardFooter,
   IconButton,
- 
 } from "@material-tailwind/react";
 
-const TABLE_HEAD = ["Name", "Education", "Phone Number", "Year of Passing","Status"];
+const TABLE_HEAD = [
+  "Name",
+  "Education",
+  "Phone Number",
+  "Year of Passing",
+  "Status",
+];
 
 const TABLE_ROWS = [
   {
@@ -86,22 +91,13 @@ function AdminStudentsList() {
             </thead>
             <tbody>
               {TABLE_ROWS.map(
-                (
-                  {
-                    name,
-                    email,
-                    education,
-                    phone,
-                    year_of_passing
-                  },
-                  index
-                ) => {
+                ({ name, email, education, phone, year_of_passing }, index) => {
                   const rowData = {
                     name,
                     email,
                     education,
                     phone,
-                    year_of_passing
+                    year_of_passing,
                   };
                   const isLast = index === TABLE_ROWS.length - 1;
                   const classes = isLast
@@ -160,7 +156,6 @@ function AdminStudentsList() {
                           {year_of_passing}
                         </Typography>
                       </td>
-                      
                     </tr>
                   );
                 }
@@ -173,11 +168,7 @@ function AdminStudentsList() {
             Previous
           </Button>
           <div className="flex items-center gap-2 ">
-            <IconButton
-              variant="outlined"
-              size="sm"
-              className="font-ddin"
-            >
+            <IconButton variant="outlined" size="sm" className="font-ddin">
               1
             </IconButton>
             <IconButton variant="text" size="sm" className="font-ddin">
