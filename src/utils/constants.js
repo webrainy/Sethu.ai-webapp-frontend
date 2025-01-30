@@ -21,3 +21,5 @@ export const EXPERTISE_LEVELS = [
   "Advanced",
   "Expert",
 ];
+
+export const Assignment_Table_Head = ["Assignment", "Status"];
