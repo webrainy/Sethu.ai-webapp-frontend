@@ -3,10 +3,12 @@ import React, { useState } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { VscPreview } from "react-icons/vsc";
 import ManageBatchModal from "../../components/modal/admin/ManageBatchModal";
+import { useNavigate } from "react-router-dom";
 
 function AdminManageBatch() {
   const [modal, setModal] = useState({ add: false, update: false });
   const [data, setData] = useState({ batch_name: "", editable: false });
+  const navigate = useNavigate();
 
   const handleAddModal = () => {
     setModal({ ...modal, add: true });
@@ -44,7 +46,10 @@ function AdminManageBatch() {
               key={i}
               className="p-4 bg-white rounded-xl hover:shadow-md transition-all flex justify-between items-center"
             >
-              <p className="font-ddin font-normal cursor-pointer">
+              <p
+                className="font-ddin font-normal cursor-pointer"
+                onClick={() => navigate("/admin/batch/details")}
+              >
                 Batch {i + 1}
               </p>
               <div className="flex gap-4 items-center">
@@ -52,7 +57,10 @@ function AdminManageBatch() {
                   onClick={handleUpdateModal}
                   className="text-lg cursor-pointer"
                 />
-                <VscPreview className="text-xl cursor-pointer" />
+                <VscPreview
+                  onClick={() => navigate("/admin/batch/details")}
+                  className="text-xl cursor-pointer"
+                />
               </div>
             </div>
           ))}

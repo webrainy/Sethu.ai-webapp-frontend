@@ -53,14 +53,14 @@ function StudentNotification() {
               {Notification_Table_Data.map(({ id, title, message, time }) => (
                 <tr
                   key={id}
-                  className="hover:bg-gray-100 transition flex justify-between"
+                  className="hover:bg-gray-100 transition flex justify-between border-b border-gray-200"
                 >
-                  <td className="px-6 py-4 flex items-center gap-4 border-b border-gray-200">
-                    <MdNotifications className="w-6 h-6"/>
+                  <td className="px-6 py-4 flex items-center gap-4">
+                    <MdNotifications className="w-6 h-6" />
                     <div className="flex flex-col justify-between h-full">
                       <Typography
                         variant="small"
-                        className="font-semibold text-gray-900 font-ddin"
+                        className="font-semibold text-gray-900 font-ddin text-base"
                       >
                         {title}
                       </Typography>
@@ -76,7 +76,7 @@ function StudentNotification() {
                     <div className="flex h-full">
                       <Typography
                         variant="small"
-                        className="text-gray-500 font-ddin text-xs"
+                        className="text-gray-500 font-ddin text-xs md:text-sm text-end"
                       >
                         {time}
                       </Typography>

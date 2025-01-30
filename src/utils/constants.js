@@ -6,12 +6,22 @@ export const phoneNumber =
 
 export const strongPwd = /(?=.*[a-z])(?=.*)(?=.*[0-9])(?=.*[^a-z0-9])(?=.{8,})/;
 
+
+export const urlRegex = /^(https?:\/\/)?([\w\d-]+\.)+[\w]{2,}(\/[\w\d-_.?=]*)*$/;
+
 export const ADMIN_STUDENTLIST_TABLE_HEAD = [
   "Name",
   "Education",
   "Phone Number",
   "Year of Passing",
   "Status",
+];
+
+export const ADMIN_BATCH_STUDENTLIST_TABLE_HEAD = [
+  "Student Name",
+  "Education",
+  "Email",
+  "Phone number",
 ];
 
 export const EXPERTISE_LEVELS = [
@@ -22,4 +32,4 @@ export const EXPERTISE_LEVELS = [
   "Expert",
 ];
 
-export const Assignment_Table_Head = ["Assignment", "Status"];
+export const Assignment_Table_Head = ["Assignments", "Status"];
