@@ -16,6 +16,7 @@ import StudentLayout from "./components/layouts/StudentLayout";
 import StudentBatchAssignments from "./pages/student/StudentBatch&Assignments";
 import StudentNotification from "./pages/student/StudentNotification";
 import StudentProfile from "./pages/student/StudentProfile";
+import AdminBatchDetails from "./pages/admin/AdminBatchDetails";
 
 function App() {
   return (
@@ -38,7 +39,12 @@ function App() {
               path="/admin/student/profile"
               element={<AdminStudentProfile />}
             />
+            <Route
+              path="/admin/batch/details"
+              element={<AdminBatchDetails />}
+            />
           </Route>
+          
           <Route element={<StudentLayout />}>
             <Route
               path="/student/batch"
@@ -48,10 +54,7 @@ function App() {
               path="/student/notification"
               element={<StudentNotification />}
             />
-            <Route
-              path="/student/profile"
-              element={<StudentProfile/>}
-            />
+            <Route path="/student/profile" element={<StudentProfile />} />
           </Route>
         </Routes>
       </BrowserRouter>

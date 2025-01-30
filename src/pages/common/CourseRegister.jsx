@@ -6,6 +6,7 @@ import {
   mailPattern,
   phoneNumber,
   strongPwd,
+  urlRegex,
 } from "../../utils/constants";
 import toast from "react-hot-toast";
 import RegisterImg from "../../assets/register_img.png";
@@ -189,7 +190,6 @@ function CourseRegister() {
 
   const handleAdditionalInformation = () => {
     const { hobbies, linkedin, github, coverLetter, resume } = formData;
-    const urlRegex = /^(https?:\/\/)?([\w\d-]+\.)+[\w]{2,}(\/[\w\d-_.?=]*)*$/;
 
     if (!hobbies || !linkedin || !github || !coverLetter || !resume) {
       toast.error(
