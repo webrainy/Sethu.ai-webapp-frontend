@@ -11,6 +11,10 @@ import UserHomePage from "./pages/user/UserHomePage";
 import UserProgramsPage from "./pages/user/UserProgramsPage";
 import AdminStudentsList from "./pages/admin/AdminStudentsList";
 import AdminManageBatch from "./pages/admin/AdminManageBatch";
+import StudentLayout from "./components/layouts/StudentLayout";
+import StudentBatchAssignments from "./pages/student/StudentBatch&Assignments";
+import StudentNotification from "./pages/student/StudentNotification";
+import StudentProfile from "./pages/student/StudentProfile";
 
 function App() {
   return (
@@ -21,7 +25,7 @@ function App() {
             <Route path="/login" element={<Login />} />
           </Route>
           <Route path="/course_registration" element={<CourseRegister />} />
-            
+
           <Route path="/" element={<UserHomePage />} />
           <Route path="/our_programs" element={<UserProgramsPage />} />
 
@@ -29,6 +33,20 @@ function App() {
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/manage_batch" element={<AdminManageBatch />} />
             <Route path="/admin/students" element={<AdminStudentsList />} />
+          </Route>
+          <Route element={<StudentLayout />}>
+            <Route
+              path="/student/batch"
+              element={<StudentBatchAssignments />}
+            />
+            <Route
+              path="/student/notification"
+              element={<StudentNotification />}
+            />
+            <Route
+              path="/student/profile"
+              element={<StudentProfile/>}
+            />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -5,3 +5,5 @@ export const phoneNumber =
   /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4}$/;
 
 export const strongPwd = /(?=.*[a-z])(?=.*)(?=.*[0-9])(?=.*[^a-z0-9])(?=.{8,})/;
+
+export const Assignment_Table_Head = ["Assignment", "Status"];
