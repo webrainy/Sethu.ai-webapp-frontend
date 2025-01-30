@@ -11,6 +11,7 @@ import UserHomePage from "./pages/user/UserHomePage";
 import UserProgramsPage from "./pages/user/UserProgramsPage";
 import AdminStudentsList from "./pages/admin/AdminStudentsList";
 import AdminManageBatch from "./pages/admin/AdminManageBatch";
+import AdminStudentProfile from "./pages/admin/AdminStudentProfile";
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
             <Route path="/login" element={<Login />} />
           </Route>
           <Route path="/course_registration" element={<CourseRegister />} />
-            
+
           <Route path="/" element={<UserHomePage />} />
           <Route path="/our_programs" element={<UserProgramsPage />} />
 
@@ -29,6 +30,10 @@ function App() {
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/manage_batch" element={<AdminManageBatch />} />
             <Route path="/admin/students" element={<AdminStudentsList />} />
+            <Route
+              path="/admin/student/profile"
+              element={<AdminStudentProfile />}
+            />
           </Route>
         </Routes>
       </BrowserRouter>
