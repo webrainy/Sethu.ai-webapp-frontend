@@ -1,7 +1,12 @@
 import React, { useState } from "react";
-import { Button, Input, Textarea } from "@material-tailwind/react";
+import { Button, Input, Radio, Textarea } from "@material-tailwind/react";
 import { Select, Option } from "@material-tailwind/react";
-import { mailPattern, phoneNumber, strongPwd } from "../../utils/constants";
+import {
+  EXPERTISE_LEVELS,
+  mailPattern,
+  phoneNumber,
+  strongPwd,
+} from "../../utils/constants";
 import toast from "react-hot-toast";
 import RegisterImg from "../../assets/register_img.png";
 import { useNavigate } from "react-router-dom";
@@ -49,14 +54,6 @@ function CourseRegister() {
 
   const navigate = useNavigate();
 
-  const expertiseLevels = [
-    "Beginner",
-    "Intermediate",
-    "Proficient",
-    "Advanced",
-    "Expert",
-  ];
-
   // const handlePasswordChange = (e) => {
   //   const value = e.target.value;
 
@@ -78,17 +75,6 @@ function CourseRegister() {
       ...prev,
       [name]: value,
     }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const { hobbies, linkedin, github, coverLetter, resume } = formData;
-    if (!hobbies || !linkedin || !github || !coverLetter || !resume) {
-      toast.error(
-        "Please fill all fields in the  Additional Information section."
-      );
-    }
   };
 
   const handlePersonalInformationButton = () => {
@@ -233,8 +219,15 @@ function CourseRegister() {
     });
   };
 
-  const handleButtonNavigate = () => {
-    navigate("/admin/dashboard");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const { fatherOccupation, motherOccupation, householdIncome } = formData;
+    if (!fatherOccupation || !motherOccupation || !householdIncome) {
+      toast.error("Please fill all fields.");
+    } else {
+      navigate("/admin/dashboard");
+    }
   };
 
   return (
@@ -365,51 +358,27 @@ function CourseRegister() {
                   </legend>
 
                   <div className="flex flex-row gap-3">
-                    <label
-                      htmlFor="bachelors"
-                      className="flex items-center gap-2"
-                    >
-                      <input
-                        id="bachelors"
-                        type="radio"
-                        name="education"
-                        value="Bachelors"
-                        style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                        containerProps={{
-                          className: "font-ddin",
-                        }}
-                        checked={formData.education === "Bachelors"}
-                        onChange={handleChange}
-                      />
-                      Bachelors
-                    </label>
-
-                    <label
-                      htmlFor="masters"
-                      className="flex items-center gap-2"
-                    >
-                      <input
-                        id="masters"
-                        type="radio"
-                        name="education"
-                        value="Masters"
-                        checked={formData.education === "Masters"}
-                        onChange={handleChange}
-                      />
-                      Masters
-                    </label>
-
-                    <label htmlFor="others" className="flex items-center gap-2">
-                      <input
-                        id="others"
-                        type="radio"
-                        name="education"
-                        value="others"
-                        checked={formData.education === "others"}
-                        onChange={handleChange}
-                      />
-                      others
-                    </label>
+                    <Radio
+                      name="education"
+                      label="Bachelors"
+                      value={"Bachelors"}
+                      checked={formData.education === "Bachelors"}
+                      onChange={handleChange}
+                    />
+                    <Radio
+                      name="education"
+                      label="Masters"
+                      value={"Masters"}
+                      checked={formData.education === "Masters"}
+                      onChange={handleChange}
+                    />
+                    <Radio
+                      name="education"
+                      label="Others"
+                      value={"Others"}
+                      checked={formData.education === "Others"}
+                      onChange={handleChange}
+                    />
                   </div>
                 </fieldset>
 
@@ -539,14 +508,14 @@ function CourseRegister() {
                   }}
                   required
                 />
-                <div className="text-left ">
+                <div className="text-left">
                   <label className="block mb-2">
                     Can you commit 3 months full-time (8 hours/day) in
                     Hyderabad? <span className="text-red-600">*</span>
                   </label>
                   <Select
                     name="commitment"
-                    label="commitment"
+                    label="Commitment"
                     value={formData.commitment}
                     onChange={(value) =>
                       setFormData((prev) => ({ ...prev, commitment: value }))
@@ -618,7 +587,7 @@ function CourseRegister() {
                       }
                       required
                     >
-                      {expertiseLevels.map((level) => (
+                      {EXPERTISE_LEVELS.map((level) => (
                         <Option
                           key={level}
                           value={level}
@@ -851,6 +820,7 @@ function CourseRegister() {
                     containerProps={{
                       className: "font-ddin",
                     }}
+                    required
                   />
                 </div>
 
@@ -876,6 +846,7 @@ function CourseRegister() {
                     containerProps={{
                       className: "font-ddin",
                     }}
+                    required
                   />
                 </div>
 
@@ -903,7 +874,7 @@ function CourseRegister() {
                       <Option
                         key={income}
                         value={income}
-                        style={{ fontFamily: "font-ddin" }}
+                        style={{ fontFamily: "D-DIN" }}
                       >
                         {income}
                       </Option>
@@ -931,7 +902,6 @@ function CourseRegister() {
                   <Button
                     type="submit"
                     className="text-[14px] tracking-[3px] font-ddin font-light hover:font-semibold transition-all bg-deep-orange-800 rounded-[10px] px-10 outline-none shadow-none hover:shadow-none border border-[#DD4633] hover:border-[#DD4633] hover:bg-[#DD4633] hover:text-white bg-transparent text-[#DD4633]"
-                    onClick={handleButtonNavigate}
                   >
                     Submit
                   </Button>

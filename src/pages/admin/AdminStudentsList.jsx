@@ -1,21 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Card,
   Typography,
-  Button,
   CardBody,
-  CardFooter,
   IconButton,
+  Input,
 } from "@material-tailwind/react";
-
-const TABLE_HEAD = [
-  "Name",
-  "Education",
-  "Phone Number",
-  "Year of Passing",
-  "Status",
-];
+import { ADMIN_STUDENTLIST_TABLE_HEAD } from "../../utils/constants";
+import { HiArrowLeft, HiArrowRight } from "react-icons/hi";
 
 const TABLE_ROWS = [
   {
@@ -24,6 +17,7 @@ const TABLE_ROWS = [
     phone: "9067876543",
     education: "Masters",
     year_of_passing: "2021",
+    status: "pending",
   },
   {
     name: "Amazon",
@@ -31,6 +25,7 @@ const TABLE_ROWS = [
     phone: "876543234",
     education: "Masters",
     year_of_passing: "2021",
+    status: "accepted",
   },
   {
     name: "Pinterest",
@@ -38,6 +33,7 @@ const TABLE_ROWS = [
     phone: "6789876789",
     education: "Masters",
     year_of_passing: "2021",
+    status: "rejected",
   },
   {
     name: "Google",
@@ -45,6 +41,7 @@ const TABLE_ROWS = [
     phone: "2343546512",
     education: "Masters",
     year_of_passing: "2021",
+    status: "pending",
   },
   {
     name: "Netflix",
@@ -52,31 +49,54 @@ const TABLE_ROWS = [
     phone: "9887766554",
     education: "Masters",
     year_of_passing: "2021",
+    status: "pending",
   },
 ];
 
 function AdminStudentsList() {
+  const [active, setActive] = useState(1);
   const navigate = useNavigate();
 
   const handleRowClick = (rowData) => {
-    navigate("/admin/staff/profile", { state: { user: rowData } });
+    navigate("/admin/student/profile", { state: { user: rowData } });
+  };
+
+  const next = () => {
+    if (active === 10) return;
+
+    setActive(active + 1);
+  };
+
+  const prev = () => {
+    if (active === 1) return;
+
+    setActive(active - 1);
   };
 
   return (
     <div className="p-3">
       <div className="flex justify-between items-center">
         <p className="text-3xl font-ddin font-semibold">Manage Student</p>
-        {/* <Button className="shadow-none hover:shadow-none capitalize font-ddin font-normal text-base border-[#DD4633] border bg-transparent text-[#DD4633] hover:text-white hover:bg-[#DD4633]">
-          Add Batch
-        </Button> */}
+
+        <div className="w-72">
+          <Input
+            type="text"
+            accessKey="s"
+            label="Type Alt+S to search"
+            style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+            containerProps={{
+              className: "font-ddin",
+            }}
+          />
+        </div>
       </div>
 
-      <Card className="h-full w-full box-shadow">
-        <CardBody className="overflow-auto px-0">
-          <table className="w-full min-w-max table-auto text-left ">
+      <Card className="h-fit w-full box-shadow mt-5">
+        <CardBody className="overflow-auto px-0 py-0">
+          <table className="w-full min-w-max table-auto text-left">
             <thead>
               <tr>
-                {TABLE_HEAD.map((head) => (
+                {ADMIN_STUDENTLIST_TABLE_HEAD.map((head) => (
                   <th key={head} className=" bg-[#e9e6e6] p-4">
                     <Typography
                       variant="small"
@@ -91,13 +111,17 @@ function AdminStudentsList() {
             </thead>
             <tbody>
               {TABLE_ROWS.map(
-                ({ name, email, education, phone, year_of_passing }, index) => {
+                (
+                  { name, email, education, phone, year_of_passing, status },
+                  index
+                ) => {
                   const rowData = {
                     name,
                     email,
                     education,
                     phone,
                     year_of_passing,
+                    status,
                   };
                   const isLast = index === TABLE_ROWS.length - 1;
                   const classes = isLast
@@ -115,7 +139,7 @@ function AdminStudentsList() {
                             <Typography
                               variant="small"
                               color="blue-gray"
-                              className="font-semibold font-ddin hover:underline"
+                              className="font-semibold font-ddin hover:underline text-base"
                             >
                               {name}
                             </Typography>
@@ -156,6 +180,15 @@ function AdminStudentsList() {
                           {year_of_passing}
                         </Typography>
                       </td>
+                      <td className={classes}>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal font-ddin"
+                        >
+                          {status}
+                        </Typography>
+                      </td>
                     </tr>
                   );
                 }
@@ -163,32 +196,30 @@ function AdminStudentsList() {
             </tbody>
           </table>
         </CardBody>
-        <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4 ">
-          <Button variant="outlined" size="sm" className="font-ddin">
-            Previous
-          </Button>
-          <div className="flex items-center gap-2 ">
-            <IconButton variant="outlined" size="sm" className="font-ddin">
-              1
-            </IconButton>
-            <IconButton variant="text" size="sm" className="font-ddin">
-              2
-            </IconButton>
-            <IconButton variant="text" size="sm" className="font-ddin">
-              ...
-            </IconButton>
-            <IconButton variant="text" size="sm" className="font-ddin">
-              9
-            </IconButton>
-            <IconButton variant="text" size="sm" className="font-ddin">
-              10
-            </IconButton>
-          </div>
-          <Button variant="outlined" size="sm" className="font-ddin">
-            Next
-          </Button>
-        </CardFooter>
       </Card>
+
+      <div className="flex items-center gap-6 justify-center mt-4">
+        <IconButton
+          size="sm"
+          variant="outlined"
+          onClick={prev}
+          disabled={active === 1}
+        >
+          <HiArrowLeft className="h-4 w-4" />
+        </IconButton>
+        <Typography color="gray" className="!block font-myriad font-light">
+          Page <strong className="text-gray-900">{active}</strong> of{" "}
+          <strong className="text-gray-900">10</strong>
+        </Typography>
+        <IconButton
+          size="sm"
+          variant="outlined"
+          onClick={next}
+          disabled={active === 10}
+        >
+          <HiArrowRight className="h-4 w-4" />
+        </IconButton>
+      </div>
     </div>
   );
 }
