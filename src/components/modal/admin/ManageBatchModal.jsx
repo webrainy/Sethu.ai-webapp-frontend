@@ -8,7 +8,15 @@ import {
 import React from "react";
 import { RiCloseCircleLine } from "react-icons/ri";
 
-function ManageBatchModal({ open, close, data, handleSubmit }) {
+function ManageBatchModal({
+  open,
+  close,
+  data,
+  handleChange,
+  handleSubmit,
+  loading,
+  handleUpdate,
+}) {
   return (
     <div>
       <Dialog size="xs" open={open} className="bg-transparent shadow-none">
@@ -28,25 +36,30 @@ function ManageBatchModal({ open, close, data, handleSubmit }) {
             </IconButton>
           </div>
 
-          <form className="mb-2 w-auto" onSubmit={handleSubmit}>
+          <form
+            className="mb-2 w-auto"
+            onSubmit={data.editable ? handleUpdate : handleSubmit}
+          >
             <Input
               label="Batch name"
               className="p-3"
-              name="name"
+              name="batch_name"
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
               containerProps={{
                 className: "font-ddin",
               }}
-              defaultValue={data?.batch_name || ""}
+              onChange={handleChange}
+              value={data?.batch_name}
               required
             />
 
             <div className="flex justify-end mt-3">
               <Button
                 type="submit"
-                className="shadow-none hover:shadow-none capitalize py-2 font-ddin font-normal text-base border-[#DD4633] border bg-transparent text-[#DD4633] hover:text-white hover:bg-[#DD4633]"
+                className="shadow-none hover:shadow-none capitalize py-2 font-ddin font-normal text-base border-[#DD4633] border bg-transparent text-[#DD4633] hover:text-white hover:bg-[#DD4633] disabled:cursor-not-allowed"
+                disabled={loading}
               >
-                {data?.editable ? "Update" : "Submit"}
+                {loading ? "Loading..." : data?.editable ? "Update" : "Submit"}
               </Button>
             </div>
           </form>
