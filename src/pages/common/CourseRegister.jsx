@@ -12,6 +12,8 @@ import toast from "react-hot-toast";
 import RegisterImg from "../../assets/register_img.png";
 import { useNavigate } from "react-router-dom";
 import { TbEye, TbEyeOff } from "react-icons/tb";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../../redux/auth/authSlice";
 
 function CourseRegister() {
   const [visibility, setVisibility] = useState({
@@ -31,29 +33,31 @@ function CourseRegister() {
     location: "",
     education: "",
     cgpa: "",
-    yearPassed: "",
-    gmatScore: "",
-    preparingCourse: "",
-    currentWork: "",
-    commitment: "",
-    Python: "",
-    Sql: "",
-    Java: "",
-    AnalyticalSkills: "",
-    ProblemSolving: "",
-    EnglishProficiency: "",
-    HackerRankScore: "",
+    year_passed: "",
+    gmat: "",
+    course_prep: "",
+    curnt_work: "",
+    commit_ft: "",
+    python: "",
+    sql: "",
+    java: "",
+    analytical_skill: "",
+    problem_solving: "",
+    english_proficiency: "",
+    hacker_rank: "",
     hobbies: "",
-    linkedin: "",
-    github: "",
+    linkedin_url: "",
+    github_url: "",
     resume: "",
-    coverLetter: "",
-    fatherOccupation: "",
-    motherOccupation: "",
-    householdIncome: "",
+    coverletter: "",
+    father_occ: "",
+    mother_occ: "",
+    income: "",
   });
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.auth);
 
   // const handlePasswordChange = (e) => {
   //   const value = e.target.value;
@@ -120,8 +124,8 @@ function CourseRegister() {
   };
 
   const handleEducationDetailButton = () => {
-    const { education, cgpa, yearPassed, gmatScore } = formData;
-    if (!education || !cgpa || !yearPassed || !gmatScore) {
+    const { education, cgpa, year_passed, gmat } = formData;
+    if (!education || !cgpa || !year_passed || !gmat) {
       toast.error("Please fill all fields in the Educational Details section.");
       return;
     }
@@ -137,8 +141,8 @@ function CourseRegister() {
   };
 
   const handlePreferenceButton = () => {
-    const { preparingCourse, currentWork, commitment } = formData;
-    if (!preparingCourse || !currentWork || !commitment) {
+    const { course_prep, curnt_work, commit_ft } = formData;
+    if (!course_prep || !curnt_work || !commit_ft) {
       toast.error("Please fill all fields in the  Preferences section.");
       return;
     }
@@ -155,22 +159,22 @@ function CourseRegister() {
 
   const handleSkillsandExpertiseButton = () => {
     const {
-      Python,
-      Java,
-      Sql,
-      AnalyticalSkills,
-      ProblemSolving,
-      EnglishProficiency,
-      HackerRankScore,
+      python,
+      java,
+      sql,
+      analytical_skill,
+      problem_solving,
+      english_proficiency,
+      hacker_rank,
     } = formData;
     if (
-      !Python ||
-      !Java ||
-      !Sql ||
-      !AnalyticalSkills ||
-      !ProblemSolving ||
-      !EnglishProficiency ||
-      !HackerRankScore
+      !python ||
+      !java ||
+      !sql ||
+      !analytical_skill ||
+      !problem_solving ||
+      !english_proficiency ||
+      !hacker_rank
     ) {
       toast.error(
         "Please fill all fields in the  Skills and Expertise section."
@@ -189,22 +193,22 @@ function CourseRegister() {
   };
 
   const handleAdditionalInformation = () => {
-    const { hobbies, linkedin, github, coverLetter, resume } = formData;
+    const { hobbies, linkedin_url, github_url, coverletter, resume } = formData;
 
-    if (!hobbies || !linkedin || !github || !coverLetter || !resume) {
+    if (!hobbies || !linkedin_url || !github_url || !coverletter || !resume) {
       toast.error(
         "Please fill all fields in the Additional Information section."
       );
       return;
     }
 
-    if (!urlRegex.test(linkedin)) {
-      toast.error("Please enter a valid LinkedIn profile URL.");
+    if (!urlRegex.test(linkedin_url)) {
+      toast.error("Please enter a valid linkedin_url profile URL.");
       return;
     }
 
-    if (!urlRegex.test(github)) {
-      toast.error("Please enter a valid GitHub profile URL.");
+    if (!urlRegex.test(github_url)) {
+      toast.error("Please enter a valid github_url profile URL.");
       return;
     }
 
@@ -219,14 +223,56 @@ function CourseRegister() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { fatherOccupation, motherOccupation, householdIncome } = formData;
-    if (!fatherOccupation || !motherOccupation || !householdIncome) {
+    const form_data = new FormData();
+
+    form_data.append("name", formData.name);
+    form_data.append("email", formData.email);
+    form_data.append("password", formData.password);
+    form_data.append("phone", `+91${formData.phone}`);
+    form_data.append("location", formData.location);
+    form_data.append("education", formData.education);
+    form_data.append("cgpa", formData.cgpa);
+    form_data.append("year_passed", formData.year_passed);
+    form_data.append("gmat", formData.gmat);
+    form_data.append("course_prep", formData.course_prep);
+    form_data.append("curnt_work", formData.curnt_work);
+    form_data.append("commit_ft", formData.commit_ft);
+    form_data.append("sk_python", formData.python);
+    form_data.append("sk_sql", formData.sql);
+    form_data.append("sk_java", formData.java);
+    form_data.append("sk_analyticalskill", formData.analytical_skill);
+    form_data.append("sk_prblmsolving", formData.problem_solving);
+    form_data.append("sk_engprof", formData.english_proficiency);
+    form_data.append("hckr_rnk", formData.hacker_rank);
+    form_data.append("hobbies", formData.hobbies);
+    form_data.append("linkedin_url", formData.linkedin_url);
+    form_data.append("github_url", formData.github_url);
+    form_data.append("resume", formData.resume);
+    form_data.append("coverletter", formData.coverletter);
+    form_data.append("father_occ", formData.father_occ);
+    form_data.append("mother_occ", formData.mother_occ);
+    form_data.append("income", formData.income);
+
+    const { father_occ, mother_occ, income } = formData;
+    if (!father_occ || !mother_occ || !income) {
       toast.error("Please fill all fields.");
     } else {
-      navigate("/admin/dashboard");
+      const result = await dispatch(
+        register({ end_point: "/api/auth/register", register_data: form_data })
+      ).unwrap();
+
+      if (result.responseCode === 200) {
+        toast.success("You're all set! Registration successful!");
+        navigate("/login");
+      } else {
+        toast.error(
+          result.responseMessage ||
+            "Oops! Registration failed. Give it another shot!"
+        );
+      }
     }
   };
 
@@ -296,6 +342,7 @@ function CourseRegister() {
                   }}
                   required
                 />
+
                 <Input
                   label="Password"
                   name="password"
@@ -410,8 +457,8 @@ function CourseRegister() {
                 <Input
                   label="Year Passed"
                   type="number"
-                  name="yearPassed"
-                  value={formData.yearPassed}
+                  name="year_passed"
+                  value={formData.year_passed}
                   onChange={handleChange}
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   containerProps={{
@@ -434,9 +481,9 @@ function CourseRegister() {
                 <Input
                   label="GMAT Score"
                   type="number"
-                  name="gmatScore"
+                  name="gmat"
                   maxLength={10}
-                  value={formData.gmatScore}
+                  value={formData.gmat}
                   onChange={handleChange}
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   containerProps={{
@@ -488,8 +535,8 @@ function CourseRegister() {
                 <h3 className="font-bold font-ddin">References</h3>
                 <Input
                   label="Are you preparing for any course?"
-                  name="preparingCourse"
-                  value={formData.preparingCourse}
+                  name="course_prep"
+                  value={formData.course_prep}
                   onChange={handleChange}
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   containerProps={{
@@ -499,8 +546,8 @@ function CourseRegister() {
                 />
                 <Input
                   label="What are you currently working on?"
-                  name="currentWork"
-                  value={formData.currentWork}
+                  name="curnt_work"
+                  value={formData.curnt_work}
                   onChange={handleChange}
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   containerProps={{
@@ -514,11 +561,11 @@ function CourseRegister() {
                     Hyderabad? <span className="text-red-600">*</span>
                   </label>
                   <Select
-                    name="commitment"
+                    name="commit_ft"
                     label="Commitment"
-                    value={formData.commitment}
+                    value={formData.commit_ft}
                     onChange={(value) =>
-                      setFormData((prev) => ({ ...prev, commitment: value }))
+                      setFormData((prev) => ({ ...prev, commit_ft: value }))
                     }
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                     containerProps={{
@@ -565,15 +612,15 @@ function CourseRegister() {
               <div className="space-y-3 max-h-[350px] overflow-y-auto p-2 font-ddin">
                 <h3 className="font-bold font-ddin">Skills and Expertise</h3>
                 {[
-                  "Python",
-                  "Sql",
-                  "Java",
-                  "AnalyticalSkills",
-                  "EnglishProficiency",
-                  "ProblemSolving",
+                  "python",
+                  "sql",
+                  "java",
+                  "analytical_skill",
+                  "english_proficiency",
+                  "problem_solving",
                 ].map((skill) => (
                   <div key={skill} className="text-left">
-                    <label className="block text-gray-700 mt-2 mb-[5px] font-ddin">
+                    <label className="block text-gray-700 mt-2 mb-[5px] font-ddin capitalize">
                       {skill.replace(/([A-Z])/g, " $1")}
                       <span className="text-red-600">*</span>
                     </label>
@@ -581,19 +628,26 @@ function CourseRegister() {
                       name={skill}
                       className="mb-2 font-ddin"
                       label={`Select Expertise for ${skill}`}
-                      value={formData[skill]}
+                      value={
+                        formData[skill] !== undefined
+                          ? String(formData[skill])
+                          : ""
+                      }
                       onChange={(value) =>
-                        setFormData((prev) => ({ ...prev, [skill]: value }))
+                        setFormData((prev) => ({
+                          ...prev,
+                          [skill]: Number(value),
+                        }))
                       }
                       required
                     >
-                      {EXPERTISE_LEVELS.map((level) => (
+                      {EXPERTISE_LEVELS.map(({ label, value }) => (
                         <Option
-                          key={level}
-                          value={level}
+                          key={value}
+                          value={String(value)}
                           style={{ fontFamily: "D-DIN" }}
                         >
-                          {level}
+                          {label}
                         </Option>
                       ))}
                     </Select>
@@ -606,8 +660,8 @@ function CourseRegister() {
                   <Input
                     type="number"
                     label="HackerRank Score"
-                    name="HackerRankScore"
-                    value={formData.HackerRankScore}
+                    name="hacker_rank"
+                    value={formData.hacker_rank}
                     onChange={handleChange}
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                     containerProps={{
@@ -669,14 +723,12 @@ function CourseRegister() {
                 </div>
 
                 <div className="text-left ">
-                  <label className="block mb-1 font-medium">
-                    LinkedIn Profile URL
-                  </label>
+                  <label className="block mb-1 font-medium">Linkdin Url</label>
                   <Input
                     type="url"
-                    label="Enter your LinkedIn profile URL"
-                    name="linkedin"
-                    value={formData.linkedin}
+                    label="Enter your linkedin url"
+                    name="linkedin_url"
+                    value={formData.linkedin_url}
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                     containerProps={{
                       className: "font-ddin",
@@ -684,7 +736,7 @@ function CourseRegister() {
                     onChange={(e) => {
                       setFormData((prev) => ({
                         ...prev,
-                        linkedin: e.target.value,
+                        linkedin_url: e.target.value,
                       }));
                     }}
                     required
@@ -693,13 +745,13 @@ function CourseRegister() {
 
                 <div className="text-left">
                   <label className="block mb-1 font-medium">
-                    GitHub or Other Source Code URL
+                    GitHub Url or Other Source Code URL
                   </label>
                   <Input
                     type="url"
-                    label="Enter your GitHub or other source code URL"
-                    name="github"
-                    value={formData.github}
+                    label="Enter your Github Url or other source code URL"
+                    name="github_url"
+                    value={formData.github_url}
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                     containerProps={{
                       className: "font-ddin",
@@ -707,7 +759,7 @@ function CourseRegister() {
                     onChange={(e) => {
                       setFormData((prev) => ({
                         ...prev,
-                        github: e.target.value,
+                        github_url: e.target.value,
                       }));
                     }}
                     required
@@ -724,7 +776,7 @@ function CourseRegister() {
                       const file = e.target.files[0];
                       if (file && file.type !== "application/pdf") {
                         alert("Only PDF files are allowed.");
-                        e.target.value = ""; // Clear the file input
+                        e.target.value = "";
                       } else {
                         setFormData((prev) => ({
                           ...prev,
@@ -748,12 +800,12 @@ function CourseRegister() {
                   <Input
                     type="file"
                     label="Upload your cover letter"
-                    name="coverLetter"
+                    name="coverletter"
                     required
                     onChange={(e) =>
                       setFormData((prev) => ({
                         ...prev,
-                        coverLetter: e.target.files[0],
+                        coverletter: e.target.files[0],
                       }))
                     }
                     accept=".pdf"
@@ -807,13 +859,13 @@ function CourseRegister() {
                   </label>
                   <Input
                     type="text"
-                    name="fatherOccupation"
+                    name="father_occ"
                     label="Father's Occupation"
-                    value={formData.fatherOccupation}
+                    value={formData.father_occ}
                     onChange={(e) =>
                       setFormData((prev) => ({
                         ...prev,
-                        fatherOccupation: e.target.value,
+                        father_occ: e.target.value,
                       }))
                     }
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
@@ -833,13 +885,13 @@ function CourseRegister() {
                   </label>
                   <Input
                     type="text"
-                    name="motherOccupation"
+                    name="mother_occ"
                     label="Mother's Occupation"
-                    value={formData.motherOccupation}
+                    value={formData.mother_occ}
                     onChange={(e) =>
                       setFormData((prev) => ({
                         ...prev,
-                        motherOccupation: e.target.value,
+                        mother_occ: e.target.value,
                       }))
                     }
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
@@ -855,13 +907,13 @@ function CourseRegister() {
                     Household Income
                   </label>
                   <Select
-                    name="householdIncome"
+                    name="income"
                     label="Select Household Income"
-                    value={formData.householdIncome}
+                    value={formData.income}
                     onChange={(value) =>
                       setFormData((prev) => ({
                         ...prev,
-                        householdIncome: value,
+                        income: value,
                       }))
                     }
                   >
@@ -903,7 +955,7 @@ function CourseRegister() {
                     type="submit"
                     className="text-[14px] tracking-[3px] font-ddin font-light hover:font-semibold transition-all bg-deep-orange-800 rounded-[10px] px-10 outline-none shadow-none hover:shadow-none border border-[#DD4633] hover:border-[#DD4633] hover:bg-[#DD4633] hover:text-white bg-transparent text-[#DD4633]"
                   >
-                    Submit
+                    {loading ? "Loading..." : "Submit"}
                   </Button>
                 </div>
               </div>

@@ -27,11 +27,11 @@ export const ADMIN_BATCH_STUDENTLIST_TABLE_HEAD = [
 ];
 
 export const EXPERTISE_LEVELS = [
-  "Beginner",
-  "Intermediate",
-  "Proficient",
-  "Advanced",
-  "Expert",
+  { label: "Beginner", value: 1 },
+  { label: "Intermediate", value: 2 },
+  { label: "Proficient", value: 3 },
+  { label: "Advanced", value: 4 },
+  { label: "Expert", value: 5 },
 ];
 
 export const Assignment_Table_Head = ["Assignments", "Status"];

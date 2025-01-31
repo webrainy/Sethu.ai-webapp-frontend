@@ -24,6 +24,19 @@ export const login = createAsyncThunk(
   }
 );
 
+// register
+export const register = createAsyncThunk(
+  "auth/register",
+  async ({ end_point, register_data }, { rejectWithValue }) => {
+    try {
+      const res = await axios.post(`${base_url + end_point}`, register_data);
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response.status || "Registration failed");
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -43,6 +56,18 @@ const authSlice = createSlice({
     });
 
     // signup case
+    builder.addCase(register.pending, (state, action) => {
+      state.loading = true;
+      state.error = "";
+    });
+    builder.addCase(register.fulfilled, (state, action) => {
+      state.loading = false;
+      // state.token = action.payload.responseData?.access_token;
+    });
+    builder.addCase(register.rejected, (state, action) => {
+      state.error = action.payload.error;
+      state.loading = false;
+    });
   },
 });
 
