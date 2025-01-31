@@ -1,23 +1,25 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+import { base_url } from "../../utils/constants";
 
 const initialState = {
-  user: null,
   token: "",
   loading: false,
   error: "",
-  isAuthenticated: false,
 };
 
 // action for login
 export const login = createAsyncThunk(
   "auth/login",
-  async (login_data, { rejectWithValue }) => {
+  async ({ end_point, login_data }, { rejectWithValue }) => {
     try {
-    //   console.log(login_data);
-      return login_data;
+      const res = await axios.post(`${base_url + end_point}`, {
+        username: login_data.email,
+        password: login_data.password,
+      });
+      return res.data;
     } catch (error) {
-      console.log(error);
-      rejectWithValue(error.response.status);
+      return rejectWithValue(error.response.status || "Login failed");
     }
   }
 );
@@ -33,15 +35,14 @@ const authSlice = createSlice({
     });
     builder.addCase(login.fulfilled, (state, action) => {
       state.loading = false;
-      //   state.token = action.payload.token;
-      //   state.user = action.payload.user;
-      state.isAuthenticated = true;
+      state.token = action.payload.responseData?.access_token;
     });
     builder.addCase(login.rejected, (state, action) => {
       state.error = action.payload.error;
       state.loading = false;
-      state.isAuthenticated = false;
     });
+
+    // signup case
   },
 });
 
