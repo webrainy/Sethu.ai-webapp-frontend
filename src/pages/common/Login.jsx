@@ -56,11 +56,19 @@ function Login() {
       login({ end_point: "/api/auth/login", login_data: loginData })
     ).unwrap();
 
+    console.log(result);
+
     if (result.responseCode === 200) {
       if (result.responseData.role === 1) {
         navigate("/admin/dashboard");
         localStorage.setItem(
           "sethu_admin_access_token",
+          result.responseData.access_token
+        );
+      } else if (result.responseData.role === 2) {
+        navigate("/student/assignment");
+        localStorage.setItem(
+          "sethu_student_access_token",
           result.responseData.access_token
         );
       } else {

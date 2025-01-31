@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   ProSidebar,
   Menu,
@@ -11,6 +11,7 @@ import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 import { MdNotifications } from "react-icons/md";
 import { SiGoogleclassroom } from "react-icons/si";
 import { CgProfile } from "react-icons/cg";
+import { LuLogOut } from "react-icons/lu";
 
 function StudentSidebar({
   collapsed,
@@ -19,12 +20,13 @@ function StudentSidebar({
   handleCollapsedChange,
 }) {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const sidebarMenu = [
     {
-      title: "Batch",
+      title: "Assignments",
       icon: <SiGoogleclassroom />,
-      link: "/student/batch",
+      link: "/student/assignment",
     },
     {
       title: "Notifications",
@@ -38,6 +40,11 @@ function StudentSidebar({
       link: "/student/profile",
     },
   ];
+
+  const handleStudentLogout = () => {
+    localStorage.removeItem("sethu_student_access_token");
+    navigate("/login");
+  };
 
   return (
     <ProSidebar
@@ -99,6 +106,13 @@ function StudentSidebar({
               <NavLink to={item.link} />
             </MenuItem>
           ))}
+          <MenuItem
+            icon={<LuLogOut />}
+            onClick={() => handleStudentLogout()}
+            className="text-[#637381] font-ddin"
+          >
+            Logout
+          </MenuItem>
         </Menu>
       </SidebarContent>
     </ProSidebar>

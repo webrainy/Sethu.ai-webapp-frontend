@@ -47,7 +47,7 @@ function App() {
           
           <Route element={<StudentLayout />}>
             <Route
-              path="/student/batch"
+              path="/student/assignment"
               element={<StudentBatchAssignments />}
             />
             <Route
