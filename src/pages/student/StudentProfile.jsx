@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import {
   Button,
@@ -9,10 +9,25 @@ import {
   Textarea,
 } from "@material-tailwind/react";
 import { EXPERTISE_LEVELS } from "../../utils/constants";
+import { fetchStudentProfile } from "../../redux/studentSlice";
+import { useDispatch } from "react-redux";
 
 function StudentProfile() {
   const location = useLocation();
   const user = location.state?.user;
+
+  const dispatch = useDispatch();
+
+  const access_token = localStorage.getItem("sethu_student_access_token")
+
+  useEffect(() => {
+      dispatch(
+        fetchStudentProfile({
+          end_point: "/api/student/list",
+          access_token: access_token,
+        })
+      ).unwrap();
+    }, [dispatch]);
 
   const [formData, setFormData] = useState({
     name: user?.name || "",
