@@ -1,11 +1,18 @@
-import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import AdminSidebar from "../sidebars/AdminSidebar";
 import { FaBars } from "react-icons/fa";
 
 function AdminLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const [toggled, setToggled] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!localStorage.getItem("sethu_admin_access_token")) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   const handleCollapsedChange = () => {
     setCollapsed(!collapsed);

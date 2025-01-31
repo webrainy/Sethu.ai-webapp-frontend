@@ -3,7 +3,7 @@ import { Button, Input } from "@material-tailwind/react";
 import { TbEye, TbEyeOff } from "react-icons/tb";
 import { mailPattern, strongPwd } from "../../utils/constants";
 import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../redux/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 
@@ -15,6 +15,7 @@ function Login() {
   });
   const [passVisible, setPassVisible] = useState(false);
   const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
@@ -43,15 +44,30 @@ function Login() {
     e.preventDefault();
 
     if (!loginValid.email) {
-      toast.error("Invalid email address.");
-    } else if (!loginValid.password) {
-      toast.error(
+      return toast.error("Invalid email address.");
+    }
+    if (!loginValid.password) {
+      return toast.error(
         "Password must have atleast 1 lowercase, number, special characters and minimum 8 characters."
       );
+    }
+
+    const result = await dispatch(
+      login({ end_point: "/api/auth/login", login_data: loginData })
+    ).unwrap();
+
+    if (result.responseCode === 200) {
+      if (result.responseData.role === 1) {
+        navigate("/admin/dashboard");
+        localStorage.setItem(
+          "sethu_admin_access_token",
+          result.responseData.access_token
+        );
+      } else {
+        toast.error("Unauthorized access.");
+      }
     } else {
-      const result = await dispatch(login(loginData)).unwrap();
-      console.log(result);
-      navigate("/admin/dashboard");
+      toast.error(result.responseMessage || "Login failed. Please try again.");
     }
   };
 
@@ -113,8 +129,9 @@ function Login() {
           <Button
             type="submit"
             className="mt-4 text-[14px] tracking-[3px] font-montserrat font-ddin font-light hover:font-semibold transition-all bg-deep-orange-800 rounded-[10px] px-10 outline-none shadow-none hover:shadow-none border border-[#DD4633] hover:border-[#DD4633] hover:bg-[#DD4633] hover:text-white bg-transparent text-[#DD4633]"
+            disabled={loading}
           >
-            Login
+            {loading ? "Loading..." : "Login"}
           </Button>
         </div>
 
