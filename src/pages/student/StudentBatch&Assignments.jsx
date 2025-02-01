@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardBody, Typography } from "@material-tailwind/react";
 import { Assignment_Table_Head } from "../../utils/constants";
+import { fetchAssignment } from "../../redux/assignmentSlice";
+import { useDispatch,useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const Assignment_Table_Data = [
   { name: "Build a React To-Do App", status: "Completed" },
@@ -9,6 +12,27 @@ const Assignment_Table_Data = [
 ];
 
 function StudentBatchAssignments() {
+  const[formData,setFormData]=useState({
+    name:"",
+    
+  })
+  
+  const dispatch = useDispatch();
+
+  const access_token = localStorage.getItem("sethu_student_access_token");
+
+  const { assignment_list } = useSelector((state) => state.student);
+  const studentAssignment = assignment_list?.studentData?.[0];
+
+  useEffect(() => {
+      dispatch(
+        fetchAssignment({
+          end_point: "/api/student/list",
+          access_token: access_token,
+        })
+      ).unwrap();
+    }, [dispatch]);
+
   const statusColors = {
     Completed: "text-green-600 bg-green-100 font-ddin",
     Pending: "text-red-600 bg-red-100 font-ddin",

@@ -17,38 +17,39 @@ function StudentProfile() {
   const location = useLocation();
   const user = location.state?.user;
   const { profile_data } = useSelector((state) => state.student);
-  const studentProfile = profile_data?.[0];
+  const studentProfile = profile_data?.studentData?.[0];
 
   const [formData, setFormData] = useState({
-    name: user?.name || "",
-    email: user?.email || "",
-    phone: user?.phone || "",
-    location: user?.location || "",
-    education: user?.education || "",
-    cgpa: user?.cgpa || "",
-    year_passed: user?.year_passed || "",
-    gmat: user?.gmat || "",
-    course_prep: user?.course_prep || "",
-    curnt_work: user?.curnt_work || "",
-    commit_ft: user?.commit_ft || "",
-    hobbies: user?.hobbies || "",
-    linkedin_url: user?.linkedin_url || "",
-    github_url: user?.github_url || "",
-    resume: user?.resume || "",
-    coverletter: user?.coverletter || "",
-    skill: user?.skill || "",
-    father_occ: user?.father_occ || "",
-    mother_occ: user?.mother_occ || "",
-    income: user?.income || "",
-    review_status: user?.review_status || "",
-    select_batch: user?.select_batch || "",
-    final_comments: user?.final_comments || "",
-    python: user?.python || "",
-    sql: user?.sql || "",
-    java: user?.java || "",
-    analytical_skills: user?.analytical_skills || "",
-    english_proficiency: user?.english_proficiency || "",
-    problem_Solving: user?.problem_Solving || "",
+    name: "",
+    email: "",
+    phone: "",
+    location: "",
+    education: "",
+    cgpa: "",
+    year_passed: "",
+    gmat: "",
+    course_prep: "",
+    curnt_work: "",
+    commit_ft: "",
+    hobbies: "",
+    linkedin_url: "",
+    github_url: "",
+    resume: "",
+    coverletter: "",
+    skill: "",
+    father_occ: "",
+    mother_occ: "",
+    income: "",
+    review_status: "",
+    select_batch: "",
+    final_comments: "",
+    python: "",
+    sql: "",
+    java: "",
+    analytical_skills: "",
+    english_proficiency: "",
+    problem_Solving: "",
+    hckr_rnk: "",
   });
 
   const dispatch = useDispatch();
@@ -63,6 +64,8 @@ function StudentProfile() {
       })
     ).unwrap();
   }, [dispatch]);
+
+  console.log(profile_data);
 
   useEffect(() => {
     if (studentProfile) {
@@ -96,6 +99,7 @@ function StudentProfile() {
         sk_analyticalskill: studentProfile.sk_analyticalskill || "",
         sk_prblmsolving: studentProfile.sk_prblmsolving || "",
         sk_engprof: studentProfile.sk_engprof || "",
+        hckr_rnk: studentProfile.hckr_rnk || "",
       });
     }
   }, [studentProfile, user]);
@@ -109,20 +113,19 @@ function StudentProfile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("data",formData);
-    
+    console.log("data", formData);
   };
 
   return (
     <div className="p-3">
       <div className="flex justify-between items-center">
         <p className="text-3xl font-ddin font-semibold">
-          All About <span className="text-[#FF9D23]">Student Name</span>
+          All About <span className="text-[#FF9D23]">{formData.name}</span>
         </p>
       </div>
 
       <form onSubmit={handleSubmit}>
-        {profile_data && profile_data.length > 0 ? (
+        {profile_data && profile_data?.studentData?.length > 0 ? (
           <>
             <div className="mt-5 grid lg:grid-cols-2 gap-4">
               {/* {profile_data.map((item, i) => ( */}
@@ -151,7 +154,7 @@ function StudentProfile() {
                   name="email"
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   value={formData.email}
-                  onChange={handleInputChange}
+                  onChange={(e) => handleInputChange(e.target.value, "email")}
                   containerProps={{
                     className: "font-ddin",
                   }}
@@ -164,7 +167,7 @@ function StudentProfile() {
                   name="phone"
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   value={formData.phone}
-                  onChange={handleInputChange}
+                  onChange={(e) => handleInputChange(e.target.value, "phone")}
                   maxLength={10}
                   containerProps={{
                     className: "font-ddin",
@@ -177,7 +180,9 @@ function StudentProfile() {
                   name="location"
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   value={formData.location}
-                  onChange={handleInputChange}
+                  onChange={(e) =>
+                    handleInputChange(e.target.value, "location")
+                  }
                   containerProps={{
                     className: "font-ddin",
                   }}
@@ -228,7 +233,7 @@ function StudentProfile() {
                   type="number"
                   name="cgpa"
                   value={formData.cgpa}
-                  onChange={handleInputChange}
+                  onChange={(e) => handleInputChange(e.target.value, "cgpa")}
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   containerProps={{
                     className: "font-ddin",
@@ -252,7 +257,9 @@ function StudentProfile() {
                   type="number"
                   name="year_passed"
                   value={formData.year_passed}
-                  onChange={handleInputChange}
+                  onChange={(e) =>
+                    handleInputChange(e.target.value, "year_passed")
+                  }
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   containerProps={{
                     className: "font-ddin",
@@ -275,7 +282,7 @@ function StudentProfile() {
                   type="number"
                   name="gmat"
                   value={formData.gmat}
-                  onChange={handleInputChange}
+                  onChange={(e) => handleInputChange(e.target.value, "gmat")}
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   containerProps={{
                     className: "font-ddin",
@@ -303,7 +310,9 @@ function StudentProfile() {
                     label="Are you preparing for any course?"
                     name="course_prep"
                     value={formData.course_prep}
-                    onChange={handleInputChange}
+                    onChange={(e) =>
+                      handleInputChange(e.target.value, "course_prep")
+                    }
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                     containerProps={{
                       className: "font-ddin",
@@ -314,7 +323,9 @@ function StudentProfile() {
                     label="What are you currently working on?"
                     name="curnt_work"
                     value={formData.curnt_work}
-                    onChange={handleInputChange}
+                    onChange={(e) =>
+                      handleInputChange(e.target.value, "curnt_work")
+                    }
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                     containerProps={{
                       className: "font-ddin",
@@ -330,7 +341,9 @@ function StudentProfile() {
                       name="commit_ft"
                       label="Commitment"
                       value={formData.commit_ft}
-                      onChange={handleInputChange}
+                      onChange={(e) =>
+                        handleInputChange(e.target.value, "commit_ft")
+                      }
                       style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                       containerProps={{
                         className: "font-ddin",
@@ -356,7 +369,9 @@ function StudentProfile() {
                     label="Hobbies"
                     name="hobbies"
                     value={formData.hobbies}
-                    onChange={handleInputChange}
+                    onChange={(e) =>
+                      handleInputChange(e.target.value, "hobbies")
+                    }
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                     containerProps={{
                       className: "font-ddin",
@@ -371,8 +386,10 @@ function StudentProfile() {
                     containerProps={{
                       className: "font-ddin",
                     }}
-                    value={formData.linkedin_url}
-                    // onChange={(value)=>handleInputChange(value,linkedin_url)}
+                    value={formData.linkedin_url || ""}
+                    onChange={(e) =>
+                      handleInputChange(e.target.value, "linkedin_url")
+                    }
                     required
                   />
                   <Input
@@ -384,7 +401,9 @@ function StudentProfile() {
                       className: "font-ddin",
                     }}
                     value={formData.github_url}
-                    onChange={handleInputChange}
+                    onChange={(e) =>
+                      handleInputChange(e.target.value, "github_url")
+                    }
                     required
                   />
 
@@ -507,7 +526,7 @@ function StudentProfile() {
                     <Select
                       name={skill.name}
                       className="mb-2 font-ddin"
-                      label={`Select Expertise for ${skill.name.replace(
+                      label={`Select Expertise for ${skill.label.replace(
                         "sk_",
                         ""
                       )}`}
@@ -531,6 +550,25 @@ function StudentProfile() {
                     </Select>
                   </div>
                 ))}
+                <div className="text-left mt-3 mb-3">
+                  <label className="block text-gray-700 font-ddin mb-1">
+                    Hacker Rank Score
+                  </label>
+                  <Input
+                    type="number"
+                    label="Hacker Rank Score"
+                    name="hckr_rnk"
+                    value={formData.hckr_rnk}
+                    onChange={(e) =>
+                      handleInputChange(e.target.value, "hckr_rnk")
+                    }
+                    style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                    containerProps={{
+                      className: "font-ddin",
+                    }}
+                    required
+                  />
+                </div>
               </div>
 
               {/* Other Information */}
@@ -543,7 +581,9 @@ function StudentProfile() {
                   name="father_occ"
                   label="Father's Occupation"
                   value={formData.father_occ}
-                  onChange={handleInputChange}
+                  onChange={(e) =>
+                    handleInputChange(e.target.value, "father_occ")
+                  }
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   containerProps={{
                     className: "font-ddin",
@@ -555,7 +595,9 @@ function StudentProfile() {
                   name="mother_occ"
                   label="Mother's Occupation"
                   value={formData.mother_occ}
-                  onChange={handleInputChange}
+                  onChange={(e) =>
+                    handleInputChange(e.target.value, "mother_occ")
+                  }
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   containerProps={{
                     className: "font-ddin",
@@ -566,7 +608,7 @@ function StudentProfile() {
                   name="income"
                   label="Select Household Income"
                   value={formData.income}
-                  onChange={handleInputChange}
+                  onChange={(e) => handleInputChange(e.target.value, "incomev")}
                 >
                   {[
                     "Less than 5 Lakhs",
