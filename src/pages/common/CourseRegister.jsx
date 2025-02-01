@@ -277,7 +277,7 @@ function CourseRegister() {
   };
 
   return (
-    <div className="bg-gradient-to-b from-[#de4a34] to-[#e57f41] flex justify-center items-center h-screen text-[#333]">
+    <div className="bg-gradient-to-b from-[#de4a34] to-[#e57f41] flex justify-center items-center min-h-screen text-[#333]">
       <div
         className="flex bg-white rounded-[20px] overflow-hidden max-w-[900px] w-full mx-3 md:mx-0"
         style={{ boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)" }}
@@ -954,6 +954,7 @@ function CourseRegister() {
                   <Button
                     type="submit"
                     className="text-[14px] tracking-[3px] font-ddin font-light hover:font-semibold transition-all bg-deep-orange-800 rounded-[10px] px-10 outline-none shadow-none hover:shadow-none border border-[#DD4633] hover:border-[#DD4633] hover:bg-[#DD4633] hover:text-white bg-transparent text-[#DD4633]"
+                    disabled={loading}
                   >
                     {loading ? "Loading..." : "Submit"}
                   </Button>

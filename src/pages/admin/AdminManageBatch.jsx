@@ -126,7 +126,9 @@ function AdminManageBatch() {
                   >
                     <p
                       className="font-ddin font-normal cursor-pointer"
-                      onClick={() => navigate("/admin/batch/details")}
+                      onClick={() =>
+                        navigate("/admin/batch/details", { state: { item } })
+                      }
                     >
                       {item.name}
                     </p>
@@ -136,7 +138,9 @@ function AdminManageBatch() {
                         className="text-lg cursor-pointer"
                       />
                       <VscPreview
-                        onClick={() => navigate("/admin/batch/details")}
+                        onClick={() =>
+                          navigate("/admin/batch/details", { state: { item } })
+                        }
                         className="text-xl cursor-pointer"
                       />
                     </div>

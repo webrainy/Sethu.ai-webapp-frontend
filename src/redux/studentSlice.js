@@ -8,7 +8,7 @@ const initialState = {
   profile_data: [],
 };
 
-// fetch all data
+// fetch student profile
 export const fetchStudentProfile = createAsyncThunk(
   "student/profile",
   async ({ end_point, access_token }, { rejectWithValue }) => {
@@ -23,7 +23,7 @@ export const fetchStudentProfile = createAsyncThunk(
   }
 );
 
-const studentProfileSlice = createSlice({
+const studentSlice = createSlice({
     name: "student",
     initialState,
     extraReducers: (builder) => {
@@ -45,6 +45,6 @@ const studentProfileSlice = createSlice({
   });
 
 //   generate reducers
-const studentReducers = studentProfileSlice.reducer;
+const studentReducers = studentSlice.reducer;
 
 export default studentReducers;

@@ -56,8 +56,6 @@ function Login() {
       login({ end_point: "/api/auth/login", login_data: loginData })
     ).unwrap();
 
-    console.log(result);
-
     if (result.responseCode === 200) {
       if (result.responseData.role === 1) {
         navigate("/admin/dashboard");
