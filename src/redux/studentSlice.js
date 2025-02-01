@@ -34,8 +34,11 @@ const studentProfileSlice = createSlice({
       });
       builder.addCase(fetchStudentProfile.fulfilled, (state, action) => {
         state.loading = false;
-        state.batch_items =
+        state.profile_data =
           action.payload.responseCode === 200 ? action.payload.responseData : [];
+
+          console.log(action.payload);
+          
       });
       builder.addCase(fetchStudentProfile.rejected, (state, action) => {
         state.error = action.payload.error;

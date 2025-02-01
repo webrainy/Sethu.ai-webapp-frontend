@@ -59,17 +59,6 @@ function CourseRegister() {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.auth);
 
-  // const handlePasswordChange = (e) => {
-  //   const value = e.target.value;
-
-  //   if (strongPwd.test(value)) {
-  //     setLoginValid({ ...loginValid, password: true });
-  //   } else {
-  //     setLoginValid({ ...loginValid, password: false });
-  //   }
-  //   setLoginData({ ...loginData, password: value });
-  // };
-
   const handlePasswordVisibility = () => {
     setPassVisible(!passVisible);
   };
@@ -203,12 +192,12 @@ function CourseRegister() {
     }
 
     if (!urlRegex.test(linkedin_url)) {
-      toast.error("Please enter a valid linkedin_url profile URL.");
+      toast.error("Please enter a valid Linkedin url.");
       return;
     }
 
     if (!urlRegex.test(github_url)) {
-      toast.error("Please enter a valid github_url profile URL.");
+      toast.error("Please enter a valid Github url.");
       return;
     }
 
@@ -659,7 +648,7 @@ function CourseRegister() {
                   </label>
                   <Input
                     type="number"
-                    label="HackerRank Score"
+                    label="Hacker Rank Score"
                     name="hacker_rank"
                     value={formData.hacker_rank}
                     onChange={handleChange}
