@@ -24,6 +24,21 @@ export const fetchBatchItems = createAsyncThunk(
   }
 );
 
+// fetch batch details
+export const fetchBatchSelectedItems = createAsyncThunk(
+  "batch/select_batch",
+  async ({ end_point, access_token }, { rejectWithValue }) => {
+    try {
+      const res = await axios.get(`${base_url + end_point}`, {
+        headers: { Authorization: access_token },
+      });
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data || "Fetch failed");
+    }
+  }
+);
+
 // add items
 export const postBatchItem = createAsyncThunk(
   "batch/add",
@@ -79,6 +94,21 @@ const batchSlice = createSlice({
     builder.addCase(fetchBatchItems.rejected, (state, action) => {
       state.error = action.payload.error;
       state.loading = false;
+    });
+
+    // fetch batch details
+    builder.addCase(fetchBatchSelectedItems.pending, (state, action) => {
+      state.loading = true;
+      state.error = "";
+    });
+    builder.addCase(fetchBatchSelectedItems.fulfilled, (state, action) => {
+      state.loading = false;
+      state.selectedItems =
+        action.payload.responseCode === 200 ? action.payload.responseData : [];
+    });
+    builder.addCase(fetchBatchSelectedItems.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.error;
     });
 
     // add batches

@@ -9,7 +9,16 @@ import {
 import React from "react";
 import { RiCloseCircleLine } from "react-icons/ri";
 
-function AssignAssignementModal({ open, close, data, handleSubmit }) {
+function AssignAssignementModal({
+  open,
+  close,
+  data,
+  handleAllStudentSubmit,
+  handleChange,
+  loading,
+  modal,
+  handleParticularStudentSubmit,
+}) {
   return (
     <div>
       <Dialog size="lg" open={open} className="bg-transparent shadow-none">
@@ -29,16 +38,25 @@ function AssignAssignementModal({ open, close, data, handleSubmit }) {
             </IconButton>
           </div>
 
-          <form className="flex flex-col gap-3 " onSubmit={handleSubmit}>
+          <form
+            className="flex flex-col gap-3 "
+            onSubmit={
+              modal?.particular_student_modal
+                ? handleParticularStudentSubmit
+                : handleAllStudentSubmit
+            }
+          >
             <Input
               label="Assignment name"
               type="text"
               className="p-3"
-              name="assgn_title"
+              name="assgn_name"
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
               containerProps={{
                 className: "font-ddin",
               }}
+              value={data.assgn_name}
+              onChange={handleChange}
               required
             />
             <Input
@@ -50,16 +68,18 @@ function AssignAssignementModal({ open, close, data, handleSubmit }) {
               containerProps={{
                 className: "font-ddin",
               }}
+              value={data.assgn_url}
+              onChange={handleChange}
             />
             <Textarea
               label="Assignment description"
               name="assgn_desc"
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              // value={formData.location}
-              // onChange={handleChange}
               containerProps={{
                 className: "font-ddin",
               }}
+              value={data.assgn_desc}
+              onChange={handleChange}
               required
             />
 
@@ -67,8 +87,9 @@ function AssignAssignementModal({ open, close, data, handleSubmit }) {
               <Button
                 type="submit"
                 className="shadow-none hover:shadow-none capitalize py-2 font-ddin font-normal text-base border-[#DD4633] border bg-transparent text-[#DD4633] hover:text-white hover:bg-[#DD4633]"
+                disabled={loading}
               >
-                {data?.editable ? "Update" : "Submit"}
+                {loading ? "Loading..." : "Submit"}
               </Button>
             </div>
           </form>
