@@ -58,8 +58,6 @@ function AdminBatchDetails() {
     });
   };
 
-  console.log(selectedItems, loading, assgn_loading);
-
   const handleAssignmentForParticularStudent = () => {
     setModal({ ...modal, particular_statudents_bottom_sheet: true });
     setData({
@@ -76,13 +74,22 @@ function AdminBatchDetails() {
   };
 
   const handleCheckParticularStudentChange = (student_id, isChecked) => {
-    // setData({...data, student_list: })
     setData((prevData) => ({
       ...prevData,
       student_list: isChecked
         ? [...prevData.student_list, student_id] // Add student ID
         : prevData.student_list.filter((id) => id !== student_id), // Remove student ID
     }));
+  };
+
+  const handleStudentSearchChange = async (e) => {
+    console.log(e.target.value);
+
+    // const searchQuery = e.target.value.trim();
+
+    // if (searchQuery?.length > 0) {
+    //   dispatch()
+    // }
   };
 
   // Function to export data to CSV
@@ -115,7 +122,6 @@ function AdminBatchDetails() {
   const handleParticularStudentSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("pass", data);
     const urlencoded = new URLSearchParams();
 
     urlencoded.append("title", data.assgn_name);
@@ -134,8 +140,6 @@ function AdminBatchDetails() {
         assgn_data: urlencoded,
       })
     ).unwrap();
-
-    console.log(result);
 
     if (result.responseCode === 200) {
       toast.success("Assignment assigned.");
@@ -391,6 +395,7 @@ function AdminBatchDetails() {
                 containerProps={{
                   className: "font-ddin",
                 }}
+                onChange={(e) => handleStudentSearchChange(e)}
               />
             </div>
           </div>
