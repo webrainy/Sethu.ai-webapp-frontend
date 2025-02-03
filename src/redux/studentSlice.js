@@ -32,6 +32,21 @@ export const updateStudentData = createAsyncThunk(
       const res = await axios.put(`${base_url + end_point}`, student_data, {
         headers: { Authorization: access_token },
       });
+
+//       builder.addCase(fetchStudentProfile.fulfilled, (state, action) => {
+//         state.loading = false;
+//         state.profile_data =
+//           action.payload.responseCode === 200 ? action.payload.responseData : [];
+//           console.log(action.payload);
+          
+//       });
+//       builder.addCase(fetchStudentProfile.rejected, (state, action) => {
+//         state.error = action.payload.error;
+//         state.loading = false;
+//       });
+//     },
+//   });
+
       return res.data;
     } catch (error) {
       return rejectWithValue(error.response.data || "Connection failed.");

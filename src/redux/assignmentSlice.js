@@ -6,6 +6,7 @@ const initialState = {
   error: "",
   assgn_loading: false,
   assignment_list: [],
+  student_info: [],
 };
 
 // fetch assignment
@@ -56,16 +57,24 @@ const assignmentSlice = createSlice({
     });
 
     // fetch assignments
-    builder.addCase(fetchAssignment.pending, (state, action) => {
+    builder.addCase(fetchAssignment.pending, (state) => {
       state.assgn_loading = true;
       state.error = "";
     });
     builder.addCase(fetchAssignment.fulfilled, (state, action) => {
       state.assgn_loading = false;
+      state.assignment_list =
+        action.payload?.responseCode === 200
+          ? action.payload.responseData?.assignments
+          : [];
+      state.student_info =
+        action.payload?.responseCode === 200
+          ? action.payload.responseData.studentInfo
+          : {};
     });
     builder.addCase(fetchAssignment.rejected, (state, action) => {
       state.assgn_loading = false;
-      state.error = action.payload.error;
+      state.error = action.payload || action.error.message;
     });
   },
 });
