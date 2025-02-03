@@ -34,4 +34,12 @@ export const EXPERTISE_LEVELS = [
   { label: "Expert", value: 5 },
 ];
 
+export const REVIEW_STATUS = [
+  { label: "In Progress", value: 1 },
+  { label: "Assigned", value: 2 },
+  { label: "Accepted", value: 3 },
+  { label: "Rejected", value: 4 },
+  { label: "Unable to Decide", value: 5 },
+];
+
 export const Assignment_Table_Head = ["Assignments", "Status"];
