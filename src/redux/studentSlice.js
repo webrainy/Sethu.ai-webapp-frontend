@@ -36,7 +36,6 @@ const studentSlice = createSlice({
         state.loading = false;
         state.profile_data =
           action.payload.responseCode === 200 ? action.payload.responseData : [];
-
           console.log(action.payload);
           
       });
