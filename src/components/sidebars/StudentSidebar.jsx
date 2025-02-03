@@ -28,11 +28,11 @@ function StudentSidebar({
       icon: <SiGoogleclassroom />,
       link: "/student/assignment",
     },
-    {
-      title: "Notifications",
-      icon: <MdNotifications />,
-      link: "/student/notification",
-    },
+    // {
+    //   title: "Notifications",
+    //   icon: <MdNotifications />,
+    //   link: "/student/notification",
+    // },
 
     {
       title: "Profile",

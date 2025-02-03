@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import {
   Button,
@@ -8,35 +8,54 @@ import {
   Select,
   Textarea,
 } from "@material-tailwind/react";
-import { EXPERTISE_LEVELS } from "../../utils/constants";
+import { base_url, REVIEW_STATUS } from "../../utils/constants";
+import { fetchBatchItems } from "../../redux/batchSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { updateStudentData } from "../../redux/studentSlice";
+import toast from "react-hot-toast";
 
 function AdminStudentProfile() {
-  const location = useLocation();
-  const user = location.state?.user;
+  const location = useLocation().state;
+  const dispatch = useDispatch();
+  const { batch_items } = useSelector((state) => state.batch);
+  const access_token = localStorage.getItem("sethu_admin_access_token");
 
   const [formData, setFormData] = useState({
-    name: user?.name || "",
-    email: user?.email || "",
-    phone: user?.phone || "",
-    location: user?.location || "",
-    education: user?.education || "",
-    cgpa: user?.cgpa || "",
-    yearPassed: user?.yearPassed || "",
-    gmatScore: user?.gmatScore || "",
-    preparingCourse: user?.preparingCourse || "",
-    currentWork: user?.currentWork || "",
-    commitment: user?.commitment || "",
-    hobbies: user?.hobbies || "",
-    linkedin: user?.linkedin || "",
-    github: user?.github || "",
-    skill: user?.skill || "",
-    fatherOccupation: user?.fatherOccupation || "",
-    motherOccupation: user?.motherOccupation || "",
-    householdIncome: user?.householdIncome || "",
-    review_status: user?.review_status || "",
-    select_batch: user?.select_batch || "",
-    final_comments: user?.final_comments || "",
+    review_status: "",
+    select_batch: "",
+    review: "",
+    sk_python: "",
+    sk_sql: "",
+    sk_java: "",
+    sk_analyticalskill: "",
+    sk_prblmsolving: "",
+    sk_engprof: "",
   });
+
+  useEffect(() => {
+    dispatch(
+      fetchBatchItems({
+        end_point: "/api/batch/list",
+        access_token: access_token,
+      })
+    ).unwrap();
+
+    if (location?.student) {
+      setFormData({
+        review_status: location?.student?.current_state || "",
+        select_batch: location?.student?.batchInfo?.batch_id || "",
+        review: location?.student?.review || "",
+        sk_python: location?.student?.sk_python || "",
+        sk_sql: location?.student?.sk_sql || "",
+        sk_java: location?.student?.sk_java || "",
+        sk_analyticalskill: location?.student?.sk_analyticalskill || "",
+        sk_prblmsolving: location?.student?.sk_prblmsolving || "",
+        sk_engprof: location?.student?.sk_engprof || "",
+      });
+    }
+  }, [location]);
+
+  console.log(location, batch_items, formData.review_status);
 
   const handleInputChange = (value, name) => {
     setFormData((prev) => ({
@@ -47,6 +66,30 @@ function AdminStudentProfile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const urlencoded = new URLSearchParams();
+
+    urlencoded.append("current_state", formData.review_status);
+    urlencoded.append("review", formData.review);
+    if (Number(formData.review_status) === 2) {
+      urlencoded.append("batch_id", formData.select_batch);
+    }
+
+    const result = await dispatch(
+      updateStudentData({
+        end_point: `/api/student/update?student_id=${location?.student?.student_id}`,
+        access_token: access_token,
+        student_data: urlencoded,
+      })
+    ).unwrap();
+
+    if (result.responseCode === 200) {
+      toast.success("Student status updated.");
+    } else {
+      toast.error(
+        result.responseMessage || "Connection failed. Please try again."
+      );
+    }
   };
 
   return (
@@ -67,52 +110,48 @@ function AdminStudentProfile() {
               type="text"
               name="name"
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              // value={formData.name}
-              onChange={handleInputChange}
-              defaultValue={"qwerty"}
+              value={location?.student?.name || ""}
               containerProps={{
                 className: "font-ddin",
               }}
               required
+              readOnly
             />
             <Input
               label="Email"
               type="email"
               name="email"
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              // value={formData.email}
-              onChange={handleInputChange}
+              value={location?.student?.email || ""}
               containerProps={{
                 className: "font-ddin",
               }}
-              defaultValue={"qwerty@test.in"}
               required
+              readOnly
             />
             <Input
               label="Phone"
               type="tel"
               name="phone"
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              // value={formData.phone}
-              onChange={handleInputChange}
+              value={location?.student?.phone || ""}
               maxLength={10}
               containerProps={{
                 className: "font-ddin",
               }}
-              defaultValue={"1234567890"}
               required
+              readOnly
             />
             <Textarea
               label="Location"
               name="location"
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              // value={formData.location}
-              onChange={handleInputChange}
+              value={location?.student?.location || ""}
               containerProps={{
                 className: "font-ddin",
               }}
-              defaultValue={"Classes near Khairtabad Metro Station, Hyderbad."}
               required
+              readOnly
             />
           </div>
 
@@ -124,88 +163,65 @@ function AdminStudentProfile() {
             <div className="font-ddin">
               <p>Highest Education Completed</p>
               <div className="flex flex-row gap-3">
-                <Radio name="education" label="Bachelors" value={"Bachelors"} />
+                <Radio
+                  name="education"
+                  label="Bachelors"
+                  value="Bachelors"
+                  checked={location?.student?.education === "Bachelors" || ""}
+                  disabled
+                />
                 <Radio
                   name="education"
                   label="Masters"
-                  value={"Masters"}
-                  defaultChecked
+                  value="Masters"
+                  checked={location?.student?.education === "Masters" || ""}
+                  disabled
                 />
-                <Radio name="education" label="Others" value={"Others"} />
+                <Radio
+                  name="education"
+                  label="Others"
+                  value="Others"
+                  checked={location?.student?.education === "Others" || ""}
+                  disabled
+                />
               </div>
             </div>
             <Input
               label="CGPA"
               type="number"
               name="cgpa"
-              // value={formData.cgpa}
-              onChange={handleInputChange}
+              value={location?.student?.cgpa || ""}
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
               containerProps={{
                 className: "font-ddin",
               }}
               className="appearance-none outline-none"
-              onKeyDown={(e) => {
-                if (
-                  e.key === "e" ||
-                  e.key === "E" ||
-                  e.key === "-" ||
-                  e.key === "+"
-                ) {
-                  e.preventDefault();
-                }
-              }}
-              onWheel={(e) => e.target.blur()}
-              defaultValue={"50"}
               required
+              readOnly
             />
             <Input
               label="Year Passed"
               type="number"
               name="yearPassed"
-              // value={formData.yearPassed}
-              onChange={handleInputChange}
+              value={location?.student?.year_passed || ""}
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
               containerProps={{
                 className: "font-ddin",
               }}
-              onKeyDown={(e) => {
-                if (
-                  e.key === "e" ||
-                  e.key === "E" ||
-                  e.key === "-" ||
-                  e.key === "+"
-                ) {
-                  e.preventDefault();
-                }
-              }}
-              onWheel={(e) => e.target.blur()}
-              defaultValue={"2023"}
               required
+              readOnly
             />
             <Input
               label="GMAT Score"
               type="number"
               name="gmatScore"
-              // value={formData.gmatScore}
-              onChange={handleInputChange}
+              value={location?.student?.gmat || ""}
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
               containerProps={{
                 className: "font-ddin",
               }}
-              onKeyDown={(e) => {
-                if (
-                  e.key === "e" ||
-                  e.key === "E" ||
-                  e.key === "-" ||
-                  e.key === "+"
-                ) {
-                  e.preventDefault();
-                }
-              }}
-              onWheel={(e) => e.target.blur()}
-              defaultValue={"2567"}
               required
+              readOnly
             />
           </div>
 
@@ -215,51 +231,41 @@ function AdminStudentProfile() {
               <p className="font-ddin font-semibold text-lg">Preferences</p>
               <Input
                 label="Are you preparing for any course?"
-                name="preparingCourse"
-                // value={formData.preparingCourse}
-                onChange={handleInputChange}
+                name="course_prep"
+                value={location?.student?.course_prep || ""}
                 style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                 containerProps={{
                   className: "font-ddin",
                 }}
-                defaultValue={"Yes"}
                 required
+                readOnly
               />
               <Input
                 label="What are you currently working on?"
-                name="currentWork"
-                // value={formData.currentWork}
-                onChange={handleInputChange}
+                name="curnt_work"
+                value={location?.student?.curnt_work || ""}
                 style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                 containerProps={{
                   className: "font-ddin",
                 }}
-                defaultValue={"Developer"}
                 required
+                readOnly
               />
               <div className="text-left">
                 <label className="block mb-1 font-ddin">
                   Can you commit 3 months full-time (8 hours/day) in Hyderabad?{" "}
                   <span className="text-red-600">*</span>
                 </label>
-                <Select
-                  name="commitment"
-                  label="Commitment"
-                  // value={formData.commitment}
-                  onChange={handleInputChange}
+                <Input
+                  type="text"
+                  name="commit_ft"
+                  value={location?.student?.commit_ft || ""}
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   containerProps={{
                     className: "font-ddin",
                   }}
-                  defaultValue={"Yes"}
-                >
-                  <Option value="Yes" style={{ fontFamily: "D-DIN" }}>
-                    Yes
-                  </Option>
-                  <Option value="No" style={{ fontFamily: "D-DIN" }}>
-                    No
-                  </Option>
-                </Select>
+                  readOnly
+                />
               </div>
             </div>
 
@@ -272,52 +278,59 @@ function AdminStudentProfile() {
                 type="text"
                 label="Hobbies"
                 name="hobbies"
-                //   value={formData.hobbies}
-                onChange={handleInputChange}
+                value={location?.student?.hobbies || ""}
                 style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                 containerProps={{
                   className: "font-ddin",
                 }}
-                defaultValue={"Drawing"}
                 required
+                readOnly
               />
               <Input
                 type="url"
                 label="LinkedIn profile URL"
-                name="linkedin"
+                name="linkedin_url"
                 style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                 containerProps={{
                   className: "font-ddin",
                 }}
-                //   value={formData.linkedin}
-                onChange={handleInputChange}
-                defaultValue={"https://sethu.ai/"}
+                value={location?.student?.linkedin_url || ""}
                 required
+                readOnly
               />
               <Input
                 type="url"
                 label="Enter your GitHub or other source code URL"
-                name="github"
+                name="github_url"
                 style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                 containerProps={{
                   className: "font-ddin",
                 }}
-                //   value={formData.github}
-                onChange={handleInputChange}
-                defaultValue={"https://sethu.ai/"}
+                value={location?.student?.github_url || ""}
                 required
+                readOnly
               />
 
               <div className="flex justify-between items-center">
                 <div className="flex flex-col gap-1">
                   <p className="text-center font-ddin">Resume</p>
-                  <Button className="shadow-none py-2 hover:shadow-none capitalize font-ddin font-normal text-base border-[#DD4633] border bg-transparent text-[#DD4633] hover:text-white hover:bg-[#DD4633]">
+                  <Button
+                    onClick={() =>
+                      window.open(base_url + location?.student?.resume)
+                    }
+                    className="shadow-none py-2 hover:shadow-none capitalize font-ddin font-normal text-base border-[#DD4633] border bg-transparent text-[#DD4633] hover:text-white hover:bg-[#DD4633]"
+                  >
                     Download
                   </Button>
                 </div>
                 <div className="flex flex-col gap-1">
                   <p className="text-center font-ddin">Cover letter</p>
-                  <Button className="shadow-none py-2 hover:shadow-none capitalize font-ddin font-normal text-base border-[#DD4633] border bg-transparent text-[#DD4633] hover:text-white hover:bg-[#DD4633]">
+                  <Button
+                    onClick={() =>
+                      window.open(base_url + location?.student?.coverletter)
+                    }
+                    className="shadow-none py-2 hover:shadow-none capitalize font-ddin font-normal text-base border-[#DD4633] border bg-transparent text-[#DD4633] hover:text-white hover:bg-[#DD4633]"
+                  >
                     Download
                   </Button>
                 </div>
@@ -331,38 +344,42 @@ function AdminStudentProfile() {
               Skills and Expertise
             </p>
             {[
-              "Python",
-              "Sql",
-              "Java",
-              "AnalyticalSkills",
-              "EnglishProficiency",
-              "ProblemSolving",
+              { name: "sk_python", label: "Python" },
+              { name: "sk_sql", label: "Sql" },
+              { name: "sk_java", label: "Java" },
+              { name: "sk_analyticalskill", label: "Analytical Skills" },
+              { name: "sk_engprof", label: "English Proficiency" },
+              { name: "sk_prblmsolving", label: "Problem solving" },
             ].map((skill) => (
-              <div key={skill} className="text-left">
-                <label className="block text-gray-700 mt-2 mb-[5px] font-ddin">
-                  {skill.replace(/([A-Z])/g, " $1")}
+              <div key={skill.name} className="text-left">
+                <label className="block text-gray-700 mt-2 mb-[5px] font-ddin capitalize">
+                  {skill.label}
                   <span className="text-red-600">*</span>
                 </label>
-                <Select
-                  name={skill}
-                  className="mb-2 font-ddin"
-                  label={`Select Expertise for ${skill}`}
-                  // value={formData[skill]}
-                  onChange={handleInputChange}
-                  defaultValue={"Beginner"}
+                <Input
+                  type="text"
+                  name={skill.name}
+                  label={skill.label}
+                  value={
+                    formData[skill.name] == 1
+                      ? "Beginner"
+                      : formData[skill.name] == 2
+                      ? "Intermediate"
+                      : formData[skill.name] == 3
+                      ? "Proficient"
+                      : formData[skill.name] == 4
+                      ? "Advanced"
+                      : formData[skill.name] == 5
+                      ? "Expert"
+                      : "-"
+                  }
+                  style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                  containerProps={{
+                    className: "font-ddin",
+                  }}
                   required
-                >
-                  {EXPERTISE_LEVELS.map((level) => (
-                    <Option
-                      key={level}
-                      value={level}
-                      style={{ fontFamily: "D-DIN" }}
-                      defaultValue={"Beginner"}
-                    >
-                      {level}
-                    </Option>
-                  ))}
-                </Select>
+                  readOnly
+                />
               </div>
             ))}
           </div>
@@ -372,52 +389,40 @@ function AdminStudentProfile() {
             <p className="font-ddin font-semibold text-lg">Other Information</p>
             <Input
               type="text"
-              name="fatherOccupation"
+              name="father_occ"
               label="Father's Occupation"
-              // value={formData.fatherOccupation}
-              onChange={handleInputChange}
+              value={location?.student?.father_occ}
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
               containerProps={{
                 className: "font-ddin",
               }}
-              defaultValue={"Farmer"}
               required
+              readOnly
             />
             <Input
               type="text"
               name="motherOccupation"
               label="Mother's Occupation"
-              // value={formData.motherOccupation}
-              onChange={handleInputChange}
+              value={location?.student?.mother_occ}
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
               containerProps={{
                 className: "font-ddin",
               }}
-              defaultValue={"Farmer"}
               required
+              readOnly
             />
-            <Select
-              name="householdIncome"
-              label="Select Household Income"
-              // value={formData.householdIncome}
-              onChange={handleInputChange}
-            >
-              {[
-                "Less than 5 Lakhs",
-                "5-10 Lakhs",
-                "10-15 Lakhs",
-                "15+ Lakhs",
-              ].map((income) => (
-                <Option
-                  key={income}
-                  //value={income}
-                  style={{ fontFamily: "D-DIN" }}
-                  defaultValue={"5-10 Lakhs"}
-                >
-                  {income}
-                </Option>
-              ))}
-            </Select>
+            <Input
+              type="text"
+              name="income"
+              label="Household Income"
+              value={location?.student?.income}
+              style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+              containerProps={{
+                className: "font-ddin",
+              }}
+              required
+              readOnly
+            />
           </div>
 
           {/* Remarks */}
@@ -425,56 +430,48 @@ function AdminStudentProfile() {
             <p className="font-ddin font-semibold text-lg">Remarks</p>
             <Select
               label="Select Review Status"
-              value={formData.review_status}
+              value={String(formData.review_status)} // Ensuring value is always a string
+              defaultValue={String(formData.review_status)}
               onChange={(value) => handleInputChange(value, "review_status")}
             >
-              {[
-                "Assigned",
-                "In Progress",
-                "Accepted",
-                "Rejected",
-                "Unable to Decide",
-              ].map((status) => (
+              {REVIEW_STATUS.map((status) => (
                 <Option
-                  key={status}
-                  value={status}
+                  key={status.value}
+                  value={String(status.value)}
                   style={{ fontFamily: "D-DIN" }}
                 >
-                  {status}
+                  {status.label}
                 </Option>
               ))}
             </Select>
 
-            {formData.review_status === "Assigned" && (
+            {Number(formData.review_status) === 2 && (
               <Select
                 label="Select a Batch"
-                value={formData.select_batch}
+                value={String(formData.select_batch)}
                 onChange={(value) => handleInputChange(value, "select_batch")}
               >
-                {["Batch 1", "Batch 2", "Batch 3", "Batch 4", "Batch 5"].map(
-                  (batch) => (
-                    <Option
-                      key={batch}
-                      value={batch}
-                      style={{ fontFamily: "D-DIN" }}
-                    >
-                      {batch}
-                    </Option>
-                  )
-                )}
+                {batch_items.map((batch) => (
+                  <Option
+                    key={batch.batch_id}
+                    value={String(batch.batch_id)}
+                    style={{ fontFamily: "D-DIN" }}
+                  >
+                    {batch.name}
+                  </Option>
+                ))}
               </Select>
             )}
 
             <Textarea
               label="Final Comments"
-              name="final_comments"
+              name="review"
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              // value={formData.location}
-              onChange={handleInputChange}
+              value={formData.review}
+              onChange={(e) => handleInputChange(e.target.value, "review")}
               containerProps={{
                 className: "font-ddin",
               }}
-              defaultValue={"Classes near Khairtabad Metro Station, Hyderbad."}
             />
           </div>
         </div>

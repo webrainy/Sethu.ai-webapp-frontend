@@ -1,11 +1,18 @@
-import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import StudentSidebar from "../sidebars/StudentSidebar";
 import { FaBars } from "react-icons/fa";
 
 function StudentLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const [toggled, setToggled] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!localStorage.getItem("sethu_student_access_token")) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   const handleCollapsedChange = () => {
     setCollapsed(!collapsed);
