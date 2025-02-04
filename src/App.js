@@ -18,6 +18,8 @@ import StudentNotification from "./pages/student/StudentNotification";
 import StudentProfile from "./pages/student/StudentProfile";
 import AdminBatchDetails from "./pages/admin/AdminBatchDetails";
 import AdminAssignmentDetails from "./pages/admin/AdminAssignmentDetails";
+import AdminManageEvents from "./pages/admin/AdminManageEvents";
+import AdminManageInterviews from "./pages/admin/AdminManageInterviews";
 
 function App() {
   return (
@@ -47,6 +49,14 @@ function App() {
             <Route
               path="/admin/batch/student/assignment_details"
               element={<AdminAssignmentDetails />}
+            />
+            <Route
+              path="/admin/manage_events"
+              element={<AdminManageEvents />}
+            />
+            <Route
+              path="/admin/manage_interviews"
+              element={<AdminManageInterviews />}
             />
           </Route>
 

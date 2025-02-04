@@ -9,7 +9,7 @@ import {
 } from "react-pro-sidebar";
 import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 import { MdSpaceDashboard } from "react-icons/md";
-import { SiGoogleclassroom } from "react-icons/si";
+import { SiGoogleclassroom, SiGooglemeet } from "react-icons/si";
 import { PiStudentFill } from "react-icons/pi";
 import { LuLogOut } from "react-icons/lu";
 
@@ -37,6 +37,16 @@ function AdminSidebar({
       title: "Student",
       icon: <PiStudentFill />,
       link: "/admin/students",
+    },
+    {
+      title: "Events/Classes",
+      icon: <SiGoogleclassroom />,
+      link: "/admin/manage_events",
+    },
+    {
+      title: "Interviews",
+      icon: <SiGooglemeet />,
+      link: "/admin/manage_interviews",
     },
   ];
 
