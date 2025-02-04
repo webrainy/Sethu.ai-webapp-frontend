@@ -23,8 +23,12 @@ function StudentBatchAssignments() {
 
   const getStatusData = (statusNumber) => {
     return statusNumber === 1
+      ? { text: "Pending", classes: "text-red-600 bg-red-100" }
+      : statusNumber === 2
       ? { text: "Completed", classes: "text-green-600 bg-green-100" }
-      : { text: "Pending", classes: "text-red-600 bg-red-100" };
+      : statusNumber === 3
+      ? { text: "Rejected", classes: "text-gray-700 bg-gray-200" }
+      : "";
   };
 
   return (

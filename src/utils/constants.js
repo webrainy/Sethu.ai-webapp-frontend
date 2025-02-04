@@ -24,6 +24,7 @@ export const ADMIN_BATCH_STUDENTLIST_TABLE_HEAD = [
   "Education",
   "Email",
   "Phone number",
+  "",
 ];
 
 export const EXPERTISE_LEVELS = [
