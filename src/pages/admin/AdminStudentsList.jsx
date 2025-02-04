@@ -28,8 +28,6 @@ function AdminStudentsList() {
     );
   }, [dispatch, active]);
 
-  console.log(profile_data);
-
   const handleRowClick = (student_data) => {
     navigate("/admin/student/profile", { state: { student: student_data } });
   };
@@ -40,7 +38,7 @@ function AdminStudentsList() {
     if (searchQuery?.length > 0) {
       dispatch(
         fetchStudentProfile({
-          end_point: `/api/student/list?searchkey=${searchQuery}`,
+          end_point: `/api/student/list?page=${1}&limit=${10}&searchkey=${searchQuery}`,
           access_token: access_token,
         })
       );

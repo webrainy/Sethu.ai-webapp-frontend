@@ -55,8 +55,6 @@ function AdminStudentProfile() {
     }
   }, [location]);
 
-  console.log(location, batch_items, formData.review_status);
-
   const handleInputChange = (value, name) => {
     setFormData((prev) => ({
       ...prev,

@@ -39,6 +39,21 @@ export const postAssignmentToStudent = createAsyncThunk(
   }
 );
 
+// update assignment
+export const updateAssignmentStatus = createAsyncThunk(
+  "assign/update",
+  async ({ end_point, access_token, assgn_data }, { rejectWithValue }) => {
+    try {
+      const res = await axios.put(`${base_url + end_point}`, assgn_data, {
+        headers: { Authorization: access_token },
+      });
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data || "Connection failed.");
+    }
+  }
+);
+
 const assignmentSlice = createSlice({
   name: "assignment",
   initialState,
@@ -73,6 +88,19 @@ const assignmentSlice = createSlice({
           : {};
     });
     builder.addCase(fetchAssignment.rejected, (state, action) => {
+      state.assgn_loading = false;
+      state.error = action.payload || action.error.message;
+    });
+
+    // update assignment
+    builder.addCase(updateAssignmentStatus.pending, (state, action) => {
+      state.assgn_loading = true;
+      state.error = "";
+    });
+    builder.addCase(updateAssignmentStatus.fulfilled, (state, action) => {
+      state.assgn_loading = false;
+    });
+    builder.addCase(updateAssignmentStatus.rejected, (state, action) => {
       state.assgn_loading = false;
       state.error = action.payload || action.error.message;
     });

@@ -3,6 +3,7 @@ import {
   Card,
   CardBody,
   Checkbox,
+  IconButton,
   Input,
   Typography,
 } from "@material-tailwind/react";
@@ -11,11 +12,13 @@ import { ADMIN_BATCH_STUDENTLIST_TABLE_HEAD } from "../../utils/constants";
 import AssignAssignementModal from "../../components/modal/student/AssignAssignementModal";
 import { BottomSheet } from "react-spring-bottom-sheet";
 import "react-spring-bottom-sheet/dist/style.css";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBatchSelectedItems } from "../../redux/batchSlice";
 import { postAssignmentToStudent } from "../../redux/assignmentSlice";
 import toast from "react-hot-toast";
+import { fetchStudentProfile } from "../../redux/studentSlice";
+import { HiArrowLeft, HiArrowRight } from "react-icons/hi";
 
 function AdminBatchDetails() {
   const [modal, setModal] = useState({
@@ -23,6 +26,7 @@ function AdminBatchDetails() {
     particular_statudents_bottom_sheet: false,
     particular_student_modal: false,
   });
+  const [active, setActive] = useState(1);
   const [data, setData] = useState({
     assgn_name: "",
     assgn_desc: "",
@@ -32,6 +36,7 @@ function AdminBatchDetails() {
   const location = useLocation().state;
   const dispatch = useDispatch();
   const { loading, selectedItems } = useSelector((state) => state.batch);
+  const { profile_data } = useSelector((state) => state.student);
   const { assgn_loading } = useSelector((state) => state.assignment);
   const access_token = localStorage.getItem("sethu_admin_access_token");
 
@@ -42,7 +47,30 @@ function AdminBatchDetails() {
         access_token: access_token,
       })
     );
-  }, [dispatch]);
+  }, [dispatch, location.item?.batch_id, access_token]);
+
+  // Fetch student data when `active` or `selectedItems` changes
+  useEffect(() => {
+    if (
+      modal.particular_statudents_bottom_sheet &&
+      selectedItems[0]?.batch_id
+    ) {
+      dispatch(
+        fetchStudentProfile({
+          end_point: `/api/student/list?page=${active}&limit=${15}&batch_id=${
+            selectedItems[0]?.batch_id
+          }`,
+          access_token: access_token,
+        })
+      );
+    }
+  }, [
+    active,
+    selectedItems,
+    modal.particular_statudents_bottom_sheet,
+    dispatch,
+    access_token,
+  ]);
 
   const handleAssignmentForAll = () => {
     const allStudentIds = selectedItems[0]?.students?.map(
@@ -58,7 +86,16 @@ function AdminBatchDetails() {
     });
   };
 
-  const handleAssignmentForParticularStudent = () => {
+  const handleAssignmentForParticularStudent = async () => {
+    dispatch(
+      fetchStudentProfile({
+        end_point: `/api/student/list?page=${active}&limit=${15}&batch_id=${
+          selectedItems[0]?.batch_id
+        }`,
+        access_token: access_token,
+      })
+    );
+
     setModal({ ...modal, particular_statudents_bottom_sheet: true });
     setData({
       ...data,
@@ -83,13 +120,27 @@ function AdminBatchDetails() {
   };
 
   const handleStudentSearchChange = async (e) => {
-    console.log(e.target.value);
+    const searchQuery = e.target.value.toLowerCase();
 
-    // const searchQuery = e.target.value.trim();
-
-    // if (searchQuery?.length > 0) {
-    //   dispatch()
-    // }
+    if (searchQuery?.length > 0) {
+      dispatch(
+        fetchStudentProfile({
+          end_point: `/api/student/list?page=${active}&limit=${15}&searchkey=${searchQuery}&batch_id=${
+            selectedItems[0]?.batch_id
+          }`,
+          access_token: access_token,
+        })
+      ).unwrap();
+    } else {
+      dispatch(
+        fetchStudentProfile({
+          end_point: `/api/student/list?page=${active}&limit=${15}&batch_id=${
+            selectedItems[0]?.batch_id
+          }`,
+          access_token: access_token,
+        })
+      );
+    }
   };
 
   // Function to export data to CSV
@@ -195,6 +246,16 @@ function AdminBatchDetails() {
     }
   };
 
+  const next = () => {
+    if (active === profile_data?.totalPages) return;
+    setActive(active + 1);
+  };
+
+  const prev = () => {
+    if (active === 1) return;
+    setActive(active - 1);
+  };
+
   return (
     <>
       <div className="p-3">
@@ -239,7 +300,7 @@ function AdminBatchDetails() {
                   onClick={handleCsvExport}
                   className="normal-case shadow-none hover:shadow-none font-ddin text-sm font-medium py-2 px-5"
                 >
-                  Export to CSV
+                  Export emails to CSV
                 </Button>
               )}
             </div>
@@ -315,6 +376,15 @@ function AdminBatchDetails() {
                               >
                                 {student.phone}
                               </Typography>
+                            </td>
+                            <td className={classes}>
+                              <Link
+                                to={"/admin/batch/student/assignment_details"}
+                                className="text-sm text-blue-700"
+                                state={student}
+                              >
+                                View assignments
+                              </Link>
                             </td>
                           </tr>
                         );
@@ -400,10 +470,10 @@ function AdminBatchDetails() {
             </div>
           </div>
 
-          {selectedItems[0]?.students?.length > 0 ? (
+          {profile_data?.studentData?.length > 0 ? (
             <form>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {selectedItems[0]?.students?.map((student, i) => (
+                {profile_data?.studentData?.map((student, i) => (
                   <div
                     key={i}
                     className="p-4 bg-gray-100 rounded-xl hover:shadow-md transition-all flex justify-between items-center"
@@ -425,6 +495,36 @@ function AdminBatchDetails() {
                   </div>
                 ))}
               </div>
+
+              {profile_data?.studentData?.length > 0 && (
+                <div className="flex items-center gap-6 justify-center mt-4">
+                  <IconButton
+                    size="sm"
+                    variant="outlined"
+                    onClick={prev}
+                    disabled={active === 1}
+                  >
+                    <HiArrowLeft className="h-4 w-4" />
+                  </IconButton>
+                  <Typography
+                    color="gray"
+                    className="!block font-myriad font-light"
+                  >
+                    Page <strong className="text-gray-900">{active}</strong> of{" "}
+                    <strong className="text-gray-900">
+                      {profile_data?.totalPages}
+                    </strong>
+                  </Typography>
+                  <IconButton
+                    size="sm"
+                    variant="outlined"
+                    onClick={next}
+                    disabled={active === profile_data?.totalPages}
+                  >
+                    <HiArrowRight className="h-4 w-4" />
+                  </IconButton>
+                </div>
+              )}
 
               <div className="flex justify-end items-center mt-3">
                 <Button
