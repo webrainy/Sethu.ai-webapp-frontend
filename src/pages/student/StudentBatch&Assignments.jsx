@@ -73,12 +73,12 @@ function StudentBatchAssignments() {
                   </tr>
                 </thead>
                 <tbody>
-                  {assignment_list.length > 0 ? (
+                  {assignment_list?.length > 0 ? (
                     assignment_list.map((assignment, index) => {
                       const { assignmentInfo, compl_status } = assignment;
                       const { title, description, url } = assignmentInfo || {};
                       const statusData = getStatusData(compl_status);
-                      const isLast = index === assignment_list.length - 1;
+                      const isLast = index === assignment_list?.length - 1;
                       const classes = isLast
                         ? "px-4 py-4 font-ddin"
                         : "px-4 py-4 border-b border-blue-gray-50 font-ddin";

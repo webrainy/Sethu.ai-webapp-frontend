@@ -7,6 +7,7 @@ const initialState = {
   assgn_loading: false,
   assignment_list: [],
   student_info: [],
+  events_list: [],
 };
 
 // fetch assignment
@@ -85,6 +86,10 @@ const assignmentSlice = createSlice({
       state.student_info =
         action.payload?.responseCode === 200
           ? action.payload.responseData.studentInfo
+          : {};
+      state.events_list =
+        action.payload?.responseCode === 200
+          ? action.payload.responseData.events
           : {};
     });
     builder.addCase(fetchAssignment.rejected, (state, action) => {
