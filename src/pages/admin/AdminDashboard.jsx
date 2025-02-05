@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Typography } from "@material-tailwind/react";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { lineChartData, lineChartOptions } from "../../utils/charts";
 import ReactApexChart from "react-apexcharts";
 import profile from "../../assets/profilepic.jpg";
+import moment from "moment";
+import { IoVideocam } from "react-icons/io5";
+import { useDispatch, useSelector } from "react-redux";
+import { listEventItem } from "../../redux/eventSlice";
 
 const studentsData = [
   {
@@ -29,8 +33,80 @@ const studentsData = [
 ];
 
 function AdminDashboard() {
+  const dispatch = useDispatch();
+  const access_token = localStorage.getItem("sethu_admin_access_token");
+  const { event_items, loading } = useSelector((state) => state.event);
+
+  useEffect(() => {
+    dispatch(
+      listEventItem({
+        end_point: `/api/event/list?order=1&limit=10`,
+        access_token: access_token,
+      })
+    );
+  }, [dispatch]);
+
   return (
     <div>
+      {!loading ? (
+        <>
+          {event_items.length > 0 && (
+            <div className="mx-3 bg-white px-4 py-3 rounded-2xl">
+              <p className="font-ddin font-semibold text-3xl">
+                Recent Events & Interviews
+              </p>
+              <div className="grid lg:grid-cols-2 gap-3 items-center mt-2">
+                {event_items.map((event, i) => (
+                  <div
+                    key={i}
+                    className="bg-white px-4 py-3 rounded-xl hover:shadow-md border"
+                  >
+                    <div className="flex justify-between items-start gap-4">
+                      <p className="font-ddin text-xl font-semibold capitalize">
+                        {event.title}
+                      </p>
+                      <p className="font-myriad text-sm font-light text-gray-600">
+                        {/* Feb, 08 2025 12.00pm */}
+                        {moment(event.datetime).format("LLL")}
+                      </p>
+                    </div>
+                    <div className="flex justify-between items-end gap-4">
+                      <div className="text-base font-myriad font-light">
+                        <p>
+                          Batch name:{" "}
+                          <span className="font-semibold capitalize">
+                            {event.batchInfo?.name}
+                          </span>
+                        </p>
+                        <p>
+                          Students name:{" "}
+                          {event?.eventInfo
+                            .map((info) => info.studentInfo.name)
+                            .join(", ")}
+                        </p>
+                      </div>
+                      <Button
+                        onClick={() => window.open(event.url)}
+                        className="flex items-center gap-2 shadow-none hover:shadow-none normal-case font-ddin font-medium text-base py-2 bg-transparent border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
+                      >
+                        <IoVideocam />
+                        Join URL
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="h-[50vh] flex justify-center items-center flex-col">
+          <p className="text-3xl font-ddin font-semibold text-center">
+            Loading...
+          </p>
+        </div>
+      )}
+
       <div className="flex flex-col md:flex-row gap-3 w-full rounded-2xl p-3">
         <div className="flex-[3]">
           <div className="flex flex-col sm:flex-row gap-5">

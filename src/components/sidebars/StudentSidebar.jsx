@@ -9,7 +9,7 @@ import {
 } from "react-pro-sidebar";
 import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 import { MdNotifications } from "react-icons/md";
-import { SiGoogleclassroom } from "react-icons/si";
+import { SiGoogleclassroom, SiGooglemeet } from "react-icons/si";
 import { CgProfile } from "react-icons/cg";
 import { LuLogOut } from "react-icons/lu";
 
@@ -24,6 +24,11 @@ function StudentSidebar({
 
   const sidebarMenu = [
     {
+      title: "Dashboard",
+      icon: <SiGoogleclassroom />,
+      link: "/student/dashboard",
+    },
+    {
       title: "Assignments",
       icon: <SiGoogleclassroom />,
       link: "/student/assignment",
@@ -33,7 +38,16 @@ function StudentSidebar({
     //   icon: <MdNotifications />,
     //   link: "/student/notification",
     // },
-
+    {
+      title: "Events",
+      icon: <SiGoogleclassroom />,
+      link: "/student/events",
+    },
+    {
+      title: "Interviews",
+      icon: <SiGooglemeet />,
+      link: "/student/interviews",
+    },
     {
       title: "Profile",
       icon: <CgProfile />,

@@ -64,7 +64,7 @@ function Login() {
           result.responseData.access_token
         );
       } else if (result.responseData.role === 2) {
-        navigate("/student/assignment");
+        navigate("/student/dashboard");
         localStorage.setItem(
           "sethu_student_access_token",
           result.responseData.access_token
