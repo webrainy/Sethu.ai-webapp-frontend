@@ -86,26 +86,31 @@ function Footer() {
           </div>
           <div className="text-left sm:text-right flex flex-col gap-1 sm:gap-3">
             <p className="text-3xl md:text-5xl font-normal font-ddin">
-              +91 00000 00000
+              <span
+                onClick={() => (window.location.href = "tel:+919052372023")}
+                className="cursor-pointer"
+              >
+                +91 90523 72023
+              </span>
             </p>
             <p className="text-base md:text-xl font-myriad font-light">
               Classes near Khairtabad Metro Station, Hyderbad.
             </p>
-            <p className="font-light">enquiry@trust.in</p>
+            <p className="font-light">
+              <span
+                onClick={() => (window.location.href = "mailto:info@sethu.ai")}
+                className="cursor-pointer"
+              >
+                info@sethu.ai
+              </span>
+            </p>
           </div>
         </div>
 
         <hr className="max-w-[1180px] w-full" />
 
         <div className="text-center pt-2 text-white font-myriad font-light">
-          <p>
-            © {date.getFullYear()} Sri Sathya Sai Seva Organisations - Hyderbad
-            Boys. All rights Reserved | Terms & Conditions | Privacy Policy
-          </p>
-          <p>
-            Designed & Developed by{" "}
-            <span className="font-semibold">White Thoughts and Branding</span>
-          </p>
+          <p>Copyright © {date.getFullYear()} @theSept.org @sethu.ai</p>
         </div>
       </div>
     </>
