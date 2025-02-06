@@ -266,7 +266,7 @@ function CourseRegister() {
   };
 
   return (
-    <div className="bg-gradient-to-b from-[#de4a34] to-[#e57f41] flex justify-center items-center min-h-screen text-[#333]">
+    <div className="bg-gradient-to-b home-hero-section flex justify-center items-center min-h-screen text-[#333]">
       <div
         className="flex bg-white rounded-[20px] overflow-hidden max-w-[900px] w-full mx-3 md:mx-0"
         style={{ boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)" }}
@@ -359,7 +359,7 @@ function CourseRegister() {
                   value={formData.password}
                   required
                 />
-                <Textarea
+                <Input
                   label="Location"
                   name="location"
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
@@ -467,11 +467,42 @@ function CourseRegister() {
                   maxLength={10}
                   required
                 />
-                <Input
+                {/* <Input
                   label="GMAT Score"
-                  type="number"
+                  type="text" // Changed to "text" to allow "NA"
                   name="gmat"
                   maxLength={10}
+                  value={formData.gmat}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    // Allow numbers or "NA" (case-insensitive)
+                    if (/^\d*$/.test(value) || value.toUpperCase() === "NA") {
+                      handleChange(e); // Call the existing handleChange function
+                    }
+                  }}
+                  style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                  containerProps={{
+                    className: "font-ddin",
+                  }}
+                  onKeyDown={(e) => {
+                    // Prevent "e", "E", "-", and "+" keys
+                    if (
+                      e.key === "e" ||
+                      e.key === "E" ||
+                      e.key === "-" ||
+                      e.key === "+"
+                    ) {
+                      e.preventDefault();
+                    }
+                  }}
+                  onWheel={(e) => e.target.blur()}
+                  required
+                /> */}
+                <Input
+                  label="GMAT Score"
+                  placeholder="Enter NA if not applicable"
+                  type="text"
+                  name="gmat"
                   value={formData.gmat}
                   onChange={handleChange}
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
@@ -601,31 +632,37 @@ function CourseRegister() {
               <div className="space-y-3 max-h-[350px] overflow-y-auto p-2 font-ddin">
                 <h3 className="font-bold font-ddin">Skills and Expertise</h3>
                 {[
-                  "python",
-                  "sql",
-                  "java",
-                  "analytical_skill",
-                  "english_proficiency",
-                  "problem_solving",
-                ].map((skill) => (
-                  <div key={skill} className="text-left">
+                  { name: "python", label: "Python" },
+                  { name: "sql", label: "SQL" },
+                  { name: "java", label: "JAVA" },
+                  { name: "analytical_skill", label: "Analytical skill" },
+                  { name: "english_proficiency", label: "English proficiency" },
+                  { name: "problem_solving", label: "Problem solving" },
+                  // "sql",
+                  // "java",
+                  // "analytical_skill",
+                  // "english_proficiency",
+                  // "problem_solving",
+                ].map((skill, i) => (
+                  <div key={i} className="text-left">
                     <label className="block text-gray-700 mt-2 mb-[5px] font-ddin capitalize">
-                      {skill.replace(/([A-Z])/g, " $1")}
+                      {/* {skill.replace(/([A-Z])/g, " $1")} */}
+                      {skill.label}
                       <span className="text-red-600">*</span>
                     </label>
                     <Select
-                      name={skill}
+                      name={skill.name}
                       className="mb-2 font-ddin"
-                      label={`Select Expertise for ${skill}`}
+                      label={`Select Expertise for ${skill.label}`}
                       value={
-                        formData[skill] !== undefined
-                          ? String(formData[skill])
+                        formData[skill.name] !== undefined
+                          ? String(formData[skill.name])
                           : ""
                       }
                       onChange={(value) =>
                         setFormData((prev) => ({
                           ...prev,
-                          [skill]: Number(value),
+                          [skill.name]: Number(value),
                         }))
                       }
                       required
@@ -647,7 +684,8 @@ function CourseRegister() {
                     HackerRank Score
                   </label>
                   <Input
-                    type="number"
+                    type="text"
+                    placeholder="Enter NA if not applicable"
                     label="Hacker Rank Score"
                     name="hacker_rank"
                     value={formData.hacker_rank}
@@ -763,17 +801,34 @@ function CourseRegister() {
                     required
                     onChange={(e) => {
                       const file = e.target.files[0];
-                      if (file && file.type !== "application/pdf") {
-                        alert("Only PDF files are allowed.");
-                        e.target.value = "";
-                      } else {
-                        setFormData((prev) => ({
-                          ...prev,
-                          resume: file,
-                        }));
+                      if (file) {
+                        const allowedTypes = [
+                          "application/pdf",
+                          "application/msword",
+                          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                        ];
+                        const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+
+                        // Check file type
+                        if (!allowedTypes.includes(file.type)) {
+                          alert("Only PDF and DOC/DOCX files are allowed.");
+                          e.target.value = ""; // Clear the input
+                        }
+                        // Check file size
+                        else if (file.size > maxSize) {
+                          alert("File size must be less than 5MB.");
+                          e.target.value = ""; // Clear the input
+                        }
+                        // If valid, update form data
+                        else {
+                          setFormData((prev) => ({
+                            ...prev,
+                            resume: file,
+                          }));
+                        }
                       }
                     }}
-                    accept=".pdf"
+                    accept=".pdf,.doc,.docx"
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                     containerProps={{
                       className: "font-ddin",

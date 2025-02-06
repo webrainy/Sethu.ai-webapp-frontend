@@ -4,7 +4,7 @@ import LoginImg from "../../assets/login_img.png";
 
 function AuthLayout() {
   return (
-    <div className="bg-gradient-to-b from-[#de4a34] to-[#e57f41] flex justify-center items-center h-screen text-[#333]">
+    <div className="bg-gradient-to-b home-hero-section flex justify-center items-center h-screen text-[#333]">
       <div
         className="flex bg-white rounded-[20px] overflow-hidden max-w-[900px] w-full mx-3 md:mx-0"
         style={{ boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)" }}
