@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import { fetchBatchItems } from "../../redux/batchSlice";
+import { listReviewerItem } from "../../redux/reviewerSlice";
 import {
   Button,
   Checkbox,
@@ -15,21 +18,18 @@ import {
   EXAM_INTERVIEW_STATUS,
   REVIEW_STATUS,
 } from "../../utils/constants";
-import { fetchBatchItems } from "../../redux/batchSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { updateStudentData } from "../../redux/studentSlice";
 import toast from "react-hot-toast";
-import { listReviewerItem } from "../../redux/reviewerSlice";
+import { updateStudentData } from "../../redux/studentSlice";
 
-function AdminStudentProfile() {
+function ReviewerStudentProfile() {
   const location = useLocation().state;
   const dispatch = useDispatch();
   const { batch_items } = useSelector((state) => state.batch);
-  const { reviewer_item } = useSelector((state) => state.reviewer);
+  //   const { reviewer_item } = useSelector((state) => state.reviewer);
   const { loading } = useSelector((state) => state.student);
   const maxCharacterLimit = 500;
+  const access_token = localStorage.getItem("sethu_reviewer_access_token");
   const navigate = useNavigate();
-  const access_token = localStorage.getItem("sethu_admin_access_token");
 
   const [formData, setFormData] = useState({
     review_status: "",
@@ -41,7 +41,7 @@ function AdminStudentProfile() {
     sk_analyticalskill: "",
     sk_prblmsolving: "",
     sk_engprof: "",
-    reviewer: "",
+    // reviewer: "",
     date_exam: "",
     exam_marks: "",
     exam_result: "",
@@ -78,13 +78,8 @@ function AdminStudentProfile() {
         sk_analyticalskill: location?.student?.sk_analyticalskill || "",
         sk_prblmsolving: location?.student?.sk_prblmsolving || "",
         sk_engprof: location?.student?.sk_engprof || "",
-        reviewer: location?.student?.reviewerInfo?.account_id || "",
+        // reviewer: location?.student?.reviewerInfo?.account_id || "",
         date_exam: location?.student?.examInfo?.[0]?.exam_datetime || "",
-        // date_exam: location?.student?.examInfo?.[0]?.exam_datetime
-        //   ? new Date(location?.student?.examInfo?.[0]?.exam_datetime)
-        //       .toISOString()
-        //       .slice(0, 16)
-        //   : "",
         exam_marks: location?.student?.examInfo?.[0]?.exam_marks || "",
         exam_result: location?.student?.examInfo?.[0]?.exam_result || "0",
         date_interview:
@@ -121,9 +116,9 @@ function AdminStudentProfile() {
     }
     urlencoded.append("dnc_state", formData.dnc_state);
     urlencoded.append("comment", formData.comment);
-    if (Number(formData.review_status) !== 0) {
-      urlencoded.append("account_id", formData.reviewer);
-    }
+    // if (Number(formData.review_status) !== 0) {
+    //   urlencoded.append("account_id", formData.reviewer);
+    // }
     urlencoded.append("exam_datetime", formData.date_exam);
     urlencoded.append("exam_result", formData.exam_result);
     urlencoded.append("exam_marks", formData.exam_marks);
@@ -514,7 +509,7 @@ function AdminStudentProfile() {
               ))}
             </Select>
 
-            {Number(formData.review_status) !== 0 && (
+            {/* {Number(formData.review_status) !== 0 && (
               <Select
                 label="Select a reviewer"
                 value={String(formData.reviewer) || ""}
@@ -530,7 +525,7 @@ function AdminStudentProfile() {
                   </Option>
                 ))}
               </Select>
-            )}
+            )} */}
 
             <div className="flex flex-col">
               <Textarea
@@ -698,4 +693,4 @@ function AdminStudentProfile() {
   );
 }
 
-export default AdminStudentProfile;
+export default ReviewerStudentProfile;

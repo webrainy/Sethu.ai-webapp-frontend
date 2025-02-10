@@ -4,6 +4,7 @@ import batchReducers from "./batchSlice";
 import studentReducers from "./studentSlice";
 import assignmentReducers from "./assignmentSlice";
 import eventReducers from "./eventSlice";
+import reviewerReducer from "./reviewerSlice";
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     student: studentReducers,
     assignment: assignmentReducers,
     event: eventReducers,
+    reviewer: reviewerReducer,
   },
 });
 

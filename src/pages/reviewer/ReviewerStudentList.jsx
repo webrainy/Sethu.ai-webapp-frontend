@@ -1,35 +1,27 @@
+import { Card, CardBody, Input, Typography } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  Card,
-  Typography,
-  CardBody,
-  IconButton,
-  Input,
-} from "@material-tailwind/react";
-import { ADMIN_STUDENTLIST_TABLE_HEAD } from "../../utils/constants";
-import { HiArrowLeft, HiArrowRight } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchStudentProfile } from "../../redux/studentSlice";
+import { REVIEWER_STUDENTLIST_TABLE_HEAD } from "../../utils/constants";
+import { listReviewerItem } from "../../redux/reviewerSlice";
+import { useNavigate } from "react-router-dom";
 
-function AdminStudentsList() {
-  const [active, setActive] = useState(1);
-  const navigate = useNavigate();
+function ReviewerStudentList() {
+  const { reviewer_item, loading } = useSelector((state) => state.reviewer);
   const dispatch = useDispatch();
-  const { profile_data, loading } = useSelector((state) => state.student);
-  const access_token = localStorage.getItem("sethu_admin_access_token");
+  const navigate = useNavigate();
+  const access_token = localStorage.getItem("sethu_reviewer_access_token");
 
   useEffect(() => {
     dispatch(
-      fetchStudentProfile({
-        end_point: `/api/student/list?page=${active}&limit=${10}`,
+      listReviewerItem({
+        end_point: `/api/account/list_rev`,
         access_token: access_token,
       })
     );
-  }, [dispatch, active]);
+  }, [dispatch]);
 
   const handleRowClick = (student_data) => {
-    navigate("/admin/student/profile", { state: { student: student_data } });
+    navigate("/reviewer/student/profile", { state: { student: student_data } });
   };
 
   const handleStudentSearch = async (e) => {
@@ -37,29 +29,19 @@ function AdminStudentsList() {
 
     if (searchQuery?.length > 0) {
       dispatch(
-        fetchStudentProfile({
-          end_point: `/api/student/list?page=${1}&limit=${10}&searchkey=${searchQuery}`,
+        listReviewerItem({
+          end_point: `/api/account/list_rev?searchkey=${searchQuery}`,
           access_token: access_token,
         })
       );
     } else {
       dispatch(
-        fetchStudentProfile({
-          end_point: `/api/student/list?page=${active}&limit=${10}`,
+        listReviewerItem({
+          end_point: `/api/account/list_rev`,
           access_token: access_token,
         })
       );
     }
-  };
-
-  const next = () => {
-    if (active === profile_data?.totalPages) return;
-    setActive(active + 1);
-  };
-
-  const prev = () => {
-    if (active === 1) return;
-    setActive(active - 1);
   };
 
   return (
@@ -83,14 +65,14 @@ function AdminStudentsList() {
 
       {!loading ? (
         <>
-          {profile_data?.studentData?.length > 0 ? (
+          {reviewer_item[0]?.studentInfo?.length > 0 ? (
             <div>
               <Card className="h-fit w-full box-shadow mt-5">
                 <CardBody className="overflow-auto px-0 py-0">
                   <table className="w-full min-w-max table-auto text-left">
                     <thead>
                       <tr>
-                        {ADMIN_STUDENTLIST_TABLE_HEAD.map((head) => (
+                        {REVIEWER_STUDENTLIST_TABLE_HEAD.map((head) => (
                           <th key={head} className=" bg-[#e9e6e6] p-4">
                             <Typography
                               variant="small"
@@ -104,9 +86,9 @@ function AdminStudentsList() {
                       </tr>
                     </thead>
                     <tbody>
-                      {profile_data?.studentData?.map((student, index) => {
+                      {reviewer_item[0]?.studentInfo?.map((student, index) => {
                         const isLast =
-                          index === profile_data?.studentData?.length - 1;
+                          index === reviewer_item?.studentInfo?.length - 1;
                         const classes = isLast
                           ? "p-4 font-ddin"
                           : "p-4 border-b border-blue-gray-50 font-ddin";
@@ -244,18 +226,6 @@ function AdminStudentsList() {
                                   : "-"}
                               </Typography>
                             </td>
-
-                            <td className={classes}>
-                              <Typography
-                                variant="small"
-                                color="blue-gray"
-                                className="font-normal font-ddin"
-                              >
-                                {student?.reviewerInfo
-                                  ? student?.reviewerInfo?.name
-                                  : "-"}
-                              </Typography>
-                            </td>
                           </tr>
                         );
                       })}
@@ -264,35 +234,35 @@ function AdminStudentsList() {
                 </CardBody>
               </Card>
 
-              {profile_data?.studentData?.length > 0 && (
-                <div className="flex items-center gap-6 justify-center mt-4">
-                  <IconButton
-                    size="sm"
-                    variant="outlined"
-                    onClick={prev}
-                    disabled={active === 1}
-                  >
-                    <HiArrowLeft className="h-4 w-4" />
-                  </IconButton>
-                  <Typography
-                    color="gray"
-                    className="!block font-myriad font-light"
-                  >
-                    Page <strong className="text-gray-900">{active}</strong> of{" "}
-                    <strong className="text-gray-900">
-                      {profile_data?.totalPages}
-                    </strong>
-                  </Typography>
-                  <IconButton
-                    size="sm"
-                    variant="outlined"
-                    onClick={next}
-                    disabled={active === profile_data?.totalPages}
-                  >
-                    <HiArrowRight className="h-4 w-4" />
-                  </IconButton>
-                </div>
-              )}
+              {/* {profile_data?.studentData?.length > 0 && (
+            <div className="flex items-center gap-6 justify-center mt-4">
+              <IconButton
+                size="sm"
+                variant="outlined"
+                onClick={prev}
+                disabled={active === 1}
+              >
+                <HiArrowLeft className="h-4 w-4" />
+              </IconButton>
+              <Typography
+                color="gray"
+                className="!block font-myriad font-light"
+              >
+                Page <strong className="text-gray-900">{active}</strong> of{" "}
+                <strong className="text-gray-900">
+                  {profile_data?.totalPages}
+                </strong>
+              </Typography>
+              <IconButton
+                size="sm"
+                variant="outlined"
+                onClick={next}
+                disabled={active === profile_data?.totalPages}
+              >
+                <HiArrowRight className="h-4 w-4" />
+              </IconButton>
+            </div>
+          )} */}
             </div>
           ) : (
             <div className="h-[50vh] flex justify-center items-center flex-col">
@@ -316,4 +286,4 @@ function AdminStudentsList() {
   );
 }
 
-export default AdminStudentsList;
+export default ReviewerStudentList;

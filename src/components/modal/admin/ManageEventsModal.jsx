@@ -128,7 +128,6 @@ function ManageEventsModal({
 
             {data.student_type == 2 && (
               <ReactSelect
-                //   defaultValue={[colourOptions[2], colourOptions[3]]}
                 isMulti
                 name="students"
                 options={selectedItems[0]?.students?.map((student, i) => ({
@@ -146,9 +145,7 @@ function ManageEventsModal({
               <Button
                 type="submit"
                 className="shadow-none hover:shadow-none capitalize py-2 font-ddin font-normal text-base border-[#DD4633] border bg-transparent text-[#DD4633] hover:text-white hover:bg-[#DD4633] disabled:cursor-not-allowed"
-                // disabled={loading}
               >
-                {/* {loading ? "Loading..." : data?.editable ? "Update" : "Submit"} */}
                 Submit
               </Button>
             </div>

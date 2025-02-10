@@ -63,10 +63,16 @@ function Login() {
           "sethu_admin_access_token",
           result.responseData.access_token
         );
-      } else if (result.responseData.role === 2) {
-        navigate("/student/dashboard");
+      // } else if (result.responseData.role === 2) {
+      //   navigate("/student/dashboard");
+      //   localStorage.setItem(
+      //     "sethu_student_access_token",
+      //     result.responseData.access_token
+      //   );
+      } else if (result.responseData.role === 3) {
+        navigate("/reviewer/students");
         localStorage.setItem(
-          "sethu_student_access_token",
+          "sethu_reviewer_access_token",
           result.responseData.access_token
         );
       } else {
