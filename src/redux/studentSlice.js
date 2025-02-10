@@ -64,7 +64,7 @@ const studentSlice = createSlice({
       state.error = "";
     });
     builder.addCase(updateStudentData.fulfilled, (state, action) => {
-      state.loading = true;
+      state.loading = false;
       state.profile_data =
         action.payload.responseCode === 200 ? action.payload.responseData : [];
     });

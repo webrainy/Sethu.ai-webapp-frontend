@@ -23,17 +23,23 @@ import AdminManageInterviews from "./pages/admin/AdminManageInterviews";
 import StudentEvents from "./pages/student/StudentEvents";
 import StudentInterviews from "./pages/student/StudentInterviews";
 import StudentDashboard from "./pages/student/StudentDashboard";
+import ReviewerLayout from "./components/layouts/ReviewerLayout";
+import ReviewerStudentList from "./pages/reviewer/ReviewerStudentList";
+import AdminManageReviewer from "./pages/admin/AdminManageReviewer";
+import ReviewerStudentProfile from "./pages/reviewer/ReviewerStudentProfile";
 
 function App() {
   return (
     <div>
       <BrowserRouter>
         <Routes>
+          {/* auth route */}
           <Route element={<AuthLayout />}>
             <Route path="/login" element={<Login />} />
           </Route>
           <Route path="/course_registration" element={<CourseRegister />} />
 
+          {/* public route */}
           <Route path="/" element={<UserHomePage />} />
           <Route path="/our_programs" element={<UserProgramsPage />} />
 
@@ -57,12 +63,17 @@ function App() {
               path="/admin/manage_events"
               element={<AdminManageEvents />}
             />
-            <Route
+            {/* <Route
               path="/admin/manage_interviews"
               element={<AdminManageInterviews />}
+            /> */}
+            <Route
+              path="/admin/manage_reviewers"
+              element={<AdminManageReviewer />}
             />
           </Route>
 
+          {/* student route */}
           <Route element={<StudentLayout />}>
             <Route path="/student/dashboard" element={<StudentDashboard />} />
             <Route
@@ -76,6 +87,18 @@ function App() {
             <Route path="/student/events" element={<StudentEvents />} />
             <Route path="/student/interviews" element={<StudentInterviews />} />
             <Route path="/student/profile" element={<StudentProfile />} />
+          </Route>
+
+          {/* reviewer route */}
+          <Route element={<ReviewerLayout />}>
+            <Route
+              path="/reviewer/students"
+              element={<ReviewerStudentList />}
+            />
+            <Route
+              path="/reviewer/student/profile"
+              element={<ReviewerStudentProfile />}
+            />
           </Route>
         </Routes>
       </BrowserRouter>

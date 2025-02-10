@@ -1,19 +1,18 @@
 import React from "react";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { CgProfile } from "react-icons/cg";
+import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
+import { LuLogOut } from "react-icons/lu";
+import { PiStudentFill } from "react-icons/pi";
 import {
-  ProSidebar,
   Menu,
   MenuItem,
-  SidebarHeader,
+  ProSidebar,
   SidebarContent,
+  SidebarHeader,
 } from "react-pro-sidebar";
-import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
-import { MdOutlineReviews, MdSpaceDashboard } from "react-icons/md";
-import { SiGoogleclassroom, SiGooglemeet } from "react-icons/si";
-import { PiStudentFill } from "react-icons/pi";
-import { LuLogOut } from "react-icons/lu";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
-function AdminSidebar({
+function ReviewerSidebar({
   collapsed,
   toggled,
   handleToggleSidebar,
@@ -24,39 +23,19 @@ function AdminSidebar({
 
   const sidebarMenu = [
     {
-      title: "Dashboard",
-      icon: <MdSpaceDashboard />,
-      link: "/admin/dashboard",
-    },
-    {
-      title: "Batch",
-      icon: <SiGoogleclassroom />,
-      link: "/admin/manage_batch",
-    },
-    {
-      title: "Student",
+      title: "Students",
       icon: <PiStudentFill />,
-      link: "/admin/students",
-    },
-    {
-      title: "Reviewers",
-      icon: <MdOutlineReviews />,
-      link: "/admin/manage_reviewers",
-    },
-    {
-      title: "Events/Classes",
-      icon: <SiGoogleclassroom />,
-      link: "/admin/manage_events",
+      link: "/reviewer/students",
     },
     // {
-    //   title: "Interviews",
-    //   icon: <SiGooglemeet />,
-    //   link: "/admin/manage_interviews",
+    //   title: "Profile",
+    //   icon: <CgProfile />,
+    //   //   link: "/student/profile",
     // },
   ];
 
-  const handleAdminLogout = () => {
-    localStorage.removeItem("sethu_admin_access_token");
+  const handleReviewerLogout = () => {
+    localStorage.removeItem("sethu_reviewer_access_token");
     navigate("/login");
   };
 
@@ -122,7 +101,7 @@ function AdminSidebar({
           ))}
           <MenuItem
             icon={<LuLogOut />}
-            onClick={() => handleAdminLogout()}
+            onClick={() => handleReviewerLogout()}
             className="text-[#637381] font-ddin"
           >
             Logout
@@ -133,4 +112,4 @@ function AdminSidebar({
   );
 }
 
-export default AdminSidebar;
+export default ReviewerSidebar;

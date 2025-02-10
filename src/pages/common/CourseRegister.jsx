@@ -240,7 +240,9 @@ function CourseRegister() {
     form_data.append("linkedin_url", formData.linkedin_url);
     form_data.append("github_url", formData.github_url);
     form_data.append("resume", formData.resume);
-    form_data.append("coverletter", formData.coverletter);
+    if (formData.coverletter) {
+      form_data.append("profile", formData.coverletter);
+    }
     form_data.append("father_occ", formData.father_occ);
     form_data.append("mother_occ", formData.mother_occ);
     form_data.append("income", formData.income);
@@ -840,26 +842,32 @@ function CourseRegister() {
                 </div>
 
                 <div className="text-left">
-                  <label className="block mb-1 font-medium">Cover Letter</label>
+                  <label className="block mb-1 font-medium">Photo</label>
                   <Input
                     type="file"
-                    label="Upload your cover letter"
+                    label="Upload your photo"
                     name="coverletter"
-                    required
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        coverletter: e.target.files[0],
-                      }))
-                    }
-                    accept=".pdf"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file && file.size > 5 * 1024 * 1024) {
+                        // Check if file size is greater than 5MB
+                        alert("File size must be less than 5MB"); // Display an error message
+                        e.target.value = ""; // Clear the file input
+                      } else {
+                        setFormData((prev) => ({
+                          ...prev,
+                          coverletter: file,
+                        }));
+                      }
+                    }}
+                    accept=".jpg, .jpeg, .png, .bmp, .webp"
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                     containerProps={{
                       className: "font-ddin",
                     }}
                   />
                   <span className="font-ddin text-xs text-red-500">
-                    Only PDF files are allowed.
+                    Only images are allowed.
                   </span>
                 </div>
 

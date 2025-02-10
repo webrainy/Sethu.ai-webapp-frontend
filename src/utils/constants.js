@@ -16,7 +16,18 @@ export const ADMIN_STUDENTLIST_TABLE_HEAD = [
   "Education",
   "Phone Number",
   "Year of Passing",
-  "Status",
+  "Review Status",
+  "Batch Status",
+  "Assigned to",
+];
+
+export const REVIEWER_STUDENTLIST_TABLE_HEAD = [
+  "Name",
+  "Education",
+  "Phone Number",
+  "Year of Passing",
+  "Review Status",
+  "Batch Status",
 ];
 
 export const ADMIN_BATCH_STUDENTLIST_TABLE_HEAD = [
@@ -36,11 +47,29 @@ export const EXPERTISE_LEVELS = [
 ];
 
 export const REVIEW_STATUS = [
+  { label: "Not Started", value: 0 },
   { label: "In Progress", value: 1 },
-  { label: "Assigned", value: 2 },
-  { label: "Accepted", value: 3 },
+  { label: "Accepted", value: 2 },
+  { label: "Follow-up", value: 3 },
   { label: "Rejected", value: 4 },
   { label: "Unable to Decide", value: 5 },
 ];
 
+export const BATCH_STATUS = [
+  { label: "Not Assigned", value: 1 },
+  { label: "Assigned", value: 2 },
+];
+
+export const EXAM_INTERVIEW_STATUS = [
+  { label: "Pending", value: 0 },
+  { label: "Pass", value: 1 },
+  { label: "Fail", value: 2 },
+];
+
 export const Assignment_Table_Head = ["Assignments", "Status"];
+
+export const ADMIN_REVIEWER_TABLE_HEAD = [
+  "Reviewer Name",
+  "Phone Number",
+  "Email",
+];
