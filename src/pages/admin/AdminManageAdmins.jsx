@@ -10,6 +10,7 @@ import {
 import ManageReviewerModal from "../../components/modal/admin/ManageReviewerModal";
 import { listReviewerItem, postReviewerItem } from "../../redux/reviewerSlice";
 import toast from "react-hot-toast";
+import { TbEye, TbEyeOff } from "react-icons/tb";
 
 function AdminManageAdmins() {
   const [modal, setModal] = useState({ add: false });
@@ -25,6 +26,7 @@ function AdminManageAdmins() {
     phone: false,
     password: false,
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [passVisible, setPassVisible] = useState(false);
   const { reviewer_item, loading } = useSelector((state) => state.reviewer);
   const dispatch = useDispatch();
@@ -50,6 +52,10 @@ function AdminManageAdmins() {
       password: "",
       editable: false,
     });
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   const handleChange = (e) => {
@@ -147,19 +153,22 @@ function AdminManageAdmins() {
                     <table className="w-full min-w-max table-auto text-left">
                       <thead>
                         <tr>
-                          {["Admin Name", "Phone Number", "Email"].map(
-                            (head) => (
-                              <th key={head} className=" bg-[#e9e6e6] p-4">
-                                <Typography
-                                  variant="small"
-                                  color="blue-gray"
-                                  className="font-semibold leading-none opacity-70 font-ddin"
-                                >
-                                  {head}
-                                </Typography>
-                              </th>
-                            )
-                          )}
+                          {[
+                            "Admin Name",
+                            "Phone Number",
+                            "Email",
+                            "Password",
+                          ].map((head) => (
+                            <th key={head} className=" bg-[#e9e6e6] p-4">
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-semibold leading-none opacity-70 font-ddin"
+                              >
+                                {head}
+                              </Typography>
+                            </th>
+                          ))}
                         </tr>
                       </thead>
                       <tbody>
@@ -196,6 +205,28 @@ function AdminManageAdmins() {
                                   className="font-normal font-ddin"
                                 >
                                   {reviewer.email}
+                                </Typography>
+                              </td>
+                              <td className={classes}>
+                                <Typography
+                                  variant="small"
+                                  color="blue-gray"
+                                  className="font-normal font-ddin flex items-center gap-2"
+                                >
+                                  {showPassword
+                                    ? reviewer.password
+                                    : "*".repeat(reviewer.password.length)}{" "}
+                                  {!showPassword ? (
+                                    <TbEyeOff
+                                      onClick={togglePasswordVisibility}
+                                      className="cursor-pointer"
+                                    />
+                                  ) : (
+                                    <TbEye
+                                      onClick={togglePasswordVisibility}
+                                      className="cursor-pointer"
+                                    />
+                                  )}
                                 </Typography>
                               </td>
                             </tr>

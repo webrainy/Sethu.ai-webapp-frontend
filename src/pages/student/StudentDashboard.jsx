@@ -27,9 +27,7 @@ function StudentDashboard() {
         <>
           {events_list?.length > 0 && (
             <div className="mx-3 bg-white px-4 py-3 rounded-2xl">
-              <p className="font-ddin font-semibold text-3xl">
-                Recent Events & Interviews
-              </p>
+              <p className="font-ddin font-semibold text-3xl">Recent Events</p>
               <div className="grid lg:grid-cols-2 gap-3 items-center mt-2">
                 {events_list?.map((event, i) => (
                   <div

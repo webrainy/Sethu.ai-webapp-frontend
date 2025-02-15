@@ -5,6 +5,7 @@ import { mailPattern, phoneNumber, strongPwd } from "../../utils/constants";
 import { listReviewerItem, postReviewerItem } from "../../redux/reviewerSlice";
 import toast from "react-hot-toast";
 import ManageModalReviewer from "../../components/modal/admin/ManageModalReviewer";
+import { TbEye, TbEyeOff } from "react-icons/tb";
 
 function AdminManageReviewer() {
   const [modal, setModal] = useState({ add: false });
@@ -21,6 +22,7 @@ function AdminManageReviewer() {
     password: false,
   });
   const [passVisible, setPassVisible] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { reviewer_item, loading } = useSelector((state) => state.reviewer);
   const dispatch = useDispatch();
   const access_token = localStorage.getItem("sethu_admin_access_token");
@@ -45,6 +47,10 @@ function AdminManageReviewer() {
       password: "",
       editable: false,
     });
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   const handleChange = (e) => {
@@ -142,19 +148,23 @@ function AdminManageReviewer() {
                     <table className="w-full min-w-max table-auto text-left">
                       <thead>
                         <tr>
-                          {["Reviewer Name", "Phone Number", "Email"].map(
-                            (head) => (
-                              <th key={head} className=" bg-[#e9e6e6] p-4">
-                                <Typography
-                                  variant="small"
-                                  color="blue-gray"
-                                  className="font-semibold leading-none opacity-70 font-ddin"
-                                >
-                                  {head}
-                                </Typography>
-                              </th>
-                            )
-                          )}
+                          {[
+                            "Reviewer Name",
+                            "Phone Number",
+                            "Email",
+                            "Password",
+                            "Created by",
+                          ].map((head) => (
+                            <th key={head} className=" bg-[#e9e6e6] p-4">
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-semibold leading-none opacity-70 font-ddin"
+                              >
+                                {head}
+                              </Typography>
+                            </th>
+                          ))}
                         </tr>
                       </thead>
                       <tbody>
@@ -191,6 +201,37 @@ function AdminManageReviewer() {
                                   className="font-normal font-ddin"
                                 >
                                   {reviewer.email}
+                                </Typography>
+                              </td>
+                              <td className={classes}>
+                                <Typography
+                                  variant="small"
+                                  color="blue-gray"
+                                  className="font-normal font-ddin flex items-center gap-2"
+                                >
+                                  {showPassword
+                                    ? reviewer.password
+                                    : "*".repeat(reviewer.password.length)}{" "}
+                                  {!showPassword ? (
+                                    <TbEyeOff
+                                      onClick={togglePasswordVisibility}
+                                      className="cursor-pointer"
+                                    />
+                                  ) : (
+                                    <TbEye
+                                      onClick={togglePasswordVisibility}
+                                      className="cursor-pointer"
+                                    />
+                                  )}
+                                </Typography>
+                              </td>
+                              <td className={classes}>
+                                <Typography
+                                  variant="small"
+                                  color="blue-gray"
+                                  className="font-normal font-ddin"
+                                >
+                                  {reviewer?.createdBy?.name || "-"}
                                 </Typography>
                               </td>
                             </tr>

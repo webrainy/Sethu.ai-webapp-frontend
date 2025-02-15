@@ -256,6 +256,15 @@ function AdminStudentsList() {
                                   : "-"}
                               </Typography>
                             </td>
+                            <td className={classes}>
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal font-ddin"
+                              >
+                                {student?.assignedBy?.name || "-"}
+                              </Typography>
+                            </td>
                           </tr>
                         );
                       })}

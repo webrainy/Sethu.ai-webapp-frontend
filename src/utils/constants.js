@@ -19,6 +19,7 @@ export const ADMIN_STUDENTLIST_TABLE_HEAD = [
   "Review Status",
   "Batch Status",
   "Assigned to",
+  "Assigned by",
 ];
 
 export const REVIEWER_STUDENTLIST_TABLE_HEAD = [
@@ -66,7 +67,7 @@ export const EXAM_INTERVIEW_STATUS = [
   { label: "Fail", value: 2 },
 ];
 
-export const Assignment_Table_Head = ["Assignments", "Status"];
+export const Assignment_Table_Head = ["Assignments", "Status", "Added by"];
 
 export const ADMIN_REVIEWER_TABLE_HEAD = [
   // "Reviewer Name",

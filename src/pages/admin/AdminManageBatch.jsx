@@ -233,6 +233,12 @@ function AdminManageBatch() {
                             : "-"}
                         </span>
                       </p>
+                      <p className="flex items-center gap-2">
+                        Batch added by:{" "}
+                        <span className="font-normal">
+                          {item?.createdBy?.name || "-"}
+                        </span>
+                      </p>
                     </div>
                   </div>
                 ))}

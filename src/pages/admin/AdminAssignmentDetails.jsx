@@ -136,7 +136,8 @@ function AdminAssignmentDetails() {
                   {assignment_list.length > 0 ? (
                     assignment_list.map((assignment, index) => {
                       const { assignmentInfo, compl_status } = assignment;
-                      const { title, description, url } = assignmentInfo || {};
+                      const { title, description, url, createdBy } =
+                        assignmentInfo || {};
                       const statusData = getStatusData(compl_status);
                       const isLast = index === assignment_list.length - 1;
                       const classes = isLast
@@ -183,6 +184,17 @@ function AdminAssignmentDetails() {
                                 className={`border rounded-xl border-gray-300 px-4 py-[2px] text-[13px] ${statusData.classes}`}
                               >
                                 {statusData.text}
+                              </Typography>
+                            </div>
+                          </td>
+                          <td className={classes}>
+                            <div className="flex items-center gap-3 cursor-pointer justify-end">
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal font-ddin"
+                              >
+                                {createdBy?.name || "-"}
                               </Typography>
                             </div>
                           </td>
