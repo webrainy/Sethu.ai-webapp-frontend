@@ -65,6 +65,12 @@ function ViewBatchDetails({ open, onClose, viewDetails }) {
                 {viewDetails.actual_hour || "-"}
               </span>
             </p>
+            <p className="flex items-center gap-2">
+              Batch added by:{" "}
+              <span className="font-normal">
+                {viewDetails?.createdBy?.name || "-"}
+              </span>
+            </p>
           </div>
         </div>
 

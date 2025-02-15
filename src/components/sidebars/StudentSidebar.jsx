@@ -43,11 +43,11 @@ function StudentSidebar({
       icon: <SiGoogleclassroom />,
       link: "/student/events",
     },
-    {
-      title: "Interviews",
-      icon: <SiGooglemeet />,
-      link: "/student/interviews",
-    },
+    // {
+    //   title: "Interviews",
+    //   icon: <SiGooglemeet />,
+    //   link: "/student/interviews",
+    // },
     {
       title: "Profile",
       icon: <CgProfile />,

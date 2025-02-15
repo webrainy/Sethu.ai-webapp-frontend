@@ -217,6 +217,7 @@ function AdminManageEvents() {
                             .map((info) => info.studentInfo.name)
                             .join(", ")}
                         </p>
+                        <p>Added by: {event?.createdBy?.name || "-"}</p>
                       </div>
                       <Button
                         onClick={() => window.open(event.url)}
