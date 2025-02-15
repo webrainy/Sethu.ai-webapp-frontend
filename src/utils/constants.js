@@ -69,7 +69,8 @@ export const EXAM_INTERVIEW_STATUS = [
 export const Assignment_Table_Head = ["Assignments", "Status"];
 
 export const ADMIN_REVIEWER_TABLE_HEAD = [
-  "Reviewer Name",
+  // "Reviewer Name",
+  "Admin Name",
   "Phone Number",
   "Email",
 ];

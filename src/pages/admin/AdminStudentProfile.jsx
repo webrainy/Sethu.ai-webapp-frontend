@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateStudentData } from "../../redux/studentSlice";
 import toast from "react-hot-toast";
 import { listReviewerItem } from "../../redux/reviewerSlice";
+import moment from "moment/moment";
 
 function AdminStudentProfile() {
   const location = useLocation().state;
@@ -62,6 +63,7 @@ function AdminStudentProfile() {
     dispatch(
       listReviewerItem({
         end_point: `/api/account/list_rev`,
+        // end_point: `/api/account/list_admin`,
         access_token: access_token,
       })
     ).unwrap();
@@ -676,6 +678,48 @@ function AdminStudentProfile() {
               )}
             </div>
           )}
+
+          {/* important dates */}
+          <div className="shadow-md bg-white p-4 rounded-xl flex flex-col gap-3 h-fit">
+            <p className="font-ddin font-semibold text-lg">Important Dates</p>
+            <div className="flex justify-between items-center font-ddin">
+              <p>Application submitted</p>
+              <p>
+                {location?.student?.registered_on
+                  ? moment(location?.student?.registered_on).format("LLL") ||
+                    "-"
+                  : "-"}
+              </p>
+            </div>
+            <div className="flex justify-between items-center font-ddin">
+              <p>Exam date</p>
+              <p>
+                {location?.student?.examInfo[0]?.exam_datetime
+                  ? moment(
+                      location?.student?.examInfo[0]?.exam_datetime
+                    ).format("LLL") || "-"
+                  : "-"}
+              </p>
+            </div>
+            <div className="flex justify-between items-center font-ddin">
+              <p>Interview date</p>
+              <p>
+                {location?.student?.interviewInfo[0]?.int_datetime
+                  ? moment(
+                      location?.student?.interviewInfo[0]?.int_datetime
+                    ).format("LLL") || "-"
+                  : "-"}
+              </p>
+            </div>
+            <div className="flex justify-between items-center font-ddin">
+              <p>Selected date</p>
+              <p>
+                {location?.student?.selected_on
+                  ? moment(location?.student?.selected_on).format("LLL") || "-"
+                  : "-"}
+              </p>
+            </div>
+          </div>
         </div>
         <div className="flex justify-end mt-4 mb-10 gap-4">
           <Button

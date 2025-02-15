@@ -9,7 +9,7 @@ import React from "react";
 import { RiCloseCircleLine } from "react-icons/ri";
 import { TbEye, TbEyeOff } from "react-icons/tb";
 
-function ManageReviewerModal({
+function ManageModalReviewer({
   open,
   close,
   data,
@@ -26,7 +26,7 @@ function ManageReviewerModal({
         <Card className="w-full p-5">
           <div className="flex justify-between">
             <h1 className="text-xl font-bold text-gray-800 font-ddin mb-5">
-              {data?.editable ? "Update" : "Add"} Admin
+              {data?.editable ? "Update" : "Add"} Reviewer
             </h1>
             <IconButton
               color="blue-gray"
@@ -44,7 +44,7 @@ function ManageReviewerModal({
             onSubmit={data.editable ? "" : handleSubmit}
           >
             <Input
-              label="Admin name"
+              label="Reviewer name"
               className="p-3"
               name="name"
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
@@ -56,7 +56,7 @@ function ManageReviewerModal({
               required
             />
             <Input
-              label="Admin Phone number"
+              label="Reviewer Phone number"
               type="number"
               className="p-3"
               name="phone"
@@ -85,7 +85,7 @@ function ManageReviewerModal({
               required
             />
             <Input
-              label="Admin email"
+              label="Reviewer email"
               className="p-3"
               name="email"
               type="email"
@@ -98,7 +98,7 @@ function ManageReviewerModal({
               required
             />
             <Input
-              label="Admin password"
+              label="Reviewer password"
               className="p-3"
               name="password"
               type={!passVisible ? "password" : "text"}
@@ -140,4 +140,4 @@ function ManageReviewerModal({
   );
 }
 
-export default ManageReviewerModal;
+export default ManageModalReviewer;

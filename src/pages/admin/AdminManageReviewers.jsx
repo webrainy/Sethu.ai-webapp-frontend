@@ -1,15 +1,10 @@
 import { Button, Card, CardBody, Typography } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  ADMIN_REVIEWER_TABLE_HEAD,
-  mailPattern,
-  phoneNumber,
-  strongPwd,
-} from "../../utils/constants";
-import ManageReviewerModal from "../../components/modal/admin/ManageReviewerModal";
+import { mailPattern, phoneNumber, strongPwd } from "../../utils/constants";
 import { listReviewerItem, postReviewerItem } from "../../redux/reviewerSlice";
 import toast from "react-hot-toast";
+import ManageModalReviewer from "../../components/modal/admin/ManageModalReviewer";
 
 function AdminManageReviewer() {
   const [modal, setModal] = useState({ add: false });
@@ -34,6 +29,7 @@ function AdminManageReviewer() {
     dispatch(
       listReviewerItem({
         end_point: `/api/account/list_rev`,
+        // end_point: `/api/account/list_admin`,
         access_token: access_token,
       })
     ).unwrap();
@@ -95,6 +91,7 @@ function AdminManageReviewer() {
       const result = await dispatch(
         postReviewerItem({
           end_point: `/api/account/create_acc`,
+          //   end_point: `/api/account/create_acc?role=1`,
           access_token: access_token,
           item_data: {
             name: data.name,
@@ -110,6 +107,7 @@ function AdminManageReviewer() {
         dispatch(
           listReviewerItem({
             end_point: `/api/account/list_rev`,
+            // end_point: `/api/account/list_admin`,
             access_token: access_token,
           })
         ).unwrap();
@@ -144,17 +142,19 @@ function AdminManageReviewer() {
                     <table className="w-full min-w-max table-auto text-left">
                       <thead>
                         <tr>
-                          {ADMIN_REVIEWER_TABLE_HEAD.map((head) => (
-                            <th key={head} className=" bg-[#e9e6e6] p-4">
-                              <Typography
-                                variant="small"
-                                color="blue-gray"
-                                className="font-semibold leading-none opacity-70 font-ddin"
-                              >
-                                {head}
-                              </Typography>
-                            </th>
-                          ))}
+                          {["Reviewer Name", "Phone Number", "Email"].map(
+                            (head) => (
+                              <th key={head} className=" bg-[#e9e6e6] p-4">
+                                <Typography
+                                  variant="small"
+                                  color="blue-gray"
+                                  className="font-semibold leading-none opacity-70 font-ddin"
+                                >
+                                  {head}
+                                </Typography>
+                              </th>
+                            )
+                          )}
                         </tr>
                       </thead>
                       <tbody>
@@ -221,7 +221,7 @@ function AdminManageReviewer() {
         )}
       </div>
 
-      <ManageReviewerModal
+      <ManageModalReviewer
         open={modal.add}
         close={() => setModal({ ...modal, add: false })}
         data={data}

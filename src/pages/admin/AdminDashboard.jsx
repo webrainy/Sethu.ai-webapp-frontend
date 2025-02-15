@@ -107,7 +107,7 @@ function AdminDashboard() {
         </div>
       )}
 
-      <div className="flex flex-col md:flex-row gap-3 w-full rounded-2xl p-3">
+      {/* <div className="flex flex-col md:flex-row gap-3 w-full rounded-2xl p-3">
         <div className="flex-[3]">
           <div className="flex flex-col sm:flex-row gap-5">
             <div className="bg-gradient-to-br from-[#fff] to-[#FFC324] shadow-lg text-black p-4 rounded-xl font-semibold flex-1 font-myriad">
@@ -203,7 +203,7 @@ function AdminDashboard() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -57,18 +57,18 @@ function Login() {
     ).unwrap();
 
     if (result.responseCode === 200) {
-      if (result.responseData.role === 1) {
+      if (result.responseData.role === 1 || result.responseData.role === 4) {
         navigate("/admin/dashboard");
         localStorage.setItem(
           "sethu_admin_access_token",
           result.responseData.access_token
         );
-      // } else if (result.responseData.role === 2) {
-      //   navigate("/student/dashboard");
-      //   localStorage.setItem(
-      //     "sethu_student_access_token",
-      //     result.responseData.access_token
-      //   );
+      } else if (result.responseData.role === 2) {
+        navigate("/student/dashboard");
+        localStorage.setItem(
+          "sethu_student_access_token",
+          result.responseData.access_token
+        );
       } else if (result.responseData.role === 3) {
         navigate("/reviewer/students");
         localStorage.setItem(

@@ -11,12 +11,31 @@ import {
   putBatchItem,
 } from "../../redux/batchSlice";
 import toast from "react-hot-toast";
+import moment from "moment";
+import { LuEye } from "react-icons/lu";
+import ViewBatchDetails from "../../components/modal/admin/ViewBatchDetails";
 
 function AdminManageBatch() {
-  const [modal, setModal] = useState({ add: false, update: false });
-  const [data, setData] = useState({ batch_name: "", editable: false });
+  const [modal, setModal] = useState({
+    add: false,
+    update: false,
+    view_details: false,
+  });
+  const [data, setData] = useState({
+    batch_name: "",
+    start_date: "",
+    end_date: "",
+    technologies: "",
+    tutor: "",
+    lab_coordinator: "",
+    planned_hours: "",
+    actual_hours: "",
+    comments: "",
+    editable: false,
+  });
+  const [viewDetails, setViewDetails] = useState({});
   const dispatch = useDispatch();
-  const { error, loading, batch_items } = useSelector((state) => state.batch);
+  const { loading, batch_items } = useSelector((state) => state.batch);
   // const token = useSelector((state) => state.auth.token);
   const navigate = useNavigate();
   const access_token = localStorage.getItem("sethu_admin_access_token");
@@ -32,7 +51,19 @@ function AdminManageBatch() {
 
   const handleAddModal = () => {
     setModal({ ...modal, add: true });
-    setData({ ...data, batch_name: "", editable: false });
+    setData({
+      ...data,
+      batch_name: "",
+      start_date: "",
+      end_date: "",
+      technologies: "",
+      tutor: "",
+      lab_coordinator: "",
+      planned_hours: "",
+      actual_hours: "",
+      comments: "",
+      editable: false,
+    });
   };
 
   const handleUpdateModal = (item_data) => {
@@ -41,6 +72,14 @@ function AdminManageBatch() {
       ...data,
       batch_name: item_data.name,
       batch_id: item_data.batch_id,
+      start_date: item_data.start_date,
+      end_date: item_data.end_date,
+      technologies: item_data.technologies,
+      tutor: item_data.tutor,
+      lab_coordinator: item_data.lab_coordinator,
+      planned_hours: item_data.planned_hour,
+      actual_hours: item_data.actual_hour,
+      comments: item_data.comment || "",
       editable: true,
     });
   };
@@ -56,7 +95,17 @@ function AdminManageBatch() {
       postBatchItem({
         end_point: "/api/batch/create",
         access_token: access_token,
-        item_data: data,
+        item_data: {
+          name: data.batch_name,
+          start_date: data.start_date,
+          end_date: data.end_date,
+          technologies: data.technologies,
+          tutor: data.tutor,
+          lab_coordinator: data.lab_coordinator,
+          planned_hour: data.planned_hours,
+          actual_hour: data.actual_hours,
+          comment: data.comments,
+        },
       })
     ).unwrap();
     if (result.responseCode === 200) {
@@ -82,7 +131,17 @@ function AdminManageBatch() {
       putBatchItem({
         end_point: `/api/batch/edit?batch_id=${data.batch_id}`,
         access_token: access_token,
-        item_data: data,
+        item_data: {
+          name: data.batch_name,
+          start_date: data.start_date,
+          end_date: data.end_date,
+          technologies: data.technologies,
+          tutor: data.tutor,
+          lab_coordinator: data.lab_coordinator,
+          planned_hour: data.planned_hours,
+          actual_hour: data.actual_hours,
+          comment: data.comments,
+        },
       })
     ).unwrap();
     if (result.responseCode === 200) {
@@ -99,6 +158,11 @@ function AdminManageBatch() {
         result.responseMessage || "Connection failed. Please try again."
       );
     }
+  };
+
+  const handleViewDetails = (item_data) => {
+    setModal({ ...modal, view_details: true });
+    setViewDetails(item_data);
   };
 
   return (
@@ -122,27 +186,53 @@ function AdminManageBatch() {
                 {batch_items.map((item, i) => (
                   <div
                     key={i}
-                    className="p-4 bg-white rounded-xl hover:shadow-md transition-all flex justify-between items-center"
+                    className="p-4 bg-white rounded-xl hover:shadow-md transition-all flex flex-col gap-2"
                   >
-                    <p
-                      className="font-ddin font-normal cursor-pointer"
-                      onClick={() =>
-                        navigate("/admin/batch/details", { state: { item } })
-                      }
-                    >
-                      {item.name}
-                    </p>
-                    <div className="flex gap-4 items-center">
-                      <FaRegEdit
-                        onClick={() => handleUpdateModal(item)}
-                        className="text-lg cursor-pointer"
-                      />
-                      <VscPreview
+                    <div className="flex justify-between items-center">
+                      <p
+                        className="font-ddin font-semibold cursor-pointer text-lg capitalize"
                         onClick={() =>
                           navigate("/admin/batch/details", { state: { item } })
                         }
-                        className="text-xl cursor-pointer"
-                      />
+                      >
+                        {item.name}
+                      </p>
+                      <div className="flex gap-4 items-center">
+                        <FaRegEdit
+                          onClick={() => handleUpdateModal(item)}
+                          className="text-lg cursor-pointer"
+                        />
+                        <VscPreview
+                          onClick={() =>
+                            navigate("/admin/batch/details", {
+                              state: { item },
+                            })
+                          }
+                          className="text-xl cursor-pointer"
+                        />
+                        <LuEye
+                          className="text-xl cursor-pointer"
+                          onClick={() => handleViewDetails(item)}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex gap-2 flex-col font-ddin font-semibold">
+                      <p>
+                        Start date:{" "}
+                        <span className="font-normal">
+                          {item.start_date
+                            ? moment(item.start_date).format("LL")
+                            : "-"}
+                        </span>
+                      </p>
+                      <p>
+                        End date:{" "}
+                        <span className="font-normal">
+                          {item.end_date
+                            ? moment(item.end_date).format("LL")
+                            : "-"}
+                        </span>
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -182,6 +272,11 @@ function AdminManageBatch() {
         handleChange={handleChange}
         handleUpdate={handleUpdate}
         loading={loading}
+      />
+      <ViewBatchDetails
+        open={modal.view_details}
+        onClose={() => setModal({ ...modal, view_details: false })}
+        viewDetails={viewDetails}
       />
     </>
   );
