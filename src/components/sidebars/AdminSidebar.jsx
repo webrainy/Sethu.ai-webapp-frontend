@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   ProSidebar,
@@ -6,12 +6,15 @@ import {
   MenuItem,
   SidebarHeader,
   SidebarContent,
+  SidebarFooter,
 } from "react-pro-sidebar";
 import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 import { MdOutlineReviews, MdSpaceDashboard } from "react-icons/md";
 import { SiGoogleclassroom, SiGooglemeet } from "react-icons/si";
 import { PiStudentFill } from "react-icons/pi";
 import { LuLogOut } from "react-icons/lu";
+import { jwtDecode } from "jwt-decode";
+import { RiLockPasswordLine } from "react-icons/ri";
 
 function AdminSidebar({
   collapsed,
@@ -21,7 +24,16 @@ function AdminSidebar({
 }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const access_token = localStorage.getItem("sethu_admin_access_token");
+  const [decoded, setDecoded] = useState();
 
+  useEffect(() => {
+    if (access_token) {
+      setDecoded(jwtDecode(access_token));
+    }
+  }, [access_token]);
+
+  // Define sidebar menu items
   const sidebarMenu = [
     {
       title: "Dashboard",
@@ -38,6 +50,16 @@ function AdminSidebar({
       icon: <PiStudentFill />,
       link: "/admin/students",
     },
+    // Conditionally include "Admins" menu item based on role
+    ...(decoded?.role !== 4
+      ? [
+          {
+            title: "Admins",
+            icon: <MdOutlineReviews />,
+            link: "/admin/manage_admins",
+          },
+        ]
+      : []),
     {
       title: "Reviewers",
       icon: <MdOutlineReviews />,
@@ -48,11 +70,11 @@ function AdminSidebar({
       icon: <SiGoogleclassroom />,
       link: "/admin/manage_events",
     },
-    // {
-    //   title: "Interviews",
-    //   icon: <SiGooglemeet />,
-    //   link: "/admin/manage_interviews",
-    // },
+    {
+      title: "Reset Password",
+      icon: <RiLockPasswordLine />,
+      link: "/admin/reset_password",
+    },
   ];
 
   const handleAdminLogout = () => {
@@ -67,8 +89,6 @@ function AdminSidebar({
       onToggle={handleToggleSidebar}
       breakPoint="lg"
       style={{ backgroundColor: "#032313" }}
-      // image={LoginBg}
-      //   style={{ color: "white", backgroundColor: "#F5F7F900", border: "none" }}
     >
       {/* Header */}
       <SidebarHeader>
@@ -85,7 +105,6 @@ function AdminSidebar({
             >
               <div
                 style={{
-                  // padding: "9px",
                   textTransform: "uppercase",
                   fontWeight: "bold",
                   fontSize: 15,
@@ -129,6 +148,27 @@ function AdminSidebar({
           </MenuItem>
         </Menu>
       </SidebarContent>
+
+      <SidebarFooter
+        style={{
+          textAlign: "center",
+          backgroundColor: "#fff",
+          borderTop: !collapsed ? "1px solid #E68242" : "none",
+          padding: "8px 0",
+        }}
+      >
+        {!collapsed && (
+          <div className="font-ddin">
+            {decoded?.name && (
+              <p className="text-black font-semibold text-[21px]">
+                {decoded?.name || ""}
+              </p>
+            )}
+            {decoded && <p>{decoded?.phone || ""}</p>}
+            {decoded && <p>{decoded?.email || ""}</p>}
+          </div>
+        )}
+      </SidebarFooter>
     </ProSidebar>
   );
 }

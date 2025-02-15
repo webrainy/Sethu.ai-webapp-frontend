@@ -44,13 +44,9 @@ export const postBatchItem = createAsyncThunk(
   "batch/add",
   async ({ end_point, access_token, item_data }, { rejectWithValue }) => {
     try {
-      const res = await axios.post(
-        `${base_url + end_point}`,
-        {
-          name: item_data.batch_name,
-        },
-        { headers: { Authorization: access_token } }
-      );
+      const res = await axios.post(`${base_url + end_point}`, item_data, {
+        headers: { Authorization: access_token },
+      });
       return res.data;
     } catch (error) {
       return rejectWithValue(error.response.data || "Something went wrong!");
@@ -63,13 +59,9 @@ export const putBatchItem = createAsyncThunk(
   "batch/update",
   async ({ end_point, access_token, item_data }, { rejectWithValue }) => {
     try {
-      const res = await axios.put(
-        `${base_url + end_point}`,
-        {
-          name: item_data.batch_name,
-        },
-        { headers: { Authorization: access_token } }
-      );
+      const res = await axios.put(`${base_url + end_point}`, item_data, {
+        headers: { Authorization: access_token },
+      });
       return res.data;
     } catch (error) {
       return rejectWithValue(error.response.data || "Something went wrong!");

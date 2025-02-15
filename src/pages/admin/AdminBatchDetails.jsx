@@ -19,12 +19,15 @@ import { postAssignmentToStudent } from "../../redux/assignmentSlice";
 import toast from "react-hot-toast";
 import { fetchStudentProfile } from "../../redux/studentSlice";
 import { HiArrowLeft, HiArrowRight } from "react-icons/hi";
+import { LuEye } from "react-icons/lu";
+import ViewBatchDetails from "../../components/modal/admin/ViewBatchDetails";
 
 function AdminBatchDetails() {
   const [modal, setModal] = useState({
     all_students: false,
     particular_statudents_bottom_sheet: false,
     particular_student_modal: false,
+    batch_details: false,
   });
   const [active, setActive] = useState(1);
   const [data, setData] = useState({
@@ -33,6 +36,7 @@ function AdminBatchDetails() {
     assgn_url: "",
     student_list: [],
   });
+  const [batchData, setBatchData] = useState({});
   const location = useLocation().state;
   const dispatch = useDispatch();
   const { loading, selectedItems } = useSelector((state) => state.batch);
@@ -47,7 +51,9 @@ function AdminBatchDetails() {
         access_token: access_token,
       })
     );
-  }, [dispatch, location.item?.batch_id, access_token]);
+
+    setBatchData(location.item);
+  }, [dispatch, location, access_token]);
 
   // Fetch student data when `active` or `selectedItems` changes
   useEffect(() => {
@@ -256,6 +262,10 @@ function AdminBatchDetails() {
     setActive(active - 1);
   };
 
+  const handleViewDetails = () => {
+    setModal({ ...modal, batch_details: true });
+  };
+
   return (
     <>
       <div className="p-3">
@@ -266,12 +276,18 @@ function AdminBatchDetails() {
         {!loading ? (
           <div>
             <div className="flex justify-between items-center">
-              <p className="font-myriad font-light text-lg">
-                Batch name:{" "}
-                <span className="font-ddin font-semibold capitalize">
-                  {selectedItems[0]?.name}
-                </span>
-              </p>
+              <div className="flex gap-3 items-center">
+                <p className="font-myriad font-light text-lg">
+                  Batch name:{" "}
+                  <span className="font-ddin font-semibold capitalize">
+                    {selectedItems[0]?.name}
+                  </span>
+                </p>
+                <LuEye
+                  className="text-xl cursor-pointer"
+                  onClick={() => handleViewDetails()}
+                />
+              </div>
 
               {selectedItems[0]?.students?.length > 0 && (
                 <div className="flex items-center gap-3">
@@ -555,6 +571,12 @@ function AdminBatchDetails() {
           )}
         </div>
       </BottomSheet>
+
+      <ViewBatchDetails
+        open={modal.batch_details}
+        onClose={() => setModal({ ...modal, batch_details: false })}
+        viewDetails={batchData}
+      />
     </>
   );
 }

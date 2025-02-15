@@ -37,6 +37,21 @@ export const register = createAsyncThunk(
   }
 );
 
+// action for change password
+export const changePassword = createAsyncThunk(
+  "auth/change_password",
+  async ({ end_point, item_data, access_token }, { rejectWithValue }) => {
+    try {
+      const res = await axios.post(`${base_url + end_point}`, item_data, {
+        headers: { Authorization: access_token },
+      });
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response.status || "Login failed");
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -51,6 +66,20 @@ const authSlice = createSlice({
       state.token = action.payload.responseData?.access_token;
     });
     builder.addCase(login.rejected, (state, action) => {
+      state.error = action.payload.error;
+      state.loading = false;
+    });
+
+    // change password
+    builder.addCase(changePassword.pending, (state, action) => {
+      state.loading = true;
+      state.error = "";
+    });
+    builder.addCase(changePassword.fulfilled, (state, action) => {
+      state.loading = false;
+      // state.token = action.payload.responseData?.access_token;
+    });
+    builder.addCase(changePassword.rejected, (state, action) => {
       state.error = action.payload.error;
       state.loading = false;
     });

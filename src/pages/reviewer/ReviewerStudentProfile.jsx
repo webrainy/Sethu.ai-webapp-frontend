@@ -20,6 +20,7 @@ import {
 } from "../../utils/constants";
 import toast from "react-hot-toast";
 import { updateStudentData } from "../../redux/studentSlice";
+import moment from "moment";
 
 function ReviewerStudentProfile() {
   const location = useLocation().state;
@@ -671,6 +672,48 @@ function ReviewerStudentProfile() {
               )}
             </div>
           )}
+
+          {/* important dates */}
+          <div className="shadow-md bg-white p-4 rounded-xl flex flex-col gap-3 h-fit">
+            <p className="font-ddin font-semibold text-lg">Important Dates</p>
+            <div className="flex justify-between items-center font-ddin">
+              <p>Application submitted</p>
+              <p>
+                {location?.student?.registered_on
+                  ? moment(location?.student?.registered_on).format("LLL") ||
+                    "-"
+                  : "-"}
+              </p>
+            </div>
+            <div className="flex justify-between items-center font-ddin">
+              <p>Date took test</p>
+              <p>
+                {location?.student?.examInfo[0]?.exam_datetime
+                  ? moment(
+                      location?.student?.examInfo[0]?.exam_datetime
+                    ).format("LLL") || "-"
+                  : "-"}
+              </p>
+            </div>
+            <div className="flex justify-between items-center font-ddin">
+              <p>Date interviewed</p>
+              <p>
+                {location?.student?.interviewInfo[0]?.int_datetime
+                  ? moment(
+                      location?.student?.interviewInfo[0]?.int_datetime
+                    ).format("LLL") || "-"
+                  : "-"}
+              </p>
+            </div>
+            <div className="flex justify-between items-center font-ddin">
+              <p>Date selected</p>
+              <p>
+                {location?.student?.selected_on
+                  ? moment(location?.student?.selected_on).format("LLL") || "-"
+                  : "-"}
+              </p>
+            </div>
+          </div>
         </div>
         <div className="flex justify-end mt-4 mb-10 gap-4">
           <Button

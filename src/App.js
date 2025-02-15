@@ -25,8 +25,10 @@ import StudentInterviews from "./pages/student/StudentInterviews";
 import StudentDashboard from "./pages/student/StudentDashboard";
 import ReviewerLayout from "./components/layouts/ReviewerLayout";
 import ReviewerStudentList from "./pages/reviewer/ReviewerStudentList";
-import AdminManageReviewer from "./pages/admin/AdminManageReviewer";
+import AdminManageAdmins from "./pages/admin/AdminManageAdmins";
 import ReviewerStudentProfile from "./pages/reviewer/ReviewerStudentProfile";
+import AdminResetPassword from "./pages/admin/AdminResetPassword";
+import AdminManageReviewer from "./pages/admin/AdminManageReviewers";
 
 function App() {
   return (
@@ -68,8 +70,16 @@ function App() {
               element={<AdminManageInterviews />}
             /> */}
             <Route
+              path="/admin/manage_admins"
+              element={<AdminManageAdmins />}
+            />
+            <Route
               path="/admin/manage_reviewers"
               element={<AdminManageReviewer />}
+            />
+            <Route
+              path="/admin/reset_password"
+              element={<AdminResetPassword />}
             />
           </Route>
 
