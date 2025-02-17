@@ -114,7 +114,7 @@ function AdminResetPassword() {
           >
             <Input
               label="Old password"
-              className="p-3 w-[500px]"
+              className="p-3 !w-[300px] sm:!w-[400px] md:!w-[500px]"
               name="old_password"
               type={!oldPasswordVisible ? "password" : "text"}
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
