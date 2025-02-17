@@ -22,7 +22,7 @@ function AdminManageReviewer() {
     password: false,
   });
   const [passVisible, setPassVisible] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState({});
   const { reviewer_item, loading } = useSelector((state) => state.reviewer);
   const dispatch = useDispatch();
   const access_token = localStorage.getItem("sethu_admin_access_token");
@@ -49,8 +49,11 @@ function AdminManageReviewer() {
     });
   };
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
+  const togglePasswordVisibility = (item_id) => {
+    setShowPassword((prev) => ({
+      ...prev,
+      [item_id]: !prev[item_id],
+    }));
   };
 
   const handleChange = (e) => {
@@ -209,17 +212,17 @@ function AdminManageReviewer() {
                                   color="blue-gray"
                                   className="font-normal font-ddin flex items-center gap-2"
                                 >
-                                  {showPassword
+                                  {showPassword[reviewer.account_id]
                                     ? reviewer.password
                                     : "*".repeat(reviewer.password.length)}{" "}
-                                  {!showPassword ? (
+                                  {!showPassword[reviewer.account_id] ? (
                                     <TbEyeOff
-                                      onClick={togglePasswordVisibility}
+                                      onClick={() => togglePasswordVisibility(reviewer.account_id)}
                                       className="cursor-pointer"
                                     />
                                   ) : (
                                     <TbEye
-                                      onClick={togglePasswordVisibility}
+                                      onClick={() => togglePasswordVisibility(reviewer.account_id)}
                                       className="cursor-pointer"
                                     />
                                   )}
