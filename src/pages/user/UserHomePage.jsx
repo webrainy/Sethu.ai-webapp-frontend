@@ -51,7 +51,10 @@ function UserHomePage() {
             <span className="font-bold">Bhagawan Sri Sathya Sai Baba.</span>
           </p>
           <div className="flex gap-3 mt-3">
-            <Button className="capitalize font-myriad font-light border-2 border-[#E68242] py-2 px-4 hover:px-3 text-[13px] rounded-[5px] hover:font-bold hover:rounded-full transition-all outline-none bg-transparent shadow-none hover:shadow-none hover:bg-[#E68242]">
+            <Button
+              onClick={() => navigate("/our_programs")}
+              className="capitalize font-myriad font-light border-2 border-[#E68242] py-2 px-4 hover:px-3 text-[13px] rounded-[5px] hover:font-bold hover:rounded-full transition-all outline-none bg-transparent shadow-none hover:shadow-none hover:bg-[#E68242]"
+            >
               Discover our programs
             </Button>
             <Button
