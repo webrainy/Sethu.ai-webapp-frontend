@@ -1,7 +1,9 @@
 import { Button, Input, Textarea } from "@material-tailwind/react";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function Footer() {
+  const navigate = useNavigate();
   const date = new Date();
 
   return (
@@ -30,46 +32,47 @@ function Footer() {
           </div>
 
           <div>
-            <form className="flex flex-col gap-2">
-              <Input
-                className="text-center"
-                variant="static"
-                placeholder="Phone"
-                type="tel"
-                style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                containerProps={{
-                  className: "font-ddin",
-                }}
-              />
-              <Input
-                className="text-center"
-                variant="static"
-                placeholder="Email"
-                type="email"
-                style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                containerProps={{
-                  className: "font-ddin",
-                }}
-              />
-              <Textarea
-                variant="static"
-                className="text-center"
-                placeholder="Message"
-                style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                containerProps={{
-                  className: "font-ddin",
-                }}
-              />
+            {/* <form className="flex flex-col gap-2"> */}
+            <Input
+              className="text-center"
+              variant="static"
+              placeholder="Phone"
+              type="tel"
+              style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+              containerProps={{
+                className: "font-ddin",
+              }}
+            />
+            <Input
+              className="text-center"
+              variant="static"
+              placeholder="Email"
+              type="email"
+              style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+              containerProps={{
+                className: "font-ddin",
+              }}
+            />
+            <Textarea
+              variant="static"
+              className="text-center"
+              placeholder="Message"
+              style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+              containerProps={{
+                className: "font-ddin",
+              }}
+            />
 
-              <div className="flex justify-center items-center mt-3">
-                <Button
-                  type="submit"
-                  className="capitalize w-fit border py-1 px-12 text-[13px] font-myriad font-light rounded-[5px] hover:font-bold hover:rounded-full transition-all outline-none shadow-none hover:shadow-none border-[#DD4633] hover:border-[#DD4633] hover:bg-[#DD4633] hover:text-white bg-transparent text-[#DD4633]"
-                >
-                  Register Now
-                </Button>
-              </div>
-            </form>
+            <div className="flex justify-center items-center mt-3">
+              <Button
+                onClick={() => navigate("/course_registration")}
+                // type="submit"
+                className="capitalize w-fit border py-1 px-12 text-[13px] font-myriad font-light rounded-[5px] hover:font-bold hover:rounded-full transition-all outline-none shadow-none hover:shadow-none border-[#DD4633] hover:border-[#DD4633] hover:bg-[#DD4633] hover:text-white bg-transparent text-[#DD4633]"
+              >
+                Register Now
+              </Button>
+            </div>
+            {/* </form> */}
           </div>
         </div>
       </div>
@@ -96,7 +99,7 @@ function Footer() {
             <p className="text-base md:text-xl font-myriad font-light">
               Classes near Khairtabad Metro Station, Hyderbad.
             </p>
-            <p className="font-light">
+            <p className="font-light font-myriad">
               <span
                 onClick={() => (window.location.href = "mailto:info@sethu.ai")}
                 className="cursor-pointer"
