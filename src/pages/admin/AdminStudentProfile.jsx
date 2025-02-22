@@ -524,7 +524,7 @@ function AdminStudentProfile() {
               >
                 {reviewer_item.map((reviewer, i) => (
                   <Option
-                    key={i}
+                    key={reviewer.account_id}
                     value={String(reviewer.account_id)}
                     style={{ fontFamily: "D-DIN" }}
                   >
