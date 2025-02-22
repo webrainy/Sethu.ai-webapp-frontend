@@ -52,11 +52,11 @@ function StudentBatchAssignments() {
               <table className="w-full table-auto text-left">
                 <thead>
                   <tr>
-                    {Assignment_Table_Head.map((head, index) => (
+                    {["Assignments", "Status"].map((head, index) => (
                       <th
                         key={index}
                         className={`bg-[#e9e6e6] p-4 ${
-                          index === Assignment_Table_Head.length - 1
+                          index === ["Assignments", "Status"].length - 1
                             ? "flex justify-end"
                             : ""
                         }`}

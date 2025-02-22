@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, Typography } from "@material-tailwind/react";
+import { Card, CardBody, Typography } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
 import { Assignment_Table_Head } from "../../utils/constants";
 import {
@@ -177,7 +177,7 @@ function AdminAssignmentDetails() {
                             </div>
                           </td>
                           <td className={classes}>
-                            <div className="flex items-center gap-3 cursor-pointer justify-end">
+                            <div className="flex items-center gap-3 cursor-pointer">
                               <Typography
                                 variant="small"
                                 color="blue-gray"
