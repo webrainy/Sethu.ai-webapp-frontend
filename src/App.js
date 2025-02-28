@@ -19,7 +19,7 @@ import StudentProfile from "./pages/student/StudentProfile";
 import AdminBatchDetails from "./pages/admin/AdminBatchDetails";
 import AdminAssignmentDetails from "./pages/admin/AdminAssignmentDetails";
 import AdminManageEvents from "./pages/admin/AdminManageEvents";
-import AdminManageInterviews from "./pages/admin/AdminManageInterviews";
+// import AdminManageInterviews from "./pages/admin/AdminManageInterviews";
 import StudentEvents from "./pages/student/StudentEvents";
 import StudentInterviews from "./pages/student/StudentInterviews";
 import StudentDashboard from "./pages/student/StudentDashboard";
@@ -29,6 +29,8 @@ import AdminManageAdmins from "./pages/admin/AdminManageAdmins";
 import ReviewerStudentProfile from "./pages/reviewer/ReviewerStudentProfile";
 import AdminResetPassword from "./pages/admin/AdminResetPassword";
 import AdminManageReviewer from "./pages/admin/AdminManageReviewers";
+import AdminManageAttendance from "./pages/admin/AdminManageAttendance";
+import AdminViewAttendance from "./pages/admin/AdminViewAttendance";
 
 function App() {
   return (
@@ -80,6 +82,14 @@ function App() {
             <Route
               path="/admin/reset_password"
               element={<AdminResetPassword />}
+            />
+            <Route
+              path="/admin/manage_attendance"
+              element={<AdminManageAttendance />}
+            />
+            <Route
+              path="/admin/attendance/view_attendance"
+              element={<AdminViewAttendance />}
             />
           </Route>
 

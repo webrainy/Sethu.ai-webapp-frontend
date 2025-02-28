@@ -1,5 +1,5 @@
-// export const base_url = "http://103.212.120.217:5932";
-export const base_url = "http://34.45.12.76:5932";
+export const base_url = "http://103.212.120.217:5932";
+// export const base_url = "http://34.45.12.76:5932";
 
 export const mailPattern =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -75,4 +75,22 @@ export const ADMIN_REVIEWER_TABLE_HEAD = [
   "Admin Name",
   "Phone Number",
   "Email",
+];
+
+export const ATTENDANCE_TAB_DATA = [
+  {
+    label: "Class",
+    value: "1",
+    desc: `It really matters and then like it really doesn't matter.`,
+  },
+  {
+    label: "Lab",
+    value: "2",
+    desc: `Because it's about motivating the doers.`,
+  },
+  {
+    label: "Mentorship",
+    value: "3",
+    desc: `We're constantly growing and making mistakes.`,
+  },
 ];
