@@ -36,11 +36,11 @@ function StudentDashboard() {
                   >
                     <div className="flex justify-between items-start gap-4">
                       <p className="font-ddin text-xl font-semibold capitalize">
-                        {event.eventInfo?.title}
+                        {event.event?.title}
                       </p>
                       <p className="font-myriad text-sm font-light text-gray-600">
                         {/* Feb, 08 2025 12.00pm */}
-                        {moment(event.eventInfo?.datetime).format("LLL")}
+                        {moment(event.event?.datetime).format("LLL")}
                       </p>
                     </div>
                     <div className="flex justify-between items-end gap-4">
@@ -53,13 +53,13 @@ function StudentDashboard() {
                         </p>
                         {/* <p>
                           Students name:{" "}
-                          {event?.eventInfo
+                          {event?.event
                             .map((info) => info.studentInfo.name)
                             .join(", ")}
                         </p> */}
                       </div>
                       <Button
-                        onClick={() => window.open(event.eventInfo?.url)}
+                        onClick={() => window.open(event.event?.url)}
                         className="flex items-center gap-2 shadow-none hover:shadow-none normal-case font-ddin font-medium text-base py-2 bg-transparent border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
                       >
                         <IoVideocam />

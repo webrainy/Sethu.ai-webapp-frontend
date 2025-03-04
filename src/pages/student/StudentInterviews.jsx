@@ -39,11 +39,11 @@ function StudentInterviews() {
                   >
                     <div className="flex justify-between items-start gap-4">
                       <p className="font-ddin text-xl font-semibold">
-                        {interview.eventInfo?.title}
+                        {interview.event?.title}
                       </p>
                       <p className="font-myriad text-sm font-light text-gray-600">
                         {/* Feb, 08 2025 12.00pm */}
-                        {moment(interview.eventInfo?.datetime).format("LLL")}
+                        {moment(interview.event?.datetime).format("LLL")}
                       </p>
                     </div>
                     <div className="flex justify-between items-end gap-4">
@@ -56,7 +56,7 @@ function StudentInterviews() {
                         </p>
                       </div>
                       <Button
-                        onClick={() => window.open(interview.eventInfo?.url)}
+                        onClick={() => window.open(interview.event?.url)}
                         className="flex items-center gap-2 shadow-none hover:shadow-none normal-case font-ddin font-medium text-base py-2 bg-transparent border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
                       >
                         <IoVideocam />

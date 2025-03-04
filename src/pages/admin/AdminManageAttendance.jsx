@@ -21,6 +21,8 @@ import {
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { ATTENDANCE_TAB_DATA } from "../../utils/constants";
+import toast from "react-hot-toast";
+import { postAttendance } from "../../redux/attendanceSlice";
 
 function AdminManageAttendance() {
   const [currentTime, setCurrentTime] = useState("");
@@ -89,14 +91,44 @@ function AdminManageAttendance() {
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const attendanceData = Object.keys(attendanceStatus).map((student_id) => ({
       student_id: student_id,
       attendance_value: attendanceStatus[student_id],
     }));
 
-    // Send the data to the backend
-    console.log("Attendance Data to Submit:", attendanceData, activeTab);
+    const urlencoded = new URLSearchParams();
+
+    urlencoded.append("attendance_type", activeTab);
+    urlencoded.append("batch_id", data.batch);
+    for (let i = 0; i < attendanceData.length; i++) {
+      urlencoded.append(
+        "attendance_status",
+        attendanceData[i].attendance_value
+      );
+      urlencoded.append("student_id", attendanceData[i].student_id);
+    }
+
+    try {
+      const result = await dispatch(
+        postAttendance({
+          end_point: `/api/attendance/create`,
+          access_token: access_token,
+          data: urlencoded,
+        })
+      ).unwrap();
+
+      if (result.responseCode === 200) {
+        toast.success("Attendance taken successfully!");
+        fetchBatchStudentList(data.batch);
+      } else {
+        toast.error(
+          result.responseMessage || "Connection failed. Please try again."
+        );
+      }
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   const handleViewAttendance = () => {

@@ -17,14 +17,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { fetchBatchItems } from "../../redux/batchSlice";
 import { ATTENDANCE_TAB_DATA } from "../../utils/constants";
+import { fetchAttendanceList } from "../../redux/attendanceSlice";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import moment from "moment";
 
 function AdminViewAttendance() {
   const [data, setData] = useState({
     batch: "",
   });
-  //   const [tableHeadTitle, setTableHeadTable] = useState([]);
+  const [filterDate, setFilterDate] = useState(new Date());
   const [activeTab, setActiveTab] = useState("1");
   const dispatch = useDispatch();
+  const { attendance_list, loading } = useSelector((state) => state.attendance);
   const { batch_items } = useSelector((state) => state.batch);
   const access_token = localStorage.getItem("sethu_admin_access_token");
 
@@ -36,6 +41,28 @@ function AdminViewAttendance() {
       })
     ).unwrap();
   }, [dispatch, activeTab]);
+
+  const fetchStudentAttendanceList = (batch) => {
+    dispatch(
+      fetchAttendanceList({
+        end_point: `/api/attendance/list?batch_id=${batch}`,
+        access_token: access_token,
+      })
+    );
+  };
+
+  const fetchFilterStudentAttendanceList = (date) => {
+    if (data.batch.length > 0) {
+      dispatch(
+        fetchAttendanceList({
+          end_point: `/api/attendance/list?batch_id=${data.batch}&date=${moment(
+            date
+          ).format("YYYY-MM-DD")}`,
+          access_token: access_token,
+        })
+      );
+    }
+  };
 
   return (
     <>
@@ -52,13 +79,6 @@ function AdminViewAttendance() {
               </Link>
             </Breadcrumbs>
           </div>
-
-          {/* <Button
-            onClick={handleViewAttendance}
-            className="shadow-none hover:shadow-none py-2 capitalize font-ddin font-normal text-base border-[#DD4633] border bg-transparent text-[#DD4633] hover:text-white hover:bg-[#DD4633]"
-          >
-            View Attendance
-          </Button> */}
         </div>
 
         <div className="mt-3 grid md:grid-cols-3">
@@ -69,7 +89,7 @@ function AdminViewAttendance() {
             }}
             style={{ fontFamily: "D-DIN", fontWeight: 500 }}
             onChange={(value) => {
-              //   fetchBatchStudentList(value);
+              fetchStudentAttendanceList(value);
               setData({ ...data, batch: value });
             }}
           >
@@ -83,6 +103,22 @@ function AdminViewAttendance() {
               </Option>
             ))}
           </Select>
+          <div></div>
+
+          <div className="flex items-center justify-end">
+            <DatePicker
+              selected={filterDate}
+              onChange={(date) => {
+                setFilterDate(date);
+                fetchFilterStudentAttendanceList(date);
+              }}
+              value={filterDate}
+              maxDate={new Date()}
+              dateFormat={"dd/MM/YYYY"}
+              placeholderText="Select a Date"
+              className="bg-[#F5F7F9] ml-4 px-5 py-2 outline-none border-none rounded-lg drop-shadow-lg font-normal text-base font-ddin"
+            />
+          </div>
         </div>
 
         {data.batch && (
@@ -109,95 +145,145 @@ function AdminViewAttendance() {
                 ))}
               </TabsHeader>
               <TabsBody>
-                {ATTENDANCE_TAB_DATA.map(({ value, desc }) => (
-                  <TabPanel key={value} value={value} className="px-0">
-                    <div className="flex justify-between items-center mt-2">
-                      <p className="font-ddin text-3xl font-semibold text-gray-900">
-                        Students
-                      </p>
-                    </div>
+                {ATTENDANCE_TAB_DATA.map(({ value, desc }) => {
+                  // Filter responseData based on attendance_type
+                  const filteredData = attendance_list?.filter(
+                    (attendance) => attendance.attendance_type == value
+                  );
 
-                    {/* {!loading ? ( */}
-                    <div>
-                      {/* {selectedItems?.[0]?.students?.length > 0 ? ( */}
-                      <Card className="h-fit w-full box-shadow mt-3">
-                        <CardBody className="overflow-auto px-0 py-0">
-                          <table className="w-full min-w-max table-auto text-left">
-                            <thead>
-                              <tr>
-                                {["Student Name", "10.00 AM"].map((head) => (
-                                  <th key={head} className=" bg-[#e9e6e6] p-4">
-                                    <Typography
-                                      variant="small"
-                                      color="blue-gray"
-                                      className="font-semibold leading-none opacity-70 font-ddin"
-                                    >
-                                      {head}
-                                    </Typography>
-                                  </th>
-                                ))}
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {Array.from({ length: 5 }).map(
-                                (student, index) => {
-                                  const isLast =
-                                    index ===
-                                    Array.from({ length: 5 }).length - 1;
-                                  const classes = isLast
-                                    ? "px-4 py-1 font-ddin"
-                                    : "px-4 py-1 border-b border-blue-gray-50 font-ddin";
+                  return (
+                    <TabPanel key={value} value={value} className="px-0">
+                      <div className="flex justify-between items-center mt-2">
+                        <p className="font-ddin text-3xl font-semibold text-gray-900">
+                          Students
+                        </p>
+                      </div>
 
-                                  return (
-                                    <tr
-                                      key={index}
-                                      className="hover:bg-[#f0eeee]"
-                                    >
-                                      <td className={classes}>
+                      {!loading ? (
+                        <div>
+                          {filteredData?.length > 0 ? (
+                            <Card className="h-fit w-full box-shadow mt-3">
+                              <CardBody className="overflow-auto px-0 py-0">
+                                <table className="w-full min-w-max table-auto text-left">
+                                  <thead>
+                                    <tr>
+                                      <th className=" bg-[#e9e6e6] p-4">
                                         <Typography
                                           variant="small"
                                           color="blue-gray"
-                                          className="font-semibold font-ddin text-base"
+                                          className="font-semibold leading-none opacity-70 font-ddin"
                                         >
-                                          test {student}
+                                          Student Name
                                         </Typography>
-                                      </td>
-                                      <td className={classes}>
-                                        <Checkbox
-                                          className="disabled:opacity-100"
-                                          color="blue"
-                                          checked={true}
-                                          onChange={(e) => e.preventDefault()}
-                                        />
-                                      </td>
+                                      </th>
+
+                                      {/* Dynamically generate headers based on datetime */}
+                                      {filteredData?.map((attendance) => (
+                                        <th
+                                          key={attendance.attendance_id}
+                                          className="bg-[#e9e6e6] p-4"
+                                        >
+                                          <Typography
+                                            variant="small"
+                                            color="blue-gray"
+                                            className="font-semibold leading-none opacity-70 font-ddin"
+                                          >
+                                            {new Date(
+                                              attendance.datetime
+                                            ).toLocaleTimeString([], {
+                                              hour: "2-digit",
+                                              minute: "2-digit",
+                                            })}
+                                          </Typography>
+                                        </th>
+                                      ))}
                                     </tr>
-                                  );
-                                }
-                              )}
-                            </tbody>
-                          </table>
-                        </CardBody>
-                      </Card>
-                      {/* ) : (
-                          <div className="h-[50vh] flex justify-center items-center flex-col">
-                            <p className="text-3xl font-ddin font-semibold text-center">
-                              No result found
-                            </p>
-                            <p className="font-myriad font-light text-center text-gray-700">
-                              Add some items to cheer it up
-                            </p>
-                          </div>
-                        )} */}
-                    </div>
-                    {/* ) : (
-                      <div className="h-[50vh] flex justify-center items-center flex-col">
-                        <p className="text-3xl font-ddin font-semibold text-center">
-                          Loading...
-                        </p>
-                      </div>
-                    )} */}
-                  </TabPanel>
-                ))}
+                                  </thead>
+                                  <tbody>
+                                    {Object.values(
+                                      filteredData.reduce((acc, attendance) => {
+                                        attendance.attendanceInfo.forEach(
+                                          (info) => {
+                                            if (
+                                              !acc[info.studentInfo.student_id]
+                                            ) {
+                                              acc[info.studentInfo.student_id] =
+                                                {
+                                                  studentInfo: info.studentInfo,
+                                                  attendanceStatus: {},
+                                                };
+                                            }
+                                            acc[
+                                              info.studentInfo.student_id
+                                            ].attendanceStatus[
+                                              attendance.attendance_id
+                                            ] = info.attendance_status;
+                                          }
+                                        );
+                                        return acc;
+                                      }, {})
+                                    ).map((student) => (
+                                      <tr
+                                        key={student.studentInfo.student_id}
+                                        className="hover:bg-[#f0eeee]"
+                                      >
+                                        <td className="px-4 py-1 border-b border-blue-gray-50 font-ddin">
+                                          <Typography
+                                            variant="small"
+                                            color="blue-gray"
+                                            className="font-semibold font-ddin text-base"
+                                          >
+                                            {student?.studentInfo?.name}
+                                          </Typography>
+                                        </td>
+
+                                        {/* Dynamically generate checkboxes based on attendance status */}
+                                        {filteredData.map((attendance) => (
+                                          <td
+                                            key={attendance.attendance_id}
+                                            className="px-4 py-1 border-b border-blue-gray-50 font-ddin"
+                                          >
+                                            <Checkbox
+                                              className="disabled:opacity-100"
+                                              color="blue"
+                                              checked={
+                                                student.attendanceStatus[
+                                                  attendance.attendance_id
+                                                ] === 1
+                                              }
+                                              onChange={(e) =>
+                                                e.preventDefault()
+                                              }
+                                            />
+                                          </td>
+                                        ))}
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </CardBody>
+                            </Card>
+                          ) : (
+                            <div className="h-[50vh] flex justify-center items-center flex-col">
+                              <p className="text-3xl font-ddin font-semibold text-center">
+                                No result found
+                              </p>
+                              <p className="font-myriad font-light text-center text-gray-700">
+                                Add some items to cheer it up
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="h-[50vh] flex justify-center items-center flex-col">
+                          <p className="text-3xl font-ddin font-semibold text-center">
+                            Loading...
+                          </p>
+                        </div>
+                      )}
+                    </TabPanel>
+                  );
+                })}
               </TabsBody>
             </Tabs>
           </div>

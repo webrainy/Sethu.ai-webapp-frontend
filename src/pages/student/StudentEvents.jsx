@@ -39,10 +39,10 @@ function StudentEvents() {
                   >
                     <div className="flex justify-between items-start gap-4">
                       <p className="font-ddin text-xl font-semibold capitalize">
-                        {event.eventInfo?.title}
+                        {event.event?.title}
                       </p>
                       <p className="font-myriad text-sm font-light text-gray-600">
-                        {moment(event.eventInfo?.datetime).format("LLL")}
+                        {moment(event.event?.datetime).format("LLL")}
                       </p>
                     </div>
                     <div className="flex justify-between items-end gap-4">
@@ -55,7 +55,7 @@ function StudentEvents() {
                         </p>
                       </div>
                       <Button
-                        onClick={() => window.open(event.eventInfo?.url)}
+                        onClick={() => window.open(event.event?.url)}
                         className="flex items-center gap-2 shadow-none hover:shadow-none normal-case font-ddin font-medium text-base py-2 bg-transparent border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
                       >
                         <IoVideocam />

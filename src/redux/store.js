@@ -5,6 +5,7 @@ import studentReducers from "./studentSlice";
 import assignmentReducers from "./assignmentSlice";
 import eventReducers from "./eventSlice";
 import reviewerReducer from "./reviewerSlice";
+import attendanceReducers from "./attendanceSlice";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     assignment: assignmentReducers,
     event: eventReducers,
     reviewer: reviewerReducer,
+    attendance: attendanceReducers,
   },
 });
 
