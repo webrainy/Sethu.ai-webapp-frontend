@@ -214,7 +214,7 @@ function AdminManageEvents() {
                         <p>
                           Students name:{" "}
                           {event?.eventInfo
-                            .map((info) => info.studentInfo.name)
+                            .map((info) => info.student.name)
                             .join(", ")}
                         </p>
                         <p>Added by: {event?.createdBy?.name || "-"}</p>
