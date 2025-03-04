@@ -45,7 +45,9 @@ function AdminViewAttendance() {
   const fetchStudentAttendanceList = (batch) => {
     dispatch(
       fetchAttendanceList({
-        end_point: `/api/attendance/list?batch_id=${batch}`,
+        end_point: `/api/attendance/list?batch_id=${batch}&date=${moment(
+          filterDate
+        ).format("YYYY-MM-DD")}`,
         access_token: access_token,
       })
     );
