@@ -86,7 +86,8 @@ function AdminAssignmentDetails() {
           <p className="font-myriad font-light text-lg">
             Student Name:{" "}
             <span className="font-ddin font-semibold capitalize">
-              {location?.name || ""}
+              {location?.name || ""}{" "}
+              {location?.name && "(" + (location?.rollno || "-") + ")"}
             </span>
           </p>
           <p className="font-myriad font-light text-lg">

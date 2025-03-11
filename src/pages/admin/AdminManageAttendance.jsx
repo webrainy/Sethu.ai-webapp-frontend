@@ -236,22 +236,24 @@ function AdminManageAttendance() {
                               <table className="w-full min-w-max table-auto text-left">
                                 <thead>
                                   <tr>
-                                    {["Student Name", "Attendance"].map(
-                                      (head) => (
-                                        <th
-                                          key={head}
-                                          className=" bg-[#e9e6e6] p-4"
+                                    {[
+                                      "Student Name",
+                                      "Roll No.",
+                                      "Attendance",
+                                    ].map((head) => (
+                                      <th
+                                        key={head}
+                                        className=" bg-[#e9e6e6] p-4"
+                                      >
+                                        <Typography
+                                          variant="small"
+                                          color="blue-gray"
+                                          className="font-semibold leading-none opacity-70 font-ddin"
                                         >
-                                          <Typography
-                                            variant="small"
-                                            color="blue-gray"
-                                            className="font-semibold leading-none opacity-70 font-ddin"
-                                          >
-                                            {head}
-                                          </Typography>
-                                        </th>
-                                      )
-                                    )}
+                                          {head}
+                                        </Typography>
+                                      </th>
+                                    ))}
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -276,6 +278,15 @@ function AdminManageAttendance() {
                                               className="font-semibold font-ddin text-base"
                                             >
                                               {student.name}
+                                            </Typography>
+                                          </td>
+                                          <td className={classes}>
+                                            <Typography
+                                              variant="small"
+                                              color="blue-gray"
+                                              className="font-semibold font-ddin text-base"
+                                            >
+                                              {student.rollno || "-"}
                                             </Typography>
                                           </td>
                                           <td className={classes}>
