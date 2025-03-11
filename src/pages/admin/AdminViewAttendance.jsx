@@ -178,6 +178,15 @@ function AdminViewAttendance() {
                                           Student Name
                                         </Typography>
                                       </th>
+                                      <th className=" bg-[#e9e6e6] p-4">
+                                        <Typography
+                                          variant="small"
+                                          color="blue-gray"
+                                          className="font-semibold leading-none opacity-70 font-ddin"
+                                        >
+                                          Roll No.
+                                        </Typography>
+                                      </th>
 
                                       {/* Dynamically generate headers based on datetime */}
                                       {filteredData?.map((attendance) => (
@@ -236,6 +245,16 @@ function AdminViewAttendance() {
                                             className="font-semibold font-ddin text-base"
                                           >
                                             {student?.studentInfo?.name}
+                                          </Typography>
+                                        </td>
+                                        <td className="px-4 py-1 border-b border-blue-gray-50 font-ddin">
+                                          <Typography
+                                            variant="small"
+                                            color="blue-gray"
+                                            className="font-semibold font-ddin text-base"
+                                          >
+                                            {student?.studentInfo?.rollno ||
+                                              "-"}
                                           </Typography>
                                         </td>
 

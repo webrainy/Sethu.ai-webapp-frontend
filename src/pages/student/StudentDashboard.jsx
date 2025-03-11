@@ -25,7 +25,7 @@ function StudentDashboard() {
     <div>
       {!assgn_loading ? (
         <>
-          {events_list?.length > 0 && (
+          {events_list?.length > 0 ? (
             <div className="mx-3 bg-white px-4 py-3 rounded-2xl">
               <p className="font-ddin font-semibold text-3xl">Recent Events</p>
               <div className="grid lg:grid-cols-2 gap-3 items-center mt-2">
@@ -69,6 +69,15 @@ function StudentDashboard() {
                   </div>
                 ))}
               </div>
+            </div>
+          ) : (
+            <div className="h-[50vh] flex justify-center items-center flex-col">
+              <p className="text-3xl font-ddin font-semibold text-center">
+                No result found
+              </p>
+              <p className="font-myriad font-light text-center text-gray-700">
+                Add some items to cheer it up
+              </p>
             </div>
           )}
         </>

@@ -34,9 +34,13 @@ export const REVIEWER_STUDENTLIST_TABLE_HEAD = [
 
 export const ADMIN_BATCH_STUDENTLIST_TABLE_HEAD = [
   "Student Name",
+  "Roll No.",
   "Education",
   "Email",
   "Phone number",
+  "Class Att.",
+  "Lab Att.",
+  "Mentorship Att.",
   "",
 ];
 
