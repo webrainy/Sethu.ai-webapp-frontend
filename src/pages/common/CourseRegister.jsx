@@ -27,11 +27,16 @@ function CourseRegister() {
   const [passVisible, setPassVisible] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
+    dob: "",
+    gender: "",
     email: "",
     password: "",
     phone: "",
     location: "",
+    city: "",
+    district: "",
     education: "",
+    college: "",
     cgpa: "",
     year_passed: "",
     gmat: "",
@@ -72,12 +77,32 @@ function CourseRegister() {
   };
 
   const handlePersonalInformationButton = () => {
-    const { name, email, password, phone, location } = formData;
+    const {
+      name,
+      email,
+      password,
+      phone,
+      location,
+      dob,
+      city,
+      district,
+      gender,
+    } = formData;
     const mailRegex = new RegExp(mailPattern);
     const phoneRegex = new RegExp(phoneNumber);
     const passwordRegex = new RegExp(strongPwd);
 
-    if (!name || !email || !password || !phone || !location) {
+    if (
+      !name ||
+      !email ||
+      !password ||
+      !phone ||
+      !location ||
+      !dob ||
+      !city ||
+      !district ||
+      !gender
+    ) {
       toast.error(
         "Please fill all fields in the Personal Information section."
       );
@@ -113,8 +138,8 @@ function CourseRegister() {
   };
 
   const handleEducationDetailButton = () => {
-    const { education, cgpa, year_passed, gmat } = formData;
-    if (!education || !cgpa || !year_passed || !gmat) {
+    const { education, cgpa, year_passed, gmat, college } = formData;
+    if (!education || !cgpa || !year_passed || !gmat || !college) {
       toast.error("Please fill all fields in the Educational Details section.");
       return;
     }
@@ -218,11 +243,16 @@ function CourseRegister() {
     const form_data = new FormData();
 
     form_data.append("name", formData.name);
+    form_data.append("dob", formData.dob);
     form_data.append("email", formData.email);
     form_data.append("password", formData.password);
     form_data.append("phone", `+91${formData.phone}`);
     form_data.append("location", formData.location);
+    form_data.append("gender", formData.gender);
+    form_data.append("city", formData.city);
+    form_data.append("district", formData.district);
     form_data.append("education", formData.education);
+    form_data.append("college", formData.college);
     form_data.append("cgpa", formData.cgpa);
     form_data.append("year_passed", formData.year_passed);
     form_data.append("gmat", formData.gmat);
@@ -302,6 +332,48 @@ function CourseRegister() {
                     className: "font-ddin",
                   }}
                   required
+                />{" "}
+                <fieldset className="flex flex-col gap-3">
+                  <legend className="font-ddin">
+                    Gender
+                    <span className="text-red-600">*</span>
+                  </legend>
+
+                  <div className="flex flex-row gap-3 font-ddin">
+                    <Radio
+                      name="gender"
+                      label="Male"
+                      value={"Male"}
+                      checked={formData.gender === "Male"}
+                      onChange={handleChange}
+                    />
+                    <Radio
+                      name="gender"
+                      label="Female"
+                      value={"Female"}
+                      checked={formData.gender === "Female"}
+                      onChange={handleChange}
+                    />
+                    <Radio
+                      name="gender"
+                      label="Others"
+                      value={"Others"}
+                      checked={formData.gender === "Others"}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </fieldset>
+                <Input
+                  label="Date of Birth"
+                  type="date"
+                  name="dob"
+                  style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                  value={formData.dob}
+                  onChange={handleChange}
+                  containerProps={{
+                    className: "font-ddin",
+                  }}
+                  required
                 />
                 <Input
                   label="Email"
@@ -333,7 +405,6 @@ function CourseRegister() {
                   }}
                   required
                 />
-
                 <Input
                   label="Password"
                   name="password"
@@ -366,6 +437,28 @@ function CourseRegister() {
                   name="location"
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   value={formData.location}
+                  onChange={handleChange}
+                  containerProps={{
+                    className: "font-ddin",
+                  }}
+                  required
+                />
+                <Input
+                  label="City"
+                  name="city"
+                  style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                  value={formData.city}
+                  onChange={handleChange}
+                  containerProps={{
+                    className: "font-ddin",
+                  }}
+                  required
+                />
+                <Input
+                  label="District"
+                  name="district"
+                  style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                  value={formData.district}
                   onChange={handleChange}
                   containerProps={{
                     className: "font-ddin",
@@ -419,7 +512,17 @@ function CourseRegister() {
                     />
                   </div>
                 </fieldset>
-
+                <Input
+                  label="College Name"
+                  name="college"
+                  style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                  value={formData.college}
+                  onChange={handleChange}
+                  containerProps={{
+                    className: "font-ddin",
+                  }}
+                  required
+                />
                 <Input
                   label="CGPA"
                   type="number"

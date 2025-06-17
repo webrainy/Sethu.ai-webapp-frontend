@@ -15,16 +15,22 @@ import {
 } from "../../redux/studentSlice";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import moment from "moment/moment";
 
 function StudentProfile() {
   const { profile_data, loading } = useSelector((state) => state.student);
   const studentProfile = profile_data?.studentData?.[0];
   const [formData, setFormData] = useState({
     name: "",
+    dob: "",
+    gender: "",
     email: "",
     phone: "",
     location: "",
+    city: "",
+    district: "",
     education: "",
+    college_name: "",
     cgpa: "",
     year_passed: "",
     gmat: "",
@@ -67,10 +73,15 @@ function StudentProfile() {
     if (studentProfile) {
       setFormData({
         name: studentProfile.name || "",
+        dob: studentProfile.dob || "",
+        gender: studentProfile.gender || "",
         email: studentProfile.email || "",
         phone: studentProfile.phone || "",
         location: studentProfile.location || "",
+        city: studentProfile.city || "",
+        district: studentProfile.district || "",
         education: studentProfile.education || "",
+        college: studentProfile.college || "",
         cgpa: studentProfile.cgpa || "",
         year_passed: studentProfile.year_passed || "",
         gmat: studentProfile.gmat || "",
@@ -113,10 +124,15 @@ function StudentProfile() {
     const form_data = new FormData();
 
     form_data.append("name", formData.name);
+    form_data.append("dob", formData.dob);
+    form_data.append("gender", formData.gender);
     form_data.append("phone", formData.phone);
     form_data.append("email", formData.email);
     form_data.append("location", formData.location);
+    form_data.append("city", formData.city);
+    form_data.append("district", formData.district);
     form_data.append("education", formData.education);
+    form_data.append("college", formData.college);
     form_data.append("cgpa", formData.cgpa);
     form_data.append("year_passed", formData.year_passed);
     form_data.append("gmat", formData.gmat);
@@ -194,6 +210,54 @@ function StudentProfile() {
                     }}
                     required
                   />
+                  <div className="font-ddin">
+                    <p>Gender</p>
+                    <div className="flex flex-row gap-3 font-ddin">
+                      <Radio
+                        name="gender"
+                        label="Male"
+                        value={"Male"}
+                        checked={formData.gender === "Male"}
+                        onChange={(e) =>
+                          handleInputChange(e.target.value, "gender")
+                        }
+                      />
+                      <Radio
+                        name="gender"
+                        label="Female"
+                        value={"Female"}
+                        checked={formData.gender === "Female"}
+                        onChange={(e) =>
+                          handleInputChange(e.target.value, "gender")
+                        }
+                      />
+                      <Radio
+                        name="gender"
+                        label="Others"
+                        value={"Others"}
+                        checked={formData.gender === "Others"}
+                        onChange={(e) =>
+                          handleInputChange(e.target.value, "gender")
+                        }
+                      />
+                    </div>
+                  </div>
+                  <Input
+                    label="Date of Birth"
+                    type="date"
+                    name="dob"
+                    style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                    value={
+                      formData.dob
+                        ? moment(formData.dob).format("YYYY-MM-DD")
+                        : ""
+                    }
+                    onChange={(e) => handleInputChange(e.target.value, "dob")}
+                    containerProps={{
+                      className: "font-ddin",
+                    }}
+                    required
+                  />
                   <Input
                     label="Email"
                     type="email"
@@ -226,6 +290,32 @@ function StudentProfile() {
                     value={formData.location}
                     onChange={(e) =>
                       handleInputChange(e.target.value, "location")
+                    }
+                    containerProps={{
+                      className: "font-ddin",
+                    }}
+                    required
+                  />
+                  <Input
+                    label="City"
+                    type="text"
+                    name="city"
+                    style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                    value={formData.city}
+                    onChange={(e) => handleInputChange(e.target.value, "city")}
+                    containerProps={{
+                      className: "font-ddin",
+                    }}
+                    required
+                  />
+                  <Input
+                    label="District"
+                    type="text"
+                    name="district"
+                    style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                    value={formData.district}
+                    onChange={(e) =>
+                      handleInputChange(e.target.value, "district")
                     }
                     containerProps={{
                       className: "font-ddin",
@@ -271,6 +361,20 @@ function StudentProfile() {
                       />
                     </div>
                   </div>
+                  <Input
+                    label="College Name"
+                    type="text"
+                    name="college"
+                    style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                    value={formData.college}
+                    onChange={(e) =>
+                      handleInputChange(e.target.value, "college_name")
+                    }
+                    containerProps={{
+                      className: "font-ddin",
+                    }}
+                    required
+                  />
                   <Input
                     label="CGPA"
                     type="number"
