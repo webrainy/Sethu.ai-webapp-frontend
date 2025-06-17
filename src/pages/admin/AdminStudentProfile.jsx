@@ -153,7 +153,12 @@ function AdminStudentProfile() {
   return (
     <div className="p-3">
       <div className="flex justify-between items-center">
-        <p className="text-3xl font-ddin font-semibold">Student Details</p>
+        <p className="text-3xl font-ddin font-semibold">
+          Student Details{" "}
+          {location?.student?.rollno
+            ? "(" + location?.student?.rollno + ")"
+            : ""}
+        </p>
       </div>
 
       <form onSubmit={handleSubmit}>

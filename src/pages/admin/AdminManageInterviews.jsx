@@ -212,7 +212,7 @@ function AdminManageInterviews() {
                         <p>
                           Students name:{" "}
                           {interview?.eventInfo
-                            .map((info) => info.studentInfo.name)
+                            .map((info) => info.student.name)
                             .join(", ")}
                         </p>
                       </div>

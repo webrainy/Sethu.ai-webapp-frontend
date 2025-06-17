@@ -183,7 +183,12 @@ function StudentProfile() {
         <p className="text-3xl font-ddin font-semibold">
           All About{" "}
           <span className="text-[#FF9D23] capitalize">
-            {loading ? "-" : formData.name}
+            {loading ? "-" : formData.name}{" "}
+            {!loading
+              ? studentProfile?.rollno
+                ? "(" + studentProfile?.rollno + ")"
+                : ""
+              : ""}
           </span>
         </p>
       </div>

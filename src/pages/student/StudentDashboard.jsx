@@ -25,7 +25,7 @@ function StudentDashboard() {
     <div>
       {!assgn_loading ? (
         <>
-          {events_list?.length > 0 && (
+          {events_list?.length > 0 ? (
             <div className="mx-3 bg-white px-4 py-3 rounded-2xl">
               <p className="font-ddin font-semibold text-3xl">Recent Events</p>
               <div className="grid lg:grid-cols-2 gap-3 items-center mt-2">
@@ -36,11 +36,11 @@ function StudentDashboard() {
                   >
                     <div className="flex justify-between items-start gap-4">
                       <p className="font-ddin text-xl font-semibold capitalize">
-                        {event.eventInfo?.title}
+                        {event.event?.title}
                       </p>
                       <p className="font-myriad text-sm font-light text-gray-600">
                         {/* Feb, 08 2025 12.00pm */}
-                        {moment(event.eventInfo?.datetime).format("LLL")}
+                        {moment(event.event?.datetime).format("LLL")}
                       </p>
                     </div>
                     <div className="flex justify-between items-end gap-4">
@@ -53,13 +53,13 @@ function StudentDashboard() {
                         </p>
                         {/* <p>
                           Students name:{" "}
-                          {event?.eventInfo
+                          {event?.event
                             .map((info) => info.studentInfo.name)
                             .join(", ")}
                         </p> */}
                       </div>
                       <Button
-                        onClick={() => window.open(event.eventInfo?.url)}
+                        onClick={() => window.open(event.event?.url)}
                         className="flex items-center gap-2 shadow-none hover:shadow-none normal-case font-ddin font-medium text-base py-2 bg-transparent border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
                       >
                         <IoVideocam />
@@ -69,6 +69,15 @@ function StudentDashboard() {
                   </div>
                 ))}
               </div>
+            </div>
+          ) : (
+            <div className="h-[50vh] flex justify-center items-center flex-col">
+              <p className="text-3xl font-ddin font-semibold text-center">
+                No result found
+              </p>
+              <p className="font-myriad font-light text-center text-gray-700">
+                Add some items to cheer it up
+              </p>
             </div>
           )}
         </>

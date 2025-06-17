@@ -34,9 +34,13 @@ export const REVIEWER_STUDENTLIST_TABLE_HEAD = [
 
 export const ADMIN_BATCH_STUDENTLIST_TABLE_HEAD = [
   "Student Name",
+  "Roll No.",
   "Education",
   "Email",
   "Phone number",
+  "Class Att.",
+  "Lab Att.",
+  "Mentorship Att.",
   "",
 ];
 
@@ -75,4 +79,22 @@ export const ADMIN_REVIEWER_TABLE_HEAD = [
   "Admin Name",
   "Phone Number",
   "Email",
+];
+
+export const ATTENDANCE_TAB_DATA = [
+  {
+    label: "Class",
+    value: "1",
+    desc: `It really matters and then like it really doesn't matter.`,
+  },
+  {
+    label: "Lab",
+    value: "2",
+    desc: `Because it's about motivating the doers.`,
+  },
+  {
+    label: "Mentorship",
+    value: "3",
+    desc: `We're constantly growing and making mistakes.`,
+  },
 ];

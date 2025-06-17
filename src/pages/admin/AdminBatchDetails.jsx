@@ -320,9 +320,29 @@ function AdminBatchDetails() {
                 </Button>
               )}
             </div>
+            <div>
+              <p className="font-ddin">
+                Total Class conducted:{" "}
+                <span className="font-semibold">
+                  {selectedItems[0]?.attCount?.classCount || 0}
+                </span>
+              </p>
+              <p className="font-ddin">
+                Total Lab conducted:{" "}
+                <span className="font-semibold">
+                  {selectedItems[0]?.attCount?.labCount || 0}
+                </span>
+              </p>
+              <p className="font-ddin">
+                Total Mentorship conducted:{" "}
+                <span className="font-semibold">
+                  {selectedItems[0]?.attCount?.mentorshipCount || 0}
+                </span>
+              </p>
+            </div>
 
             {selectedItems[0]?.students?.length > 0 ? (
-              <Card className="h-fit w-full box-shadow mt-1">
+              <Card className="h-fit w-full box-shadow mt-3">
                 <CardBody className="overflow-auto px-0 py-0">
                   <table className="w-full min-w-max table-auto text-left">
                     <thead>
@@ -372,6 +392,15 @@ function AdminBatchDetails() {
                                 color="blue-gray"
                                 className="font-normal font-ddin"
                               >
+                                {student.rollno || "-"}
+                              </Typography>
+                            </td>
+                            <td className={classes}>
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal font-ddin"
+                              >
                                 {student.education}
                               </Typography>
                             </td>
@@ -391,6 +420,51 @@ function AdminBatchDetails() {
                                 className="font-normal font-ddin"
                               >
                                 {student.phone}
+                              </Typography>
+                            </td>
+                            <td className={classes}>
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal font-ddin"
+                              >
+                                {student.classCount} (
+                                {selectedItems[0]?.attCount?.classCount > 0 &&
+                                student.classCount > 0
+                                  ? (student.classCount * 100) /
+                                    selectedItems[0]?.attCount?.classCount
+                                  : "0"}
+                                %)
+                              </Typography>
+                            </td>
+                            <td className={classes}>
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal font-ddin"
+                              >
+                                {student.labCount} (
+                                {selectedItems[0]?.attCount?.labCount > 0 &&
+                                student.labCount > 0
+                                  ? (student.labCount * 100) /
+                                    selectedItems[0]?.attCount?.labCount
+                                  : "0"}
+                                %)
+                              </Typography>
+                            </td>
+                            <td className={classes}>
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal font-ddin"
+                              >
+                                {student.mentorshipCount} (
+                                {selectedItems[0]?.attCount?.mentorshipCount >
+                                  0 && student.mentorshipCount > 0
+                                  ? (student.mentorshipCount * 100) /
+                                    selectedItems[0]?.attCount?.mentorshipCount
+                                  : "0"}
+                                %)
                               </Typography>
                             </td>
                             <td className={classes}>

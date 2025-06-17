@@ -79,7 +79,7 @@ function AdminDashboard() {
                         <p>
                           Students name:{" "}
                           {event?.eventInfo
-                            .map((info) => info.studentInfo?.name || "Unknown")
+                            .map((info) => info.studentInfo?.name || "-")
                             .join(", ")}
                         </p>
                       </div>

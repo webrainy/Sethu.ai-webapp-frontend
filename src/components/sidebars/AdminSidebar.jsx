@@ -15,6 +15,7 @@ import { PiStudentFill } from "react-icons/pi";
 import { LuLogOut } from "react-icons/lu";
 import { jwtDecode } from "jwt-decode";
 import { RiLockPasswordLine } from "react-icons/ri";
+import { HiOutlinePresentationChartBar } from "react-icons/hi";
 
 function AdminSidebar({
   collapsed,
@@ -64,6 +65,11 @@ function AdminSidebar({
       title: "Reviewers",
       icon: <MdOutlineReviews />,
       link: "/admin/manage_reviewers",
+    },
+    {
+      title: "Attendance",
+      icon: <HiOutlinePresentationChartBar />,
+      link: "/admin/manage_attendance",
     },
     {
       title: "Events/Classes",
