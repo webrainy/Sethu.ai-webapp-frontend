@@ -173,6 +173,44 @@ function ReviewerStudentProfile() {
               }}
               required
               readOnly
+            />{" "}
+            <div className="font-ddin">
+              <p>Gender</p>
+              <div className="flex flex-row gap-3 font-ddin">
+                <Radio
+                  name="gender"
+                  label="Male"
+                  value={"Male"}
+                  checked={location?.student?.gender === "Male"}
+                />
+                <Radio
+                  name="gender"
+                  label="Female"
+                  value={"Female"}
+                  checked={location?.student?.gender === "Female"}
+                />
+                <Radio
+                  name="gender"
+                  label="Others"
+                  value={"Others"}
+                  checked={location?.student?.gender === "Others"}
+                />
+              </div>
+            </div>
+            <Input
+              label="Date of Birth"
+              type="date"
+              name="dob"
+              style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+              value={
+                location?.student?.dob
+                  ? moment(location?.student?.dob).format("YYYY-MM-DD")
+                  : ""
+              }
+              containerProps={{
+                className: "font-ddin",
+              }}
+              required
             />
             <Input
               label="Email"
@@ -210,6 +248,28 @@ function ReviewerStudentProfile() {
               required
               readOnly
             />
+            <Input
+              label="City"
+              type="text"
+              name="city"
+              style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+              value={location?.student?.city}
+              containerProps={{
+                className: "font-ddin",
+              }}
+              required
+            />
+            <Input
+              label="District"
+              type="text"
+              name="district"
+              style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+              value={location?.student?.district}
+              containerProps={{
+                className: "font-ddin",
+              }}
+              required
+            />
           </div>
 
           {/* Education Details */}
@@ -243,6 +303,17 @@ function ReviewerStudentProfile() {
                 />
               </div>
             </div>
+            <Input
+              label="College Name"
+              type="text"
+              name="college"
+              style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+              value={location?.student?.college || ""}
+              containerProps={{
+                className: "font-ddin",
+              }}
+              required
+            />
             <Input
               label="CGPA"
               type="number"

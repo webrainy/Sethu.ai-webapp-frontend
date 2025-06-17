@@ -9,28 +9,28 @@ import { IoVideocam } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { listEventItem } from "../../redux/eventSlice";
 
-const studentsData = [
-  {
-    name: "John Doe",
-    assignmentCompletedState: true,
-  },
-  {
-    name: "Jane Smith",
-    assignmentCompletedState: false,
-  },
-  {
-    name: "Mark Taylor",
-    assignmentCompletedState: true,
-  },
-  {
-    name: "Emily Johnson",
-    assignmentCompletedState: false,
-  },
-  {
-    name: "David Williams",
-    assignmentCompletedState: true,
-  },
-];
+// const studentsData = [
+//   {
+//     name: "John Doe",
+//     assignmentCompletedState: true,
+//   },
+//   {
+//     name: "Jane Smith",
+//     assignmentCompletedState: false,
+//   },
+//   {
+//     name: "Mark Taylor",
+//     assignmentCompletedState: true,
+//   },
+//   {
+//     name: "Emily Johnson",
+//     assignmentCompletedState: false,
+//   },
+//   {
+//     name: "David Williams",
+//     assignmentCompletedState: true,
+//   },
+// ];
 
 function AdminDashboard() {
   const dispatch = useDispatch();
@@ -79,7 +79,7 @@ function AdminDashboard() {
                         <p>
                           Students name:{" "}
                           {event?.eventInfo
-                            .map((info) => info.student.name)
+                            .map((info) => info.studentInfo?.name || "-")
                             .join(", ")}
                         </p>
                       </div>
