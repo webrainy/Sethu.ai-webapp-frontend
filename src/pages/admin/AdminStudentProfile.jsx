@@ -247,7 +247,7 @@ function AdminStudentProfile() {
               required
               readOnly
             />
-            <Textarea
+            {/* <Textarea
               label="Location"
               name="location"
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
@@ -257,7 +257,7 @@ function AdminStudentProfile() {
               }}
               required
               readOnly
-            />
+            /> */}
             <Input
               label="City"
               type="text"

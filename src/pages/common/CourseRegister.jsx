@@ -32,7 +32,6 @@ function CourseRegister() {
     email: "",
     password: "",
     phone: "",
-    location: "",
     city: "",
     district: "",
     education: "",
@@ -82,7 +81,6 @@ function CourseRegister() {
       email,
       password,
       phone,
-      location,
       dob,
       city,
       district,
@@ -97,7 +95,6 @@ function CourseRegister() {
       !email ||
       !password ||
       !phone ||
-      !location ||
       !dob ||
       !city ||
       !district ||
@@ -247,7 +244,6 @@ function CourseRegister() {
     form_data.append("email", formData.email);
     form_data.append("password", formData.password);
     form_data.append("phone", `+91${formData.phone}`);
-    form_data.append("location", formData.location);
     form_data.append("gender", formData.gender);
     form_data.append("city", formData.city);
     form_data.append("district", formData.district);
@@ -430,17 +426,6 @@ function CourseRegister() {
                   }
                   onChange={handleChange}
                   value={formData.password}
-                  required
-                />
-                <Input
-                  label="Location"
-                  name="location"
-                  style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                  value={formData.location}
-                  onChange={handleChange}
-                  containerProps={{
-                    className: "font-ddin",
-                  }}
                   required
                 />
                 <Input
