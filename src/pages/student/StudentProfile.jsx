@@ -26,7 +26,6 @@ function StudentProfile() {
     gender: "",
     email: "",
     phone: "",
-    location: "",
     city: "",
     district: "",
     education: "",
@@ -77,7 +76,6 @@ function StudentProfile() {
         gender: studentProfile.gender || "",
         email: studentProfile.email || "",
         phone: studentProfile.phone || "",
-        location: studentProfile.location || "",
         city: studentProfile.city || "",
         district: studentProfile.district || "",
         education: studentProfile.education || "",
@@ -128,7 +126,6 @@ function StudentProfile() {
     form_data.append("gender", formData.gender);
     form_data.append("phone", formData.phone);
     form_data.append("email", formData.email);
-    form_data.append("location", formData.location);
     form_data.append("city", formData.city);
     form_data.append("district", formData.district);
     form_data.append("education", formData.education);
@@ -283,7 +280,7 @@ function StudentProfile() {
                     }}
                     required
                   />
-                  <Textarea
+                  {/* <Textarea
                     label="Location"
                     name="location"
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
@@ -295,7 +292,7 @@ function StudentProfile() {
                       className: "font-ddin",
                     }}
                     required
-                  />
+                  /> */}
                   <Input
                     label="City"
                     type="text"

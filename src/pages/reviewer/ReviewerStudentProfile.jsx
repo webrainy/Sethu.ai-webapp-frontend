@@ -232,7 +232,7 @@ function ReviewerStudentProfile() {
               required
               readOnly
             />
-            <Textarea
+            {/* <Textarea
               label="Location"
               name="location"
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
@@ -242,7 +242,7 @@ function ReviewerStudentProfile() {
               }}
               required
               readOnly
-            />
+            /> */}
             <Input
               label="City"
               type="text"
