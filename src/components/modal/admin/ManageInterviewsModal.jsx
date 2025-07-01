@@ -80,8 +80,21 @@ function ManageInterviewsModal({
               containerProps={{
                 className: "font-ddin",
               }}
-              value={data.time}
-              onChange={handleChange}
+              // value={data.time}
+              // onChange={handleChange}
+              value={
+                data.time ? new Date(data.time).toISOString().split("T")[0] : ""
+              }
+              onChange={(e) => {
+                const dateValue = e.target.value;
+                if (dateValue) {
+                  // Append 'T00:00:00' to create full datetime string
+                  const fullDateTime = `${dateValue}T00:00:00`;
+                  setData({ ...data, time: fullDateTime });
+                } else {
+                  setData({ ...data, time: "" });
+                }
+              }}
               required
             />
 

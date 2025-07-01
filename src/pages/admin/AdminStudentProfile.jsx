@@ -33,6 +33,7 @@ function AdminStudentProfile() {
   const access_token = localStorage.getItem("sethu_admin_access_token");
 
   const [formData, setFormData] = useState({
+    name: "",
     review_status: "",
     select_batch: "",
     comment: "",
@@ -71,6 +72,7 @@ function AdminStudentProfile() {
     if (location?.student) {
       setFormData({
         ...formData,
+        name: location?.student?.name || "",
         review_status: location?.student?.current_state || "0",
         select_batch: location?.student?.batchInfo?.batch_id || "",
         comment: location?.student?.comment || "",
@@ -115,7 +117,7 @@ function AdminStudentProfile() {
     e.preventDefault();
 
     const urlencoded = new URLSearchParams();
-
+    urlencoded.append("name", formData.name);
     urlencoded.append("current_state", formData.review_status);
     urlencoded.append("batch_state", formData.batch_assigned);
     if (formData.batch_assigned == 2) {
@@ -177,8 +179,9 @@ function AdminStudentProfile() {
               containerProps={{
                 className: "font-ddin",
               }}
+              onChange={handleInputChange}
               required
-              readOnly
+              // readOnly
             />
             <div className="font-ddin">
               <p>Gender</p>
@@ -188,21 +191,21 @@ function AdminStudentProfile() {
                   label="Male"
                   value={"Male"}
                   checked={location?.student?.gender === "Male"}
-                  disabled
+                  // disabled
                 />
                 <Radio
                   name="gender"
                   label="Female"
                   value={"Female"}
                   checked={location?.student?.gender === "Female"}
-                  disabled
+                  // disabled
                 />
                 <Radio
                   name="gender"
                   label="Others"
                   value={"Others"}
                   checked={location?.student?.gender === "Others"}
-                  disabled
+                  // disabled
                 />
               </div>
             </div>
@@ -220,7 +223,7 @@ function AdminStudentProfile() {
                 className: "font-ddin",
               }}
               required
-              readOnly
+              // readOnly
             />
             <Input
               label="Email"
@@ -232,7 +235,7 @@ function AdminStudentProfile() {
                 className: "font-ddin",
               }}
               required
-              readOnly
+              // readOnly
             />
             <Input
               label="Phone"
@@ -245,7 +248,7 @@ function AdminStudentProfile() {
                 className: "font-ddin",
               }}
               required
-              readOnly
+              // readOnly
             />
             {/* <Textarea
               label="Location"
@@ -268,7 +271,7 @@ function AdminStudentProfile() {
                 className: "font-ddin",
               }}
               required
-              readOnly
+              // readOnly
             />
             <Input
               label="District"
@@ -280,7 +283,7 @@ function AdminStudentProfile() {
                 className: "font-ddin",
               }}
               required
-              readOnly
+              // readOnly
             />
           </div>
 
@@ -297,21 +300,21 @@ function AdminStudentProfile() {
                   label="Bachelors"
                   value="Bachelors"
                   checked={location?.student?.education === "Bachelors" || ""}
-                  disabled
+                  // disabled
                 />
                 <Radio
                   name="education"
                   label="Masters"
                   value="Masters"
                   checked={location?.student?.education === "Masters" || ""}
-                  disabled
+                  // disabled
                 />
                 <Radio
                   name="education"
                   label="Others"
                   value="Others"
                   checked={location?.student?.education === "Others" || ""}
-                  disabled
+                  // disabled
                 />
               </div>
             </div>
@@ -325,7 +328,7 @@ function AdminStudentProfile() {
                 className: "font-ddin",
               }}
               required
-              readOnly
+              // readOnly
             />
             <Input
               label="CGPA"
@@ -338,7 +341,7 @@ function AdminStudentProfile() {
               }}
               className="appearance-none outline-none"
               required
-              readOnly
+              // readOnly
             />
             <Input
               label="Year Passed"
@@ -350,7 +353,7 @@ function AdminStudentProfile() {
                 className: "font-ddin",
               }}
               required
-              readOnly
+              // readOnly
             />
             <Input
               label="GMAT Score"
@@ -362,7 +365,7 @@ function AdminStudentProfile() {
                 className: "font-ddin",
               }}
               required
-              readOnly
+              // readOnly
             />
           </div>
 
@@ -378,7 +381,7 @@ function AdminStudentProfile() {
                 className: "font-ddin",
               }}
               required
-              readOnly
+              // readOnly
             />
             <Input
               label="What are you currently working on?"
@@ -389,7 +392,7 @@ function AdminStudentProfile() {
                 className: "font-ddin",
               }}
               required
-              readOnly
+              // readOnly
             />
             <div className="text-left">
               <label className="block mb-1 font-ddin">
@@ -404,7 +407,7 @@ function AdminStudentProfile() {
                 containerProps={{
                   className: "font-ddin",
                 }}
-                readOnly
+                // readOnly
               />
             </div>
 
@@ -423,7 +426,7 @@ function AdminStudentProfile() {
                   className: "font-ddin",
                 }}
                 required
-                readOnly
+                // readOnly
               />
               <Input
                 type="url"
@@ -435,7 +438,7 @@ function AdminStudentProfile() {
                 }}
                 value={location?.student?.linkedin_url || ""}
                 required
-                readOnly
+                // readOnly
               />
               <Input
                 type="url"
@@ -447,7 +450,7 @@ function AdminStudentProfile() {
                 }}
                 value={location?.student?.github_url || ""}
                 required
-                readOnly
+                // readOnly
               />
 
               <div className="flex justify-between items-center">
@@ -519,7 +522,7 @@ function AdminStudentProfile() {
                     className: "font-ddin",
                   }}
                   required
-                  readOnly
+                  // readOnly
                 />
               </div>
             ))}
@@ -533,7 +536,7 @@ function AdminStudentProfile() {
                 className: "font-ddin",
               }}
               required
-              readOnly
+              // readOnly
             />
           </div>
 
@@ -550,7 +553,7 @@ function AdminStudentProfile() {
                 className: "font-ddin",
               }}
               required
-              readOnly
+              // readOnly
             />
             <Input
               type="text"
@@ -562,7 +565,7 @@ function AdminStudentProfile() {
                 className: "font-ddin",
               }}
               required
-              readOnly
+              // readOnly
             />
             <Input
               type="text"
@@ -574,7 +577,7 @@ function AdminStudentProfile() {
                 className: "font-ddin",
               }}
               required
-              readOnly
+              // readOnly
             />
           </div>
 

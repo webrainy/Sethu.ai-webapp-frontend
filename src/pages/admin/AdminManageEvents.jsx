@@ -109,6 +109,8 @@ function AdminManageEvents() {
 
       if (result.responseCode === 200) {
         toast.success("Event added successfully!");
+        console.log("ans",result);
+        
         setModal({ ...modal, add: false });
         dispatch(
           listEventItem({
@@ -200,7 +202,8 @@ function AdminManageEvents() {
                       </p>
                       <p className="font-myriad text-sm font-light text-gray-600">
                         {/* Feb, 08 2025 12.00pm */}
-                        {moment(event.datetime).format("LLL")}
+                        {/* {moment(event.datetime).format("LLL")} */}
+                        {moment(event.datetime).format("LL")}
                       </p>
                     </div>
                     <div className="flex justify-between items-end gap-4">

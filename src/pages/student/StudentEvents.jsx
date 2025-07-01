@@ -42,7 +42,7 @@ function StudentEvents() {
                         {event.event?.title}
                       </p>
                       <p className="font-myriad text-sm font-light text-gray-600">
-                        {moment(event.event?.datetime).format("LLL")}
+                        {moment(event.event?.datetime).format("LL")}
                       </p>
                     </div>
                     <div className="flex justify-between items-end gap-4">

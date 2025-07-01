@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Button,
   Card,
@@ -8,7 +9,6 @@ import {
   Radio,
   Select,
 } from "@material-tailwind/react";
-import React from "react";
 import { RiCloseCircleLine } from "react-icons/ri";
 import ReactSelect from "react-select";
 
@@ -73,15 +73,26 @@ function ManageEventsModal({
               required
             />
             <Input
-              label="Event start timing"
-              type="datetime-local"
+              label="Event start Date"
+              type="date"
               name="time"
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
               containerProps={{
                 className: "font-ddin",
               }}
-              value={data.time}
-              onChange={handleChange}
+              value={
+                data.time ? new Date(data.time).toISOString().split("T")[0] : ""
+              }
+              onChange={(e) => {
+                const dateValue = e.target.value;
+                if (dateValue) {
+                  // Append 'T00:00:00' to create full datetime string
+                  const fullDateTime = `${dateValue}T00:00:00`;
+                  setData({ ...data, time: fullDateTime });
+                } else {
+                  setData({ ...data, time: "" });
+                }
+              }}
               required
             />
 

@@ -76,16 +76,8 @@ function CourseRegister() {
   };
 
   const handlePersonalInformationButton = () => {
-    const {
-      name,
-      email,
-      password,
-      phone,
-      dob,
-      city,
-      district,
-      gender,
-    } = formData;
+    const { name, email, password, phone, dob, city, district, gender } =
+      formData;
     const mailRegex = new RegExp(mailPattern);
     const phoneRegex = new RegExp(phoneNumber);
     const passwordRegex = new RegExp(strongPwd);
@@ -206,7 +198,7 @@ function CourseRegister() {
   const handleAdditionalInformation = () => {
     const { hobbies, linkedin_url, github_url, coverletter, resume } = formData;
 
-    if (!hobbies || !linkedin_url || !github_url || !coverletter || !resume) {
+    if (!hobbies || !linkedin_url) {
       toast.error(
         "Please fill all fields in the Additional Information section."
       );
@@ -218,8 +210,8 @@ function CourseRegister() {
       return;
     }
 
-    if (!urlRegex.test(github_url)) {
-      toast.error("Please enter a valid Github url.");
+    if (github_url && !urlRegex.test(github_url)) {
+      toast.error("Please enter a valid GitHub URL or leave the field empty.");
       return;
     }
 
@@ -879,7 +871,6 @@ function CourseRegister() {
                         github_url: e.target.value,
                       }));
                     }}
-                    required
                   />
                 </div>
                 <div className="text-left">
@@ -888,7 +879,6 @@ function CourseRegister() {
                     type="file"
                     label="Upload your resume"
                     name="resume"
-                    required
                     onChange={(e) => {
                       const file = e.target.files[0];
                       if (file) {

@@ -6,11 +6,15 @@ import {
   CardBody,
   IconButton,
   Input,
+  Button,
+  Tooltip,
 } from "@material-tailwind/react";
 import { ADMIN_STUDENTLIST_TABLE_HEAD } from "../../utils/constants";
 import { HiArrowLeft, HiArrowRight } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStudentProfile } from "../../redux/studentSlice";
+import { LuFilter } from "react-icons/lu";
+import * as XLSX from "xlsx";
 
 function AdminStudentsList() {
   const [active, setActive] = useState(1);
@@ -62,6 +66,58 @@ function AdminStudentsList() {
     setActive(active - 1);
   };
 
+  const handleExport = () => {
+    // Prepare data for export
+    const exportData = profile_data?.studentData?.map((student) => ({
+      Name: student.name,
+      Email: student.email,
+      Education: student.education,
+      Phone: student.phone,
+      "Year Passed": student.year_passed,
+      Status:
+        student.current_state === 0
+          ? "Not started"
+          : student.current_state === 1
+          ? "In Progress"
+          : student.current_state === 2
+          ? "Accepted"
+          : student.current_state === 3
+          ? "Follow-up"
+          : student.current_state === 4
+          ? "Rejected"
+          : student.current_state === 5
+          ? "Unable to decide"
+          : "-",
+      "Batch Status":
+        student.batch_state === 1
+          ? "Not Assigned"
+          : student.batch_state === 2
+          ? "Assigned"
+          : "-",
+      Reviewer: student?.reviewerInfo?.name || "-",
+      "Assigned By": student?.assignedBy?.name || "-",
+    }));
+
+    if (exportData && exportData.length > 0) {
+      // Create workbook and worksheet
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.json_to_sheet(exportData);
+
+      // Add worksheet to workbook
+      XLSX.utils.book_append_sheet(wb, ws, "Students");
+
+      // Generate file name with current date
+      const fileName = `Students_Export_${new Date()
+        .toISOString()
+        .slice(0, 10)}.xlsx`;
+
+      // Export the workbook
+      XLSX.writeFile(wb, fileName);
+    } else {
+      alert("No data to export");
+    }
+  };
+
   return (
     <div className="p-3">
       <div className="flex justify-between items-center">
@@ -79,6 +135,23 @@ function AdminStudentsList() {
             onChange={handleStudentSearch}
           />
         </div>
+      </div>
+      <div className="flex justify-end items-center mt-5 gap-4">
+        <Tooltip content="Filter">
+          <IconButton
+            variant="outlined"
+            className="border border-gray-300 p-2 rounded-md hover:bg-gray-100"
+          >
+            <LuFilter className="h-5 w-5 text-gray-700" />
+          </IconButton>
+        </Tooltip>
+
+        <Button
+          onClick={handleExport}
+          className="px-4 py-2 shadow-none hover:shadow-none capitalize font-ddin font-normal text-base border border-[#DD4633] bg-transparent text-[#DD4633] hover:text-white hover:bg-[#DD4633] rounded-md"
+        >
+          Export
+        </Button>
       </div>
 
       {!loading ? (

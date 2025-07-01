@@ -24,7 +24,8 @@
     "react-spring-bottom-sheet": "^3.4.1",
     "sass": "^1.83.4",
     "swiper": "^11.2.1",
-    "web-vitals": "^4.2.4"
+    "web-vitals": "^4.2.4",
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "react-scripts start",

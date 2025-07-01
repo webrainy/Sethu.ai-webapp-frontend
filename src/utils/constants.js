@@ -1,5 +1,6 @@
-export const base_url = "http://103.212.120.217:5932";
+// export const base_url = "http://103.212.120.217:5932";
 // export const base_url = "http://34.45.12.76:5932";
+export const base_url = "https://sethu.ai:5932";
 
 export const mailPattern =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

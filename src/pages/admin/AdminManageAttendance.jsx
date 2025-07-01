@@ -11,6 +11,7 @@ import {
   TabsBody,
   TabsHeader,
   Typography,
+  Input,
 } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,11 +26,11 @@ import toast from "react-hot-toast";
 import { postAttendance } from "../../redux/attendanceSlice";
 
 function AdminManageAttendance() {
-  const [currentTime, setCurrentTime] = useState("");
   const [data, setData] = useState({
     batch: "",
     student: "",
     attendance_value: 0,
+    date: moment().format("YYYY-MM-DD"), // Default to today's date
   });
   const [activeTab, setActiveTab] = useState("1");
   const [attendanceStatus, setAttendanceStatus] = useState({});
@@ -47,12 +48,6 @@ function AdminManageAttendance() {
         access_token: access_token,
       })
     ).unwrap();
-
-    const interval = setInterval(() => {
-      setCurrentTime(new Date().toLocaleTimeString());
-    }, 1000);
-
-    return () => clearInterval(interval);
   }, [dispatch]);
 
   const fetchBatchStudentList = (batch) => {
@@ -101,6 +96,7 @@ function AdminManageAttendance() {
 
     urlencoded.append("attendance_type", activeTab);
     urlencoded.append("batch_id", data.batch);
+    urlencoded.append("attendance_date", data.date); // Add selected date to the request
     for (let i = 0; i < attendanceData.length; i++) {
       urlencoded.append(
         "attendance_status",
@@ -135,6 +131,10 @@ function AdminManageAttendance() {
     navigate("/admin/attendance/view_attendance");
   };
 
+  const handleDateChange = (e) => {
+    setData({ ...data, date: e.target.value });
+  };
+
   return (
     <>
       <div className="p-3">
@@ -149,7 +149,7 @@ function AdminManageAttendance() {
           </Button>
         </div>
 
-        <div className="mt-3 grid md:grid-cols-3">
+        <div className="mt-3 grid md:grid-cols-3 gap-4">
           <Select
             label="Select a Batch"
             containerProps={{
@@ -171,6 +171,17 @@ function AdminManageAttendance() {
               </Option>
             ))}
           </Select>
+
+          <Input
+            type="date"
+            label="Select Date"
+            value={data.date}
+            onChange={handleDateChange}
+            containerProps={{
+              className: "font-ddin",
+            }}
+            style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+          />
         </div>
 
         {data.batch && (
@@ -200,7 +211,7 @@ function AdminManageAttendance() {
                 {ATTENDANCE_TAB_DATA.map(({ value, desc }) => (
                   <TabPanel key={value} value={value} className="px-0">
                     <div className="!flex justify-end items-center font-ddin">
-                      {moment().format("ll") + " - " + currentTime}
+                      {moment(data.date).format("ll")}
                     </div>
 
                     <div className="flex justify-between items-center mt-2">
