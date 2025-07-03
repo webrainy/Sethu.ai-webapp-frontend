@@ -24,7 +24,7 @@ export const ADMIN_STUDENTLIST_TABLE_HEAD = [
   "Assigned by",
 ];
 
-export const REVIEWER_STUDENTLIST_TABLE_HEAD = [
+export const REVIEWER_STUDENTLIST_TABLE_HEAD = [ 
   "Name",
   "Education",
   "Phone Number",
