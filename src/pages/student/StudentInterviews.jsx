@@ -42,8 +42,8 @@ function StudentInterviews() {
                         {interview.event?.title}
                       </p>
                       <p className="font-myriad text-sm font-light text-gray-600">
-                        {/* Feb, 08 2025 12.00pm */}
-                        {moment(interview.event?.datetime).format("LLL")}
+                        {/* Feb, 08 2025*/}
+                        {moment(interview.event?.datetime).format("LL")}
                       </p>
                     </div>
                     <div className="flex justify-between items-end gap-4">

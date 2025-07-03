@@ -33,15 +33,40 @@ function AdminStudentProfile() {
   const access_token = localStorage.getItem("sethu_admin_access_token");
 
   const [formData, setFormData] = useState({
-    review_status: "",
-    select_batch: "",
-    comment: "",
-    sk_python: "",
-    sk_sql: "",
-    sk_java: "",
-    sk_analyticalskill: "",
-    sk_prblmsolving: "",
-    sk_engprof: "",
+    name: location.student.name || "",
+    gender: location.student.gender || "",
+    dob: location.student.dob
+      ? moment(location.student.dob).format("YYYY-MM-DD")
+      : "",
+    email: location.student.email || "",
+    phone: location.student.phone || "",
+    city: location.student.city || "",
+    district: location.student.district || "",
+    education: location.student.education || "",
+    college: location.student.college || "",
+    cgpa: location.student.cgpa || "",
+    year_passed: location.student.year_passed || "",
+    gmat: location.student.gmat || "",
+    course_prep: location.student.course_prep || "",
+    curnt_work: location.student.curnt_work || "",
+    commit_ft: location.student.commit_ft || "",
+    hobbies: location.student.hobbies || "",
+    linkedin_url: location.student.linkedin_url || "",
+    github_url: location.student.github_url || "",
+    hckr_rnk: location.student.hckr_rnk || "",
+    father_occ: location.student.father_occ || "",
+    mother_occ: location.student.mother_occ || "",
+    income: location.student.income || "",
+
+    review_status: location.student.review_status || "",
+    select_batch: location.student.select_batch || "",
+    comment: location.student.comment || "",
+    sk_python: location.student.sk_python || "",
+    sk_sql: location.student.sk_sql || "",
+    sk_java: location.student.sk_java || "",
+    sk_analyticalskill: location.student.sk_analyticalskill || "",
+    sk_prblmsolving: location.student.sk_prblmsolving || "",
+    sk_engprof: location.student.cgpa || "",
     reviewer: "",
     date_exam: "",
     exam_marks: "",
@@ -69,8 +94,8 @@ function AdminStudentProfile() {
     ).unwrap();
 
     if (location?.student) {
-      setFormData({
-        ...formData,
+      setFormData((prev) => ({
+        ...prev,
         review_status: location?.student?.current_state || "0",
         select_batch: location?.student?.batchInfo?.batch_id || "",
         comment: location?.student?.comment || "",
@@ -81,26 +106,23 @@ function AdminStudentProfile() {
         sk_prblmsolving: location?.student?.sk_prblmsolving || "",
         sk_engprof: location?.student?.sk_engprof || "",
         reviewer: location?.student?.reviewerInfo?.account_id || "",
-        date_exam: location?.student?.examInfo?.[0]?.exam_datetime || "",
-        // date_exam: location?.student?.examInfo?.[0]?.exam_datetime
-        //   ? new Date(location?.student?.examInfo?.[0]?.exam_datetime)
-        //       .toISOString()
-        //       .slice(0, 16)
-        //   : "",
+
+        date_exam: location?.student?.examInfo?.[0]?.exam_datetime
+          ? location.student.examInfo[0].exam_datetime.substring(0, 10)
+          : "",
+
         exam_marks: location?.student?.examInfo?.[0]?.exam_marks || "",
         exam_result: location?.student?.examInfo?.[0]?.exam_result || "0",
-        date_interview:
-          location?.student?.interviewInfo?.[0]?.int_datetime || "",
-        // date_interview: location?.student?.interviewInfo?.[0]?.int_datetime
-        //   ? new Date(location?.student?.interviewInfo?.[0]?.int_datetime)
-        //       .toISOString()
-        //       .slice(0, 16)
-        //   : "",
+
+        date_interview: location?.student?.interviewInfo?.[0]?.int_datetime
+          ? location.student.interviewInfo[0].int_datetime.substring(0, 10)
+          : "",
+
         interview_result:
           location?.student?.interviewInfo?.[0]?.int_result || "0",
         batch_assigned: location?.student?.batch_state || "",
         dnc_state: location?.student?.dnc_state || "",
-      });
+      }));
     }
   }, [dispatch, location]);
 
@@ -114,40 +136,103 @@ function AdminStudentProfile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const urlencoded = new URLSearchParams();
+    const profileData = new URLSearchParams();
+    const stateData = new URLSearchParams();
 
-    urlencoded.append("current_state", formData.review_status);
-    urlencoded.append("batch_state", formData.batch_assigned);
+    // 1. Profile fields (to /api/student/edit)
+    profileData.append("name", formData.name);
+    profileData.append("gender", formData.gender);
+    profileData.append("dob", formData.dob);
+    profileData.append("email", formData.email);
+    profileData.append("phone", formData.phone);
+    profileData.append("city", formData.city);
+    profileData.append("district", formData.district);
+    profileData.append("education", formData.education);
+    profileData.append("college", formData.college);
+    profileData.append("cgpa", formData.cgpa);
+    profileData.append("year_passed", formData.year_passed);
+    profileData.append("gmat", formData.gmat);
+    profileData.append("course_prep", formData.course_prep);
+    profileData.append("curnt_work", formData.curnt_work);
+    profileData.append("commit_ft", formData.commit_ft);
+    profileData.append("hobbies", formData.hobbies);
+    profileData.append("linkedin_url", formData.linkedin_url);
+    profileData.append("github_url", formData.github_url);
+    profileData.append("father_occ", formData.father_occ);
+    profileData.append("mother_occ", formData.mother_occ);
+    profileData.append("income", formData.income);
+    profileData.append("hckr_rnk", formData.hckr_rnk);
+    profileData.append("sk_python", formData.sk_python);
+    profileData.append("sk_sql", formData.sk_sql);
+    profileData.append("sk_java", formData.sk_java);
+    profileData.append("sk_analyticalskill", formData.sk_analyticalskill);
+    profileData.append("sk_prblmsolving", formData.sk_prblmsolving);
+    profileData.append("sk_engprof", formData.sk_engprof);
+    profileData.append("review_status", formData.review_status);
+    profileData.append("reviewer", formData.reviewer);
+    profileData.append("comment", formData.comment);
+
+    // 2. State fields (to /api/student/update)
+    stateData.append("current_state", formData.review_status);
+    stateData.append("batch_state", formData.batch_assigned);
     if (formData.batch_assigned == 2) {
-      urlencoded.append("batch_id", formData.select_batch);
+      stateData.append("batch_id", formData.select_batch);
     }
-    urlencoded.append("dnc_state", formData.dnc_state);
-    urlencoded.append("comment", formData.comment);
+    stateData.append("dnc_state", formData.dnc_state);
+    stateData.append("comment", formData.comment);
     if (Number(formData.review_status) !== 0) {
-      urlencoded.append("account_id", formData.reviewer);
+      stateData.append("account_id", formData.reviewer);
     }
-    urlencoded.append("exam_datetime", formData.date_exam);
-    urlencoded.append("exam_result", formData.exam_result);
-    urlencoded.append("exam_marks", formData.exam_marks);
-    urlencoded.append("int_datetime", formData.date_interview);
-    urlencoded.append("int_result", formData.interview_result);
-
-    const result = await dispatch(
-      updateStudentData({
-        end_point: `/api/student/update?student_id=${location?.student?.student_id}`,
-        access_token: access_token,
-        student_data: urlencoded,
-      })
-    ).unwrap();
-
-    if (result.responseCode === 200) {
-      toast.success("Student status updated.");
-      navigate(-1);
-    } else {
-      toast.error(
-        result.responseMessage || "Connection failed. Please try again."
-      );
+    if (formData.date_exam) {
+      stateData.append("exam_datetime", `${formData.date_exam}T00:00:00`);
     }
+    stateData.append("exam_result", formData.exam_result);
+    stateData.append("exam_marks", formData.exam_marks);
+    stateData.append("int_datetime", formData.date_interview);
+    stateData.append("int_result", formData.interview_result);
+
+    try {
+      // 1. First: Update profile info
+      const profileResult = await dispatch(
+        updateStudentData({
+          end_point: `/api/student/edit?student_id=${location?.student?.student_id}`,
+          access_token: access_token,
+          student_data: profileData,
+        })
+      ).unwrap();
+
+      if (profileResult.responseCode !== 200) {
+        throw new Error(
+          profileResult.responseMessage || "Profile update failed"
+        );
+      }
+
+      // 2. Then: Update state info
+      const stateResult = await dispatch(
+        updateStudentData({
+          end_point: `/api/student/update?student_id=${location?.student?.student_id}`,
+          access_token: access_token,
+          student_data: stateData,
+        })
+      ).unwrap();
+
+      if (stateResult.responseCode === 200) {
+        toast.success("Student data updated successfully.");
+        navigate(-1);
+      } else {
+        throw new Error(stateResult.responseMessage || "State update failed");
+      }
+    } catch (err) {
+      toast.error(err.message || "Something went wrong.");
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   return (
@@ -173,114 +258,93 @@ function AdminStudentProfile() {
               type="text"
               name="name"
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              value={location?.student?.name || ""}
-              containerProps={{
-                className: "font-ddin",
-              }}
+              value={formData.name}
+              onChange={(e) => handleInputChange(e.target.value, "name")}
+              containerProps={{ className: "font-ddin" }}
               required
-              readOnly
             />
+
             <div className="font-ddin">
               <p>Gender</p>
               <div className="flex flex-row gap-3 font-ddin">
                 <Radio
                   name="gender"
                   label="Male"
-                  value={"Male"}
-                  checked={location?.student?.gender === "Male"}
-                  disabled
+                  value="Male"
+                  checked={formData.gender === "Male"}
+                  onChange={() => handleInputChange("Male", "gender")}
                 />
                 <Radio
                   name="gender"
                   label="Female"
-                  value={"Female"}
-                  checked={location?.student?.gender === "Female"}
-                  disabled
+                  value="Female"
+                  checked={formData.gender === "Female"}
+                  onChange={() => handleInputChange("Female", "gender")}
                 />
                 <Radio
                   name="gender"
                   label="Others"
-                  value={"Others"}
-                  checked={location?.student?.gender === "Others"}
-                  disabled
+                  value="Others"
+                  checked={formData.gender === "Others"}
+                  onChange={() => handleInputChange("Others", "gender")}
                 />
               </div>
             </div>
+
             <Input
               label="Date of Birth"
               type="date"
               name="dob"
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              value={
-                location?.student?.dob
-                  ? moment(location.student.dob).format("YYYY-MM-DD")
-                  : ""
-              }
-              containerProps={{
-                className: "font-ddin",
-              }}
+              value={formData.dob}
+              onChange={(e) => handleInputChange(e.target.value, "dob")}
+              containerProps={{ className: "font-ddin" }}
               required
-              readOnly
             />
+
             <Input
               label="Email"
               type="email"
               name="email"
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              value={location?.student?.email || ""}
-              containerProps={{
-                className: "font-ddin",
-              }}
+              value={formData.email}
+              onChange={(e) => handleInputChange(e.target.value, "email")}
+              containerProps={{ className: "font-ddin" }}
               required
-              readOnly
             />
+
             <Input
               label="Phone"
               type="tel"
               name="phone"
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              value={location?.student?.phone || ""}
+              value={formData.phone}
+              onChange={(e) => handleInputChange(e.target.value, "phone")}
               maxLength={10}
-              containerProps={{
-                className: "font-ddin",
-              }}
+              containerProps={{ className: "font-ddin" }}
               required
-              readOnly
             />
-            {/* <Textarea
-              label="Location"
-              name="location"
-              style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              value={location?.student?.location || ""}
-              containerProps={{
-                className: "font-ddin",
-              }}
-              required
-              readOnly
-            /> */}
+
             <Input
               label="City"
               type="text"
               name="city"
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              value={location?.student?.city}
-              containerProps={{
-                className: "font-ddin",
-              }}
+              value={formData.city}
+              onChange={(e) => handleInputChange(e.target.value, "city")}
+              containerProps={{ className: "font-ddin" }}
               required
-              readOnly
             />
+
             <Input
               label="District"
               type="text"
               name="district"
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              value={location?.student?.district}
-              containerProps={{
-                className: "font-ddin",
-              }}
+              value={formData.district}
+              onChange={(e) => handleInputChange(e.target.value, "district")}
+              containerProps={{ className: "font-ddin" }}
               required
-              readOnly
             />
           </div>
 
@@ -296,73 +360,67 @@ function AdminStudentProfile() {
                   name="education"
                   label="Bachelors"
                   value="Bachelors"
-                  checked={location?.student?.education === "Bachelors" || ""}
-                  disabled
+                  checked={formData.education === "Bachelors"}
+                  onChange={handleChange}
                 />
                 <Radio
                   name="education"
                   label="Masters"
                   value="Masters"
-                  checked={location?.student?.education === "Masters" || ""}
-                  disabled
+                  checked={formData.education === "Masters"}
+                  onChange={handleChange}
                 />
                 <Radio
                   name="education"
                   label="Others"
                   value="Others"
-                  checked={location?.student?.education === "Others" || ""}
-                  disabled
+                  checked={formData.education === "Others"}
+                  onChange={handleChange}
                 />
               </div>
             </div>
             <Input
               label="College Name"
               type="text"
-              name="college_name"
+              name="college"
+              value={formData.college}
+              onChange={(e) => handleInputChange(e.target.value, "college")}
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              value={location?.student?.college}
-              containerProps={{
-                className: "font-ddin",
-              }}
+              containerProps={{ className: "font-ddin" }}
               required
-              readOnly
             />
+
             <Input
               label="CGPA"
               type="number"
               name="cgpa"
-              value={location?.student?.cgpa || ""}
+              value={formData.cgpa}
+              onChange={(e) => handleInputChange(e.target.value, "cgpa")}
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              containerProps={{
-                className: "font-ddin",
-              }}
+              containerProps={{ className: "font-ddin" }}
               className="appearance-none outline-none"
               required
-              readOnly
             />
             <Input
               label="Year Passed"
               type="number"
-              name="yearPassed"
-              value={location?.student?.year_passed || ""}
+              name="year_passed"
+              value={formData.year_passed}
+              onChange={(e) => handleInputChange(e.target.value, "year_passed")}
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              containerProps={{
-                className: "font-ddin",
-              }}
+              containerProps={{ className: "font-ddin" }}
               required
-              readOnly
             />
+
             <Input
               label="GMAT Score"
               type="text"
-              name="gmatScore"
-              value={location?.student?.gmat || ""}
+              name="gmat"
+              value={formData.gmat}
+              onChange={(e) => handleInputChange(e.target.value, "gmat")}
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              containerProps={{
-                className: "font-ddin",
-              }}
+              containerProps={{ className: "font-ddin" }}
               required
-              readOnly
             />
           </div>
 
@@ -372,24 +430,24 @@ function AdminStudentProfile() {
             <Input
               label="Are you preparing for any course?"
               name="course_prep"
-              value={location?.student?.course_prep || ""}
+              value={formData.course_prep || ""}
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+              onChange={(e) => handleInputChange(e.target.value, "course_prep")}
               containerProps={{
                 className: "font-ddin",
               }}
               required
-              readOnly
             />
             <Input
               label="What are you currently working on?"
               name="curnt_work"
-              value={location?.student?.curnt_work || ""}
+              value={formData.curnt_work || ""}
+              onChange={(e) => handleInputChange(e.target.value, "curnt_work")}
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
               containerProps={{
                 className: "font-ddin",
               }}
               required
-              readOnly
             />
             <div className="text-left">
               <label className="block mb-1 font-ddin">
@@ -397,14 +455,15 @@ function AdminStudentProfile() {
                 <span className="text-red-600">*</span>
               </label>
               <Input
+                label="Commit"
                 type="text"
                 name="commit_ft"
-                value={location?.student?.commit_ft || ""}
+                value={formData.commit_ft || ""}
+                onChange={(e) => handleInputChange(e.target.value, "commit_ft")}
                 style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                 containerProps={{
                   className: "font-ddin",
                 }}
-                readOnly
               />
             </div>
 
@@ -417,13 +476,13 @@ function AdminStudentProfile() {
                 type="text"
                 label="Hobbies"
                 name="hobbies"
-                value={location?.student?.hobbies || ""}
+                value={formData.hobbies || ""}
+                onChange={(e) => handleInputChange(e.target.value, "hobbies")}
                 style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                 containerProps={{
                   className: "font-ddin",
                 }}
                 required
-                readOnly
               />
               <Input
                 type="url"
@@ -433,9 +492,11 @@ function AdminStudentProfile() {
                 containerProps={{
                   className: "font-ddin",
                 }}
-                value={location?.student?.linkedin_url || ""}
+                value={formData.linkedin_url || ""}
+                onChange={(e) =>
+                  handleInputChange(e.target.value, "linkedin_url")
+                }
                 required
-                readOnly
               />
               <Input
                 type="url"
@@ -445,9 +506,10 @@ function AdminStudentProfile() {
                 containerProps={{
                   className: "font-ddin",
                 }}
-                value={location?.student?.github_url || ""}
-                required
-                readOnly
+                value={formData.github_url || ""}
+                onChange={(e) =>
+                  handleInputChange(e.target.value, "github_url")
+                }
               />
 
               <div className="flex justify-between items-center">
@@ -490,50 +552,48 @@ function AdminStudentProfile() {
               { name: "sk_java", label: "Java" },
               { name: "sk_analyticalskill", label: "Analytical Skills" },
               { name: "sk_engprof", label: "English Proficiency" },
-              { name: "sk_prblmsolving", label: "Problem solving" },
+              { name: "sk_prblmsolving", label: "Problem Solving" },
             ].map((skill) => (
               <div key={skill.name} className="text-left">
                 <label className="block text-gray-700 mt-2 mb-[5px] font-ddin capitalize">
                   {skill.label}
                   <span className="text-red-600">*</span>
                 </label>
-                <Input
-                  type="text"
-                  name={skill.name}
+                <Select
                   label={skill.label}
-                  value={
-                    formData[skill.name] == 1
-                      ? "Beginner"
-                      : formData[skill.name] == 2
-                      ? "Intermediate"
-                      : formData[skill.name] == 3
-                      ? "Proficient"
-                      : formData[skill.name] == 4
-                      ? "Advanced"
-                      : formData[skill.name] == 5
-                      ? "Expert"
-                      : "-"
-                  }
-                  style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                  containerProps={{
-                    className: "font-ddin",
-                  }}
-                  required
-                  readOnly
-                />
+                  value={formData[skill.name]?.toString() || ""}
+                  onChange={(value) => handleInputChange(value, skill.name)}
+                  className="font-ddin"
+                >
+                  <Option value="1" className="font-ddin">
+                    Beginner
+                  </Option>
+                  <Option value="2" className="font-ddin">
+                    Intermediate
+                  </Option>
+                  <Option value="3" className="font-ddin">
+                    Proficient
+                  </Option>
+                  <Option value="4" className="font-ddin">
+                    Advanced
+                  </Option>
+                  <Option value="5" className="font-ddin">
+                    Expert
+                  </Option>
+                </Select>
               </div>
             ))}
             <Input
               label="Hacker Rank Score"
               type="text"
-              name="hacker_rank"
-              value={location?.student?.hckr_rnk || ""}
+              name="hckr_rnk"
+              value={formData.hckr_rnk || ""}
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
               containerProps={{
                 className: "font-ddin",
               }}
+              onChange={(e) => handleInputChange(e.target.value, "hckr_rnk")}
               required
-              readOnly
             />
           </div>
 
@@ -544,37 +604,37 @@ function AdminStudentProfile() {
               type="text"
               name="father_occ"
               label="Father's Occupation"
-              value={location?.student?.father_occ}
+              value={formData.father_occ}
+              onChange={(e) => handleInputChange(e.target.value, "father_occ")}
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
               containerProps={{
                 className: "font-ddin",
               }}
               required
-              readOnly
             />
             <Input
               type="text"
-              name="motherOccupation"
+              name="mother_occ"
               label="Mother's Occupation"
-              value={location?.student?.mother_occ}
+              value={formData.mother_occ}
+              onChange={(e) => handleInputChange(e.target.value, "mother_occ")}
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
               containerProps={{
                 className: "font-ddin",
               }}
               required
-              readOnly
             />
             <Input
               type="text"
               name="income"
               label="Household Income"
-              value={location?.student?.income}
+              value={formData.income}
+              onChange={(e) => handleInputChange(e.target.value, "income")}
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
               containerProps={{
                 className: "font-ddin",
               }}
               required
-              readOnly
             />
           </div>
 
@@ -653,15 +713,14 @@ function AdminStudentProfile() {
             <p className="font-ddin font-semibold text-lg">Assign exam</p>
             <Input
               label="Date of Exam"
-              type="datetime-local"
+              type="date"
               name="date_exam"
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              containerProps={{
-                className: "font-ddin",
-              }}
+              containerProps={{ className: "font-ddin" }}
               value={formData.date_exam}
               onChange={(e) => handleInputChange(e.target.value, "date_exam")}
             />
+
             <Input
               label="Exam Marks"
               type="number"
@@ -695,13 +754,19 @@ function AdminStudentProfile() {
             <p className="font-ddin font-semibold text-lg">Assign interview</p>
             <Input
               label="Date of Interview"
-              type="datetime-local"
+              type="date"
               name="date_interview"
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
               containerProps={{
                 className: "font-ddin",
               }}
-              value={formData.date_interview}
+              value={
+                formData.date_interview
+                  ? new Date(formData.date_interview)
+                      .toISOString()
+                      .split("T")[0]
+                  : ""
+              }
               onChange={(e) =>
                 handleInputChange(e.target.value, "date_interview")
               }
@@ -769,8 +834,7 @@ function AdminStudentProfile() {
               <p>Application submitted</p>
               <p>
                 {location?.student?.registered_on
-                  ? moment(location?.student?.registered_on).format("LLL") ||
-                    "-"
+                  ? moment(location?.student?.registered_on).format("LL") || "-"
                   : "-"}
               </p>
             </div>
@@ -780,7 +844,7 @@ function AdminStudentProfile() {
                 {location?.student?.examInfo[0]?.exam_datetime
                   ? moment(
                       location?.student?.examInfo[0]?.exam_datetime
-                    ).format("LLL") || "-"
+                    ).format("LL") || "-"
                   : "-"}
               </p>
             </div>
@@ -790,7 +854,7 @@ function AdminStudentProfile() {
                 {location?.student?.interviewInfo[0]?.int_datetime
                   ? moment(
                       location?.student?.interviewInfo[0]?.int_datetime
-                    ).format("LLL") || "-"
+                    ).format("LL") || "-"
                   : "-"}
               </p>
             </div>
@@ -798,7 +862,7 @@ function AdminStudentProfile() {
               <p>Selected date</p>
               <p>
                 {location?.student?.selected_on
-                  ? moment(location?.student?.selected_on).format("LLL") || "-"
+                  ? moment(location?.student?.selected_on).format("LL") || "-"
                   : "-"}
               </p>
             </div>
