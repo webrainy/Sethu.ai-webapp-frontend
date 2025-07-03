@@ -35,6 +35,7 @@ function CourseRegister() {
     city: "",
     district: "",
     education: "",
+    iq_level: "",
     college: "",
     cgpa: "",
     year_passed: "",
@@ -52,6 +53,10 @@ function CourseRegister() {
     hobbies: "",
     linkedin_url: "",
     github_url: "",
+    attitude: "",
+    aspiration: "",
+    laptop: "",
+    about_us: "",
     resume: "",
     coverletter: "",
     father_occ: "",
@@ -127,7 +132,7 @@ function CourseRegister() {
   };
 
   const handleEducationDetailButton = () => {
-    const { education, cgpa, year_passed, gmat, college } = formData;
+    const { education, cgpa, year_passed, gmat, college, iq_level } = formData;
     if (!education || !cgpa || !year_passed || !gmat || !college) {
       toast.error("Please fill all fields in the Educational Details section.");
       return;
@@ -196,7 +201,17 @@ function CourseRegister() {
   };
 
   const handleAdditionalInformation = () => {
-    const { hobbies, linkedin_url, github_url, coverletter, resume } = formData;
+    const {
+      hobbies,
+      linkedin_url,
+      github_url,
+      coverletter,
+      resume,
+      attitude,
+      aspiration,
+      laptop,
+      about_us,
+    } = formData;
 
     if (!hobbies || !linkedin_url) {
       toast.error(
@@ -240,6 +255,7 @@ function CourseRegister() {
     form_data.append("city", formData.city);
     form_data.append("district", formData.district);
     form_data.append("education", formData.education);
+    form_data.append("iq_level", formData.iq_level);
     form_data.append("college", formData.college);
     form_data.append("cgpa", formData.cgpa);
     form_data.append("year_passed", formData.year_passed);
@@ -255,6 +271,10 @@ function CourseRegister() {
     form_data.append("sk_engprof", formData.english_proficiency);
     form_data.append("hckr_rnk", formData.hacker_rank);
     form_data.append("hobbies", formData.hobbies);
+    form_data.append("laptop", formData.laptop);
+    form_data.append("attitude", formData.attitude);
+    form_data.append("aspiration", formData.aspiration);
+    form_data.append("abt_us", formData.about_us);
     form_data.append("linkedin_url", formData.linkedin_url);
     form_data.append("github_url", formData.github_url);
     form_data.append("resume", formData.resume);
@@ -489,6 +509,16 @@ function CourseRegister() {
                     />
                   </div>
                 </fieldset>
+                <Input
+                  label="IQ Level"
+                  name="iq_level"
+                  style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                  value={formData.iq_level}
+                  onChange={handleChange}
+                  containerProps={{
+                    className: "font-ddin",
+                  }}
+                />
                 <Input
                   label="College Name"
                   name="college"
@@ -928,9 +958,8 @@ function CourseRegister() {
                     onChange={(e) => {
                       const file = e.target.files[0];
                       if (file && file.size > 5 * 1024 * 1024) {
-                        // Check if file size is greater than 5MB
-                        alert("File size must be less than 5MB"); // Display an error message
-                        e.target.value = ""; // Clear the file input
+                        alert("File size must be less than 5MB");
+                        e.target.value = "";
                       } else {
                         setFormData((prev) => ({
                           ...prev,
@@ -947,6 +976,94 @@ function CourseRegister() {
                   <span className="font-ddin text-xs text-red-500">
                     Only images are allowed.
                   </span>
+                </div>
+                <div className="text-left">
+                  <Input
+                    label="Attitude"
+                    name="attitude"
+                    style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                    value={formData.attitude}
+                    onChange={handleChange}
+                    containerProps={{
+                      className: "font-ddin",
+                    }}
+                  />
+                </div>
+                <div className="text-left">
+                  <Input
+                    label="Aspiration"
+                    name="aspiration"
+                    style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                    value={formData.aspiration}
+                    onChange={handleChange}
+                    containerProps={{
+                      className: "font-ddin",
+                    }}
+                  />
+                </div>
+                <div className="text-left">
+                  <label className="block mb-2">
+                    Can you commit 3 months full-time (8 hours/day) in
+                    Hyderabad? <span className="text-red-600">*</span>
+                  </label>
+                  <Select
+                    name="laptop"
+                    label="Has Laptop"
+                    value={formData.commit_ft}
+                    onChange={(value) =>
+                      setFormData((prev) => ({ ...prev, commit_ft: value }))
+                    }
+                    style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                    containerProps={{
+                      className: "font-ddin",
+                    }}
+                  >
+                    <Option value="Yes" style={{ fontFamily: "D-DIN" }}>
+                      Yes
+                    </Option>
+                    <Option value="No" style={{ fontFamily: "D-DIN" }}>
+                      No
+                    </Option>
+                  </Select>
+                </div>
+                <div className="text-left">
+                  <label className="block mb-2">
+                    How did you know about the program?
+                  </label>
+                  <Select
+                    name="abt_us"
+                    label="How did you know about the program?"
+                    value={formData.commit_ft}
+                    onChange={(value) =>
+                      setFormData((prev) => ({ ...prev, commit_ft: value }))
+                    }
+                    style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                    containerProps={{
+                      className: "font-ddin",
+                    }}
+                  >
+                    <Option value="WhatsApp" style={{ fontFamily: "D-DIN" }}>
+                      WhatsApp
+                    </Option>
+                    <Option
+                      value="Social Media"
+                      style={{ fontFamily: "D-DIN" }}
+                    >
+                      Social Media
+                    </Option>
+                    <Option value="Paper Ad" style={{ fontFamily: "D-DIN" }}>
+                      Paper Ad
+                    </Option>
+                    <Option value="college" style={{ fontFamily: "D-DIN" }}>
+                      College
+                    </Option>
+                    <Option value="friends" style={{ fontFamily: "D-DIN" }}>
+                      Friends
+                    </Option>
+                    <Option value="email" style={{ fontFamily: "D-DIN" }}>
+                      Email
+                    </Option>
+                  </Select>
                 </div>
 
                 <div className="flex justify-between">
