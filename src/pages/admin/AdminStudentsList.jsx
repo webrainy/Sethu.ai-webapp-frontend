@@ -10,13 +10,15 @@ import {
   Select,
   Button,
 } from "@material-tailwind/react";
-import { ADMIN_STUDENTLIST_TABLE_HEAD } from "../../utils/constants";
+import { ADMIN_STUDENTLIST_TABLE_HEAD, base_url } from "../../utils/constants";
 import { HiArrowLeft, HiArrowRight } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStudentProfile } from "../../redux/studentSlice";
 import { fetchBatchItems } from "../../redux/batchSlice";
 import { listReviewerItem } from "../../redux/reviewerSlice";
 import * as XLSX from "xlsx";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 function AdminStudentsList() {
   const [active, setActive] = useState(1);
@@ -58,32 +60,6 @@ function AdminStudentsList() {
       default:
         return "-";
     }
-  };
-
-  const exportToExcel = () => {
-    const students = profile_data?.studentData || [];
-
-    if (students.length === 0) {
-      alert("No student data to export.");
-      return;
-    }
-
-    const formattedData = students.map((student) => ({
-      Name: student?.name,
-      Email: student?.email,
-      Phone: student?.phone,
-      Reviewer: student?.reviewerInfo?.name || "N/A",
-      Batch: student?.batchInfo?.batch_name || "N/A",
-      Reviewer_Status: getReviewerStatus(student?.current_state),
-      Comment: student?.comment || "",
-    }));
-
-    const worksheet = XLSX.utils.json_to_sheet(formattedData);
-    const workbook = XLSX.utils.book_new();
-
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
-
-    XLSX.writeFile(workbook, "student_data.xlsx");
   };
 
   useEffect(() => {
@@ -154,6 +130,49 @@ function AdminStudentsList() {
       })
     );
   }, [dispatch, access_token]);
+
+  const fetchStudentsList = async () => {
+    try {
+      const res = await axios.get(
+        `${base_url}/api/student/list?limit=99999999`,
+        {
+          headers: { Authorization: access_token },
+        }
+      );
+      if (res.data.responseCode === 200) {
+        const formattedData = res.data.responseData?.studentData.map(
+          (student) => ({
+            Name: student?.name,
+            Email: student?.email,
+            Phone: student?.phone,
+            Reviewer: student?.reviewerInfo?.name || "N/A",
+            Batch: student?.batchInfo?.batch_name || "N/A",
+            Reviewer_Status: getReviewerStatus(student?.current_state),
+            Comment: student?.comment || "",
+          })
+        );
+
+        const worksheet = XLSX.utils.json_to_sheet(formattedData);
+        const workbook = XLSX.utils.book_new();
+
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+
+        XLSX.writeFile(workbook, "student_data.xlsx");
+      } else {
+        toast.error(res.data.responseMessage || "Please try again!");
+      }
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  const exportToExcel = () => {
+    if (profile_data.studentData?.length === 0) {
+      alert("No student data to export.");
+      return;
+    }
+    fetchStudentsList();
+  };
 
   const handleRowClick = (student_data) => {
     navigate("/admin/student/profile", { state: { student: student_data } });
@@ -329,14 +348,14 @@ function AdminStudentsList() {
           </div>
         </div>
 
-        <div>
+        {profile_data.studentData?.length > 0 && (
           <Button
             className="py-2 shadow-none hover:shadow-none capitalize font-ddin font-normal text-base border-[#DD4633] border bg-transparent text-[#DD4633] hover:text-white hover:bg-[#DD4633]"
             onClick={exportToExcel}
           >
             Export
           </Button>
-        </div>
+        )}
       </div>
 
       {!loading ? (
@@ -396,17 +415,29 @@ function AdminStudentsList() {
                             </div>
                           </td>
                           <td className={classes}>
-                            <Typography as="div" variant="small">
+                            <Typography
+                              as="div"
+                              variant="small"
+                              className="font-ddin"
+                            >
                               {student.education}
                             </Typography>
                           </td>
                           <td className={classes}>
-                            <Typography as="div" variant="small">
+                            <Typography
+                              as="div"
+                              variant="small"
+                              className="font-ddin"
+                            >
                               {student.phone}
                             </Typography>
                           </td>
                           <td className={classes}>
-                            <Typography as="div" variant="small">
+                            <Typography
+                              as="div"
+                              variant="small"
+                              className="font-ddin"
+                            >
                               {student.year_passed}
                             </Typography>
                           </td>
@@ -481,7 +512,11 @@ function AdminStudentsList() {
                             </Typography>
                           </td>
                           <td className={classes}>
-                            <Typography as="div" variant="small">
+                            <Typography
+                              as="div"
+                              variant="small"
+                              className="font-ddin"
+                            >
                               {student.batch_state === 1
                                 ? "Not Assigned"
                                 : student.batch_state === 2
@@ -490,12 +525,20 @@ function AdminStudentsList() {
                             </Typography>
                           </td>
                           <td className={classes}>
-                            <Typography as="div" variant="small">
+                            <Typography
+                              as="div"
+                              variant="small"
+                              className="font-ddin"
+                            >
                               {student.reviewerInfo?.name || "-"}
                             </Typography>
                           </td>
                           <td className={classes}>
-                            <Typography as="div" variant="small">
+                            <Typography
+                              as="div"
+                              variant="small"
+                              className="font-ddin"
+                            >
                               {student.assignedBy?.name || "-"}
                             </Typography>
                           </td>
