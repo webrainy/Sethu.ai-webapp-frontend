@@ -109,7 +109,7 @@ function AdminManageEvents() {
 
       if (result.responseCode === 200) {
         toast.success("Event added successfully!");
-        console.log("ans",result);
+        // console.log("ans",result);
         
         setModal({ ...modal, add: false });
         dispatch(

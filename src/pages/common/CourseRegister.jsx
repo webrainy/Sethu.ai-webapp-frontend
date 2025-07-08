@@ -205,22 +205,22 @@ function CourseRegister() {
       hobbies,
       linkedin_url,
       github_url,
-      coverletter,
-      resume,
-      attitude,
-      aspiration,
-      laptop,
-      about_us,
+      // coverletter,
+      // resume,
+      // attitude,
+      // aspiration,
+      // laptop,
+      // about_us,
     } = formData;
 
-    if (!hobbies || !linkedin_url) {
+    if (!hobbies) {
       toast.error(
         "Please fill all fields in the Additional Information section."
       );
       return;
     }
 
-    if (!urlRegex.test(linkedin_url)) {
+    if (linkedin_url && !urlRegex.test(linkedin_url)) {
       toast.error("Please enter a valid Linkedin url.");
       return;
     }
@@ -271,10 +271,10 @@ function CourseRegister() {
     form_data.append("sk_engprof", formData.english_proficiency);
     form_data.append("hckr_rnk", formData.hacker_rank);
     form_data.append("hobbies", formData.hobbies);
-    form_data.append("laptop", formData.laptop);
+    form_data.append("has_laptop", formData.laptop);
     form_data.append("attitude", formData.attitude);
     form_data.append("aspiration", formData.aspiration);
-    form_data.append("abt_us", formData.about_us);
+    form_data.append("got_to_know_from", formData.about_us);
     form_data.append("linkedin_url", formData.linkedin_url);
     form_data.append("github_url", formData.github_url);
     form_data.append("resume", formData.resume);
@@ -878,7 +878,7 @@ function CourseRegister() {
                         linkedin_url: e.target.value,
                       }));
                     }}
-                    required
+                    // required
                   />
                 </div>
 
@@ -903,6 +903,7 @@ function CourseRegister() {
                     }}
                   />
                 </div>
+
                 <div className="text-left">
                   <label className="block mb-1 font-medium">Resume</label>
                   <Input
@@ -977,6 +978,7 @@ function CourseRegister() {
                     Only images are allowed.
                   </span>
                 </div>
+
                 <div className="text-left">
                   <Input
                     label="Attitude"
@@ -989,6 +991,7 @@ function CourseRegister() {
                     }}
                   />
                 </div>
+
                 <div className="text-left">
                   <Input
                     label="Aspiration"
@@ -1001,17 +1004,18 @@ function CourseRegister() {
                     }}
                   />
                 </div>
+
                 <div className="text-left">
-                  <label className="block mb-2">
+                  {/* <label className="block mb-2">
                     Can you commit 3 months full-time (8 hours/day) in
                     Hyderabad? <span className="text-red-600">*</span>
-                  </label>
+                  </label> */}
                   <Select
                     name="laptop"
                     label="Has Laptop"
-                    value={formData.commit_ft}
+                    value={formData.laptop}
                     onChange={(value) =>
-                      setFormData((prev) => ({ ...prev, commit_ft: value }))
+                      setFormData((prev) => ({ ...prev, laptop: value }))
                     }
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                     containerProps={{
@@ -1026,16 +1030,17 @@ function CourseRegister() {
                     </Option>
                   </Select>
                 </div>
+
                 <div className="text-left">
                   <label className="block mb-2">
                     How did you know about the program?
                   </label>
                   <Select
-                    name="abt_us"
+                    name="about_us"
                     label="How did you know about the program?"
-                    value={formData.commit_ft}
+                    value={formData.about_us}
                     onChange={(value) =>
-                      setFormData((prev) => ({ ...prev, commit_ft: value }))
+                      setFormData((prev) => ({ ...prev, about_us: value }))
                     }
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                     containerProps={{
@@ -1151,7 +1156,7 @@ function CourseRegister() {
 
                 <div className="text-left">
                   <label className="block text-gray-700 mb-2">
-                    Household Income
+                    Household Income <span className="text-red-600">*</span>
                   </label>
                   <Select
                     name="income"

@@ -68,7 +68,7 @@ function ReviewerStudentList() {
 
     dispatch(
       listReviewerItem({
-        end_point: `/api/account/list_rev?${query.toString()}`,
+        end_point: `/api/account/list_rev`,
         access_token: access_token,
       })
     );

@@ -55,6 +55,11 @@ function StudentProfile() {
     english_proficiency: "",
     problem_Solving: "",
     hckr_rnk: "",
+    iq_level: "",
+    attitude: "",
+    aspiration: "",
+    has_laptop: "",
+    about_us: "",
   });
   const dispatch = useDispatch();
   const access_token = localStorage.getItem("sethu_student_access_token");
@@ -105,6 +110,11 @@ function StudentProfile() {
         sk_prblmsolving: studentProfile.sk_prblmsolving || "",
         sk_engprof: studentProfile.sk_engprof || "",
         hckr_rnk: studentProfile.hckr_rnk || "",
+        iq_level: studentProfile.iq_level || "",
+        attitude: studentProfile.attitude || "",
+        aspiration: studentProfile.aspiration || "",
+        has_laptop: studentProfile.has_laptop || "",
+        about_us: studentProfile.got_to_know_from || "",
       });
     }
   }, [studentProfile]);
@@ -151,6 +161,11 @@ function StudentProfile() {
     form_data.append("income", formData.income);
     form_data.append("coverletter", formData.coverletter);
     form_data.append("resume", formData.resume);
+    form_data.append("iq_level", formData.iq_level);
+    form_data.append("attitude", formData.attitude);
+    form_data.append("aspiration", formData.aspiration);
+    form_data.append("has_laptop", formData.has_laptop);
+    form_data.append("got_to_know_from", formData.about_us);
 
     const result = await dispatch(
       updateStudentData({
@@ -364,6 +379,16 @@ function StudentProfile() {
                     </div>
                   </div>
                   <Input
+                    label="IQ Level"
+                    name="iq_level"
+                    value={formData.iq_level}
+                    onChange={(e) =>
+                      handleInputChange(e.target.value, "iq_level")
+                    }
+                    style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                    containerProps={{ className: "font-ddin" }}
+                  />
+                  <Input
                     label="College Name"
                     type="text"
                     name="college"
@@ -452,10 +477,10 @@ function StudentProfile() {
                 </div>
 
                 <div>
-                  {/* Preferences */}
+                  {/* References */}
                   <div className="shadow-md bg-white p-4 rounded-xl flex flex-col gap-3 h-fit">
                     <p className="font-ddin font-semibold text-lg">
-                      Preferences
+                      References
                     </p>
                     <Input
                       label="Are you preparing for any course?"
@@ -562,19 +587,21 @@ function StudentProfile() {
                       <p className="text-center font-ddin font-semibold">
                         Resume
                       </p>
-                      <Typography
-                        value={formData.resume}
-                        className="capitalize font-ddin font-normal text-base text-[#DD4633] cursor-pointer"
-                        onClick={() => {
-                          if (formData.resume) {
-                            window.open(base_url + formData.resume, "_blank");
-                          } else {
-                            alert("No resume available");
-                          }
-                        }}
-                      >
-                        View
-                      </Typography>
+                      {formData.resume && (
+                        <Typography
+                          value={formData.resume}
+                          className="capitalize font-ddin font-normal text-base text-[#DD4633] cursor-pointer"
+                          onClick={() => {
+                            if (formData.resume) {
+                              window.open(base_url + formData.resume, "_blank");
+                            } else {
+                              alert("No resume available");
+                            }
+                          }}
+                        >
+                          View
+                        </Typography>
+                      )}
                     </div>
                     <div className="text-left">
                       <Input
@@ -607,22 +634,24 @@ function StudentProfile() {
                       <p className="text-center font-ddin font-semibold">
                         Cover Letter
                       </p>
-                      <Typography
-                        value={formData.coverletter}
-                        className="capitalize font-ddin font-normal text-base text-[#DD4633] cursor-pointer"
-                        onClick={() => {
-                          if (formData.coverletter) {
-                            window.open(
-                              base_url + formData.coverletter,
-                              "_blank"
-                            );
-                          } else {
-                            alert("No cover letter available");
-                          }
-                        }}
-                      >
-                        View
-                      </Typography>
+                      {formData.coverletter && (
+                        <Typography
+                          value={formData.coverletter}
+                          className="capitalize font-ddin font-normal text-base text-[#DD4633] cursor-pointer"
+                          onClick={() => {
+                            if (formData.coverletter) {
+                              window.open(
+                                base_url + formData.coverletter,
+                                "_blank"
+                              );
+                            } else {
+                              alert("No cover letter available");
+                            }
+                          }}
+                        >
+                          View
+                        </Typography>
+                      )}
                     </div>
                     <div className="text-left">
                       <Input
@@ -650,6 +679,81 @@ function StudentProfile() {
                       <span className="font-ddin text-xs text-red-500">
                         Only PDF files are allowed.
                       </span>
+                    </div>
+
+                    <Input
+                      label="Attitude"
+                      name="attitude"
+                      value={formData.attitude}
+                      onChange={(e) =>
+                        handleInputChange(e.target.value, "attitude")
+                      }
+                      style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                      containerProps={{ className: "font-ddin" }}
+                    />
+                    <Input
+                      label="Aspiration"
+                      name="aspiration"
+                      value={formData.aspiration}
+                      onChange={(e) =>
+                        handleInputChange(e.target.value, "aspiration")
+                      }
+                      style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                      containerProps={{ className: "font-ddin" }}
+                    />
+
+                    <Select
+                      name="has_laptop"
+                      label="Has Laptop"
+                      value={formData.has_laptop}
+                      onChange={(value) =>
+                        setFormData((prev) => ({ ...prev, has_laptop: value }))
+                      }
+                      style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                      containerProps={{
+                        className: "font-ddin",
+                      }}
+                    >
+                      <Option value="Yes" className="font-ddin">
+                        Yes
+                      </Option>
+                      <Option value="No" className="font-ddin">
+                        No
+                      </Option>
+                    </Select>
+
+                    <div className="text-left">
+                      <label className="block text-gray-700 mt-2 mb-[5px] font-ddin capitalize">
+                        How did you know about the program?
+                        <span className="text-red-600">*</span>
+                      </label>
+                      <Select
+                        label="How did you know about the program?"
+                        value={formData.about_us || ""}
+                        onChange={(value) =>
+                          handleInputChange(value, "about_us")
+                        }
+                        className="font-ddin"
+                      >
+                        <Option value="WhatsApp" className="font-ddin">
+                          WhatsApp
+                        </Option>
+                        <Option value="Social Media" className="font-ddin">
+                          Social Media
+                        </Option>
+                        <Option value="Paper Ad" className="font-ddin">
+                          Paper Ad
+                        </Option>
+                        <Option value="college" className="font-ddin">
+                          College
+                        </Option>
+                        <Option value="friends" className="font-ddin">
+                          Friends
+                        </Option>
+                        <Option value="email" className="font-ddin">
+                          Email
+                        </Option>
+                      </Select>
                     </div>
                   </div>
                 </div>

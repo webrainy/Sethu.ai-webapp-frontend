@@ -67,6 +67,11 @@ function ReviewerStudentProfile() {
     sk_analyticalskill: location.student.sk_analyticalskill || "",
     sk_prblmsolving: location.student.sk_prblmsolving || "",
     sk_engprof: location.student.cgpa || "",
+    iq_level: location.student.iq_level || "",
+    attitude: location.student.attitude || "",
+    aspiration: location.student.aspiration || "",
+    has_laptop: location.student.has_laptop || "",
+    about_us: location.student.got_to_know_from || "",
     reviewer: "",
     date_exam: "",
     exam_marks: "",
@@ -122,6 +127,12 @@ function ReviewerStudentProfile() {
           location?.student?.interviewInfo?.[0]?.int_result || "0",
         batch_assigned: location?.student?.batch_state || "",
         dnc_state: location?.student?.dnc_state || "",
+
+        iq_level: location.student.iq_level || "",
+        attitude: location.student.attitude || "",
+        aspiration: location.student.aspiration || "",
+        has_laptop: location.student.has_laptop || "",
+        about_us: location.student.got_to_know_from || "",
       }));
     }
   }, [dispatch, location]);
@@ -171,6 +182,11 @@ function ReviewerStudentProfile() {
     profileData.append("review_status", formData.review_status);
     profileData.append("reviewer", formData.reviewer);
     profileData.append("comment", formData.comment);
+    profileData.append("iq_level", formData.iq_level);
+    profileData.append("attitude", formData.attitude);
+    profileData.append("aspiration", formData.aspiration);
+    profileData.append("has_laptop", formData.has_laptop);
+    profileData.append("got_to_know_from", formData.about_us);
 
     // 2. State fields (to /api/student/update)
     stateData.append("current_state", formData.review_status);
@@ -380,6 +396,16 @@ function ReviewerStudentProfile() {
               </div>
             </div>
             <Input
+              label="IQ Level"
+              // type="text"
+              name="iq_level"
+              value={formData.iq_level}
+              onChange={(e) => handleInputChange(e.target.value, "iq_level")}
+              style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+              containerProps={{ className: "font-ddin" }}
+              // required
+            />
+            <Input
               label="College Name"
               type="text"
               name="college"
@@ -424,9 +450,9 @@ function ReviewerStudentProfile() {
             />
           </div>
 
-          {/* Preferences */}
+          {/* References */}
           <div className="shadow-md bg-white p-4 rounded-xl flex flex-col gap-3 h-fit">
-            <p className="font-ddin font-semibold text-lg">Preferences</p>
+            <p className="font-ddin font-semibold text-lg">References</p>
             <Input
               label="Are you preparing for any course?"
               name="course_prep"
@@ -468,7 +494,7 @@ function ReviewerStudentProfile() {
             </div>
 
             {/* Additional Information */}
-            <div className="shadow-md bg-white p-4 rounded-xl flex flex-col gap-3 h-fit mt-4">
+            <div className="flex flex-col gap-3 h-fit mt-4">
               <p className="font-ddin font-semibold text-lg">
                 Additional Information
               </p>
@@ -513,17 +539,19 @@ function ReviewerStudentProfile() {
               />
 
               <div className="flex justify-between items-center">
-                <div className="flex flex-col gap-1">
-                  <p className="text-center font-ddin">Resume</p>
-                  <Button
-                    onClick={() =>
-                      window.open(base_url + location?.student?.resume)
-                    }
-                    className="shadow-none py-2 hover:shadow-none capitalize font-ddin font-normal text-base border-[#DD4633] border bg-transparent text-[#DD4633] hover:text-white hover:bg-[#DD4633]"
-                  >
-                    Download
-                  </Button>
-                </div>
+                {location?.student?.resume && (
+                  <div className="flex flex-col gap-1">
+                    <p className="text-center font-ddin">Resume</p>
+                    <Button
+                      onClick={() =>
+                        window.open(base_url + location?.student?.resume)
+                      }
+                      className="shadow-none py-2 hover:shadow-none capitalize font-ddin font-normal text-base border-[#DD4633] border bg-transparent text-[#DD4633] hover:text-white hover:bg-[#DD4633]"
+                    >
+                      Download
+                    </Button>
+                  </div>
+                )}
                 {location?.student?.profile && (
                   <div className="flex flex-col gap-1">
                     <p className="text-center font-ddin">Photo</p>
@@ -537,6 +565,77 @@ function ReviewerStudentProfile() {
                     </Button>
                   </div>
                 )}
+              </div>
+
+              <Input
+                label="Attitude"
+                name="attitude"
+                value={formData.attitude}
+                onChange={(e) => handleInputChange(e.target.value, "attitude")}
+                style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                containerProps={{ className: "font-ddin" }}
+              />
+              <Input
+                label="Aspiration"
+                name="aspiration"
+                value={formData.aspiration}
+                onChange={(e) =>
+                  handleInputChange(e.target.value, "aspiration")
+                }
+                style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                containerProps={{ className: "font-ddin" }}
+              />
+
+              <Select
+                name="has_laptop"
+                label="Has Laptop"
+                value={formData.has_laptop}
+                onChange={(value) =>
+                  setFormData((prev) => ({ ...prev, has_laptop: value }))
+                }
+                style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                containerProps={{
+                  className: "font-ddin",
+                }}
+              >
+                <Option value="Yes" className="font-ddin">
+                  Yes
+                </Option>
+                <Option value="No" className="font-ddin">
+                  No
+                </Option>
+              </Select>
+
+              <div className="text-left">
+                <label className="block text-gray-700 mt-2 mb-[5px] font-ddin capitalize">
+                  How did you know about the program?
+                  <span className="text-red-600">*</span>
+                </label>
+                <Select
+                  label="How did you know about the program?"
+                  value={formData.about_us || ""}
+                  onChange={(value) => handleInputChange(value, "about_us")}
+                  className="font-ddin"
+                >
+                  <Option value="WhatsApp" className="font-ddin">
+                    WhatsApp
+                  </Option>
+                  <Option value="Social Media" className="font-ddin">
+                    Social Media
+                  </Option>
+                  <Option value="Paper Ad" className="font-ddin">
+                    Paper Ad
+                  </Option>
+                  <Option value="college" className="font-ddin">
+                    College
+                  </Option>
+                  <Option value="friends" className="font-ddin">
+                    Friends
+                  </Option>
+                  <Option value="email" className="font-ddin">
+                    Email
+                  </Option>
+                </Select>
               </div>
             </div>
           </div>
