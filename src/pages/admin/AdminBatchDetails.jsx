@@ -12,7 +12,7 @@ import { ADMIN_BATCH_STUDENTLIST_TABLE_HEAD } from "../../utils/constants";
 import AssignAssignementModal from "../../components/modal/student/AssignAssignementModal";
 import { BottomSheet } from "react-spring-bottom-sheet";
 import "react-spring-bottom-sheet/dist/style.css";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBatchSelectedItems } from "../../redux/batchSlice";
 import { postAssignmentToStudent } from "../../redux/assignmentSlice";
@@ -30,6 +30,8 @@ function AdminBatchDetails() {
     batch_details: false,
   });
   const [active, setActive] = useState(1);
+  const [studentsPage, setStudentsPage] = useState(1);
+  const studentsLimit = 10;
   const [data, setData] = useState({
     assgn_name: "",
     assgn_desc: "",
@@ -38,6 +40,7 @@ function AdminBatchDetails() {
   });
   const [batchData, setBatchData] = useState({});
   const location = useLocation().state;
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading, selectedItems } = useSelector((state) => state.batch);
   const { profile_data } = useSelector((state) => state.student);
@@ -49,13 +52,12 @@ function AdminBatchDetails() {
       fetchBatchSelectedItems({
         end_point: `/api/batch/list?batch_id=${location.item?.batch_id}`,
         access_token: access_token,
-      })
+      }),
     );
-
+    setStudentsPage(1);
     setBatchData(location.item);
   }, [dispatch, location, access_token]);
 
-  // Fetch student data when `active` or `selectedItems` changes
   useEffect(() => {
     if (
       modal.particular_statudents_bottom_sheet &&
@@ -67,7 +69,7 @@ function AdminBatchDetails() {
             selectedItems[0]?.batch_id
           }`,
           access_token: access_token,
-        })
+        }),
       );
     }
   }, [
@@ -80,7 +82,7 @@ function AdminBatchDetails() {
 
   const handleAssignmentForAll = () => {
     const allStudentIds = selectedItems[0]?.students?.map(
-      (student) => student.student_id
+      (student) => student.student_id,
     );
     setModal({ ...modal, all_students: true });
     setData({
@@ -99,9 +101,8 @@ function AdminBatchDetails() {
           selectedItems[0]?.batch_id
         }`,
         access_token: access_token,
-      })
+      }),
     );
-
     setModal({ ...modal, particular_statudents_bottom_sheet: true });
     setData({
       ...data,
@@ -120,14 +121,13 @@ function AdminBatchDetails() {
     setData((prevData) => ({
       ...prevData,
       student_list: isChecked
-        ? [...prevData.student_list, student_id] // Add student ID
-        : prevData.student_list.filter((id) => id !== student_id), // Remove student ID
+        ? [...prevData.student_list, student_id]
+        : prevData.student_list.filter((id) => id !== student_id),
     }));
   };
 
   const handleStudentSearchChange = async (e) => {
     const searchQuery = e.target.value.toLowerCase();
-
     if (searchQuery?.length > 0) {
       dispatch(
         fetchStudentProfile({
@@ -135,7 +135,7 @@ function AdminBatchDetails() {
             selectedItems[0]?.batch_id
           }`,
           access_token: access_token,
-        })
+        }),
       ).unwrap();
     } else {
       dispatch(
@@ -144,31 +144,21 @@ function AdminBatchDetails() {
             selectedItems[0]?.batch_id
           }`,
           access_token: access_token,
-        })
+        }),
       );
     }
   };
 
-  // Function to export data to CSV
   const exportToCsv = (data, filename) => {
-    // Create CSV content
     const csvContent =
       "data:text/csv;charset=utf-8," +
       data.map((item) => item.email).join("\n");
-
-    // Encode URI
     const encodedUri = encodeURI(csvContent);
-
-    // Create a temporary link element
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
     link.setAttribute("download", filename);
     document.body.appendChild(link);
-
-    // Trigger the download
     link.click();
-
-    // Clean up
     document.body.removeChild(link);
   };
 
@@ -178,9 +168,7 @@ function AdminBatchDetails() {
 
   const handleParticularStudentSubmit = async (e) => {
     e.preventDefault();
-
     const urlencoded = new URLSearchParams();
-
     urlencoded.append("title", data.assgn_name);
     urlencoded.append("description", data.assgn_desc);
     urlencoded.append("url", data.assgn_url);
@@ -189,36 +177,26 @@ function AdminBatchDetails() {
     for (let i = 0; i < data?.student_list?.length; i++) {
       urlencoded.append("student_id", data?.student_list[i]);
     }
-
     const result = await dispatch(
       postAssignmentToStudent({
         end_point: "/api/assign/create",
         access_token: access_token,
         assgn_data: urlencoded,
-      })
+      }),
     ).unwrap();
-
     if (result.responseCode === 200) {
       toast.success("Assignment assigned.");
       setModal({ ...modal, particular_student_modal: false });
-      // dispatch(
-      //   fetchBatchItems({
-      //     end_point: "/api/batch/list",
-      //     access_token: access_token,
-      //   })
-      // ).unwrap();
     } else {
       toast.error(
-        result.responseMessage || "Connection failed. Please try again."
+        result.responseMessage || "Connection failed. Please try again.",
       );
     }
   };
 
   const handleAllStudentSubmit = async (e) => {
     e.preventDefault();
-
     const urlencoded = new URLSearchParams();
-
     urlencoded.append("title", data.assgn_name);
     urlencoded.append("description", data.assgn_desc);
     urlencoded.append("url", data.assgn_url);
@@ -227,27 +205,19 @@ function AdminBatchDetails() {
     for (let i = 0; i < data?.student_list?.length; i++) {
       urlencoded.append("student_id", data?.student_list[i]);
     }
-
     const result = await dispatch(
       postAssignmentToStudent({
         end_point: "/api/assign/create",
         access_token: access_token,
         assgn_data: urlencoded,
-      })
+      }),
     ).unwrap();
-
     if (result.responseCode === 200) {
       toast.success("Assignment assigned.");
       setModal({ ...modal, all_students: false });
-      // dispatch(
-      //   fetchBatchItems({
-      //     end_point: "/api/batch/list",
-      //     access_token: access_token,
-      //   })
-      // ).unwrap();
     } else {
       toast.error(
-        result.responseMessage || "Connection failed. Please try again."
+        result.responseMessage || "Connection failed. Please try again.",
       );
     }
   };
@@ -265,6 +235,13 @@ function AdminBatchDetails() {
   const handleViewDetails = () => {
     setModal({ ...modal, batch_details: true });
   };
+
+  const allStudents = selectedItems[0]?.students || [];
+  const totalStudentPages = Math.ceil(allStudents.length / studentsLimit);
+  const paginatedStudents = allStudents.slice(
+    (studentsPage - 1) * studentsLimit,
+    studentsPage * studentsLimit,
+  );
 
   return (
     <>
@@ -290,7 +267,7 @@ function AdminBatchDetails() {
               </div>
 
               {selectedItems[0]?.students?.length > 0 && (
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 flex-wrap">
                   <Button
                     onClick={handleAssignmentForParticularStudent}
                     className="normal-case shadow-none hover:shadow-none font-ddin text-sm font-medium py-2 px-5"
@@ -302,6 +279,47 @@ function AdminBatchDetails() {
                     className="normal-case shadow-none hover:shadow-none font-ddin text-sm font-medium py-2 px-5"
                   >
                     Assgn. for All
+                  </Button>
+
+                  {/* ✅ Missed Homework Report Button */}
+                  <Button
+                    onClick={() =>
+                      navigate("/admin/missed-homework-report", {
+                        state: {
+                          batch_id: selectedItems[0]?.batch_id,
+                          batchName: selectedItems[0]?.name,
+                        },
+                      })
+                    }
+                    className="normal-case shadow-none hover:shadow-none font-ddin text-sm font-medium py-2 px-5 bg-[#DD4633]"
+                  >
+                    Missed Homework Report
+                  </Button>
+                  <Button
+                    onClick={() =>
+                      navigate("/admin/batch/exams", {
+                        state: {
+                          batch_id: selectedItems[0]?.batch_id,
+                          batchName: selectedItems[0]?.name,
+                        },
+                      })
+                    }
+                    className="normal-case shadow-none hover:shadow-none font-ddin text-sm font-medium py-2 px-5 bg-[#1d4ed8]"
+                  >
+                    Manage Exams
+                  </Button>
+                  <Button
+                    onClick={() =>
+                      navigate("/admin/batch/feedback", {
+                        state: {
+                          batch_id: selectedItems[0]?.batch_id,
+                          batchName: selectedItems[0]?.name,
+                        },
+                      })
+                    }
+                    className="normal-case shadow-none hover:shadow-none font-ddin text-sm font-medium py-2 px-5 bg-[#16a34a]"
+                  >
+                    Manage Feedback
                   </Button>
                 </div>
               )}
@@ -320,6 +338,7 @@ function AdminBatchDetails() {
                 </Button>
               )}
             </div>
+
             <div>
               <p className="font-ddin">
                 Total Class conducted:{" "}
@@ -348,7 +367,7 @@ function AdminBatchDetails() {
                     <thead>
                       <tr>
                         {ADMIN_BATCH_STUDENTLIST_TABLE_HEAD.map((head) => (
-                          <th key={head} className=" bg-[#e9e6e6] p-4">
+                          <th key={head} className="bg-[#e9e6e6] p-4">
                             <Typography
                               variant="small"
                               color="blue-gray"
@@ -361,9 +380,8 @@ function AdminBatchDetails() {
                       </tr>
                     </thead>
                     <tbody>
-                      {selectedItems[0]?.students?.map((student, index) => {
-                        const isLast =
-                          index === selectedItems[0]?.students?.length - 1;
+                      {paginatedStudents.map((student, index) => {
+                        const isLast = index === paginatedStudents.length - 1;
                         const classes = isLast
                           ? "p-4 font-ddin"
                           : "p-4 border-b border-blue-gray-50 font-ddin";
@@ -371,10 +389,7 @@ function AdminBatchDetails() {
                         return (
                           <tr key={index} className="hover:bg-[#f0eeee]">
                             <td className={classes}>
-                              <div
-                                className="flex items-center gap-3 cursor-pointer"
-                                //   onClick={() => handleRowClick(rowData)}
-                              >
+                              <div className="flex items-center gap-3 cursor-pointer">
                                 <div>
                                   <Typography
                                     variant="small"
@@ -482,6 +497,39 @@ function AdminBatchDetails() {
                     </tbody>
                   </table>
                 </CardBody>
+
+                {totalStudentPages > 1 && (
+                  <div className="flex items-center gap-6 justify-center py-4 border-t border-blue-gray-50">
+                    <IconButton
+                      size="sm"
+                      variant="outlined"
+                      onClick={() => setStudentsPage((p) => Math.max(p - 1, 1))}
+                      disabled={studentsPage === 1}
+                    >
+                      <HiArrowLeft className="h-4 w-4" />
+                    </IconButton>
+                    <Typography color="gray" className="font-myriad font-light">
+                      Page{" "}
+                      <strong className="text-gray-900">{studentsPage}</strong>{" "}
+                      of{" "}
+                      <strong className="text-gray-900">
+                        {totalStudentPages}
+                      </strong>
+                    </Typography>
+                    <IconButton
+                      size="sm"
+                      variant="outlined"
+                      onClick={() =>
+                        setStudentsPage((p) =>
+                          Math.min(p + 1, totalStudentPages),
+                        )
+                      }
+                      disabled={studentsPage === totalStudentPages}
+                    >
+                      <HiArrowRight className="h-4 w-4" />
+                    </IconButton>
+                  </div>
+                )}
               </Card>
             ) : (
               <div className="h-[50vh] flex justify-center items-center flex-col">
@@ -521,7 +569,6 @@ function AdminBatchDetails() {
         modal={modal}
       />
 
-      {/* bottom sheet for particular student */}
       <BottomSheet
         open={modal.particular_statudents_bottom_sheet}
         className="z-[9999999] relative"
@@ -552,9 +599,7 @@ function AdminBatchDetails() {
                 label="Type Alt+S to search"
                 className="w-60"
                 style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                containerProps={{
-                  className: "font-ddin",
-                }}
+                containerProps={{ className: "font-ddin" }}
                 onChange={(e) => handleStudentSearchChange(e)}
               />
             </div>
@@ -577,10 +622,9 @@ function AdminBatchDetails() {
                       onChange={(e) =>
                         handleCheckParticularStudentChange(
                           student.student_id,
-                          e.target.checked
+                          e.target.checked,
                         )
                       }
-                      // required
                     />
                   </div>
                 ))}

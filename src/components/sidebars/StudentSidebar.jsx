@@ -12,6 +12,7 @@ import { MdNotifications } from "react-icons/md";
 import { SiGoogleclassroom, SiGooglemeet } from "react-icons/si";
 import { CgProfile } from "react-icons/cg";
 import { LuLogOut } from "react-icons/lu";
+import { PiExamFill } from "react-icons/pi";
 
 function StudentSidebar({
   collapsed,
@@ -42,6 +43,11 @@ function StudentSidebar({
       title: "Events",
       icon: <SiGoogleclassroom />,
       link: "/student/events",
+    },
+    {
+      title: "Exams",
+      icon: <PiExamFill />,
+      link: "/student/exams",
     },
     // {
     //   title: "Interviews",

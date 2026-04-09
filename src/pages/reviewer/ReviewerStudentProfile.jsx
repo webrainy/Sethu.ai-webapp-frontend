@@ -16,6 +16,7 @@ import {
   base_url,
   BATCH_STATUS,
   EXAM_INTERVIEW_STATUS,
+  GOT_TO_KNOW_FROM,
   REVIEW_STATUS,
 } from "../../utils/constants";
 import toast from "react-hot-toast";
@@ -58,28 +59,35 @@ function ReviewerStudentProfile() {
     mother_occ: location.student.mother_occ || "",
     income: location.student.income || "",
 
-    review_status: location.student.review_status || "",
-    select_batch: location.student.select_batch || "",
+    review_status: String(location.student?.current_state || "0"),
+    select_batch: String(location.student?.batchInfo?.batch_id || ""),
     comment: location.student.comment || "",
     sk_python: location.student.sk_python || "",
     sk_sql: location.student.sk_sql || "",
     sk_java: location.student.sk_java || "",
     sk_analyticalskill: location.student.sk_analyticalskill || "",
     sk_prblmsolving: location.student.sk_prblmsolving || "",
-    sk_engprof: location.student.cgpa || "",
+    sk_engprof: location.student.sk_engprof || "",
     iq_level: location.student.iq_level || "",
     attitude: location.student.attitude || "",
     aspiration: location.student.aspiration || "",
     has_laptop: location.student.has_laptop || "",
-    about_us: location.student.got_to_know_from || "",
+    got_to_know_from: location.student.got_to_know_from || "",
+    referedby: location.student.referedby || "",
     reviewer: "",
-    date_exam: "",
-    exam_marks: "",
-    exam_result: "",
-    date_interview: "",
-    interview_result: "",
-    batch_assigned: "",
-    dnc_state: "",
+    date_exam: location.student?.examInfo?.[0]?.exam_datetime
+      ? location.student.examInfo[0].exam_datetime.substring(0, 10)
+      : "",
+    exam_marks: location.student?.examInfo?.[0]?.exam_marks || "",
+    exam_result: String(location.student?.examInfo?.[0]?.exam_result || "0"),
+    date_interview: location.student?.interviewInfo?.[0]?.int_datetime
+      ? location.student.interviewInfo[0].int_datetime.substring(0, 10)
+      : "",
+    interview_result: String(
+      location.student?.interviewInfo?.[0]?.int_result || "0",
+    ),
+    batch_assigned: String(location.student?.batch_state || ""),
+    dnc_state: location.student?.dnc_state || "",
   });
 
   useEffect(() => {
@@ -87,55 +95,16 @@ function ReviewerStudentProfile() {
       fetchBatchItems({
         end_point: "/api/batch/list",
         access_token: access_token,
-      })
+      }),
     ).unwrap();
 
     dispatch(
       listReviewerItem({
         end_point: `/api/account/list_rev`,
-        // end_point: `/api/account/list_admin`,
         access_token: access_token,
-      })
+      }),
     ).unwrap();
-
-    if (location?.student) {
-      setFormData((prev) => ({
-        ...prev,
-        review_status: location?.student?.current_state || "0",
-        select_batch: location?.student?.batchInfo?.batch_id || "",
-        comment: location?.student?.comment || "",
-        sk_python: location?.student?.sk_python || "",
-        sk_sql: location?.student?.sk_sql || "",
-        sk_java: location?.student?.sk_java || "",
-        sk_analyticalskill: location?.student?.sk_analyticalskill || "",
-        sk_prblmsolving: location?.student?.sk_prblmsolving || "",
-        sk_engprof: location?.student?.sk_engprof || "",
-        reviewer: location?.student?.reviewerInfo?.account_id || "",
-
-        date_exam: location?.student?.examInfo?.[0]?.exam_datetime
-          ? location.student.examInfo[0].exam_datetime.substring(0, 10)
-          : "",
-
-        exam_marks: location?.student?.examInfo?.[0]?.exam_marks || "",
-        exam_result: location?.student?.examInfo?.[0]?.exam_result || "0",
-
-        date_interview: location?.student?.interviewInfo?.[0]?.int_datetime
-          ? location.student.interviewInfo[0].int_datetime.substring(0, 10)
-          : "",
-
-        interview_result:
-          location?.student?.interviewInfo?.[0]?.int_result || "0",
-        batch_assigned: location?.student?.batch_state || "",
-        dnc_state: location?.student?.dnc_state || "",
-
-        iq_level: location.student.iq_level || "",
-        attitude: location.student.attitude || "",
-        aspiration: location.student.aspiration || "",
-        has_laptop: location.student.has_laptop || "",
-        about_us: location.student.got_to_know_from || "",
-      }));
-    }
-  }, [dispatch, location]);
+  }, [dispatch]);
 
   const handleInputChange = (value, name) => {
     setFormData((prev) => ({
@@ -150,7 +119,6 @@ function ReviewerStudentProfile() {
     const profileData = new URLSearchParams();
     const stateData = new URLSearchParams();
 
-    // 1. Profile fields (to /api/student/edit)
     profileData.append("name", formData.name);
     profileData.append("gender", formData.gender);
     profileData.append("dob", formData.dob);
@@ -186,9 +154,11 @@ function ReviewerStudentProfile() {
     profileData.append("attitude", formData.attitude);
     profileData.append("aspiration", formData.aspiration);
     profileData.append("has_laptop", formData.has_laptop);
-    profileData.append("got_to_know_from", formData.about_us);
+    profileData.append("got_to_know_from", formData.got_to_know_from);
+    if (formData.got_to_know_from === "Referral") {
+      profileData.append("referedby", formData.referedby);
+    }
 
-    // 2. State fields (to /api/student/update)
     stateData.append("current_state", formData.review_status);
     stateData.append("batch_state", formData.batch_assigned);
     if (formData.batch_assigned == 2) {
@@ -208,28 +178,26 @@ function ReviewerStudentProfile() {
     stateData.append("int_result", formData.interview_result);
 
     try {
-      // 1. First: Update profile info
       const profileResult = await dispatch(
         updateStudentData({
           end_point: `/api/student/edit?student_id=${location?.student?.student_id}`,
           access_token: access_token,
           student_data: profileData,
-        })
+        }),
       ).unwrap();
 
       if (profileResult.responseCode !== 200) {
         throw new Error(
-          profileResult.responseMessage || "Profile update failed"
+          profileResult.responseMessage || "Profile update failed",
         );
       }
 
-      // 2. Then: Update state info
       const stateResult = await dispatch(
         updateStudentData({
           end_point: `/api/student/update?student_id=${location?.student?.student_id}`,
           access_token: access_token,
           student_data: stateData,
-        })
+        }),
       ).unwrap();
 
       if (stateResult.responseCode === 200) {
@@ -266,9 +234,9 @@ function ReviewerStudentProfile() {
         <div className="mt-5 grid lg:grid-cols-2 gap-4">
           {/* personal information */}
           <div className="shadow-md bg-white p-4 rounded-xl flex flex-col gap-3 h-fit">
-            <div className="font-ddin font-semibold text-lg">
+            <p className="font-ddin font-semibold text-lg mb-1">
               Personal Information
-            </div>
+            </p>
             <Input
               label="Name"
               type="text"
@@ -279,7 +247,6 @@ function ReviewerStudentProfile() {
               containerProps={{ className: "font-ddin" }}
               required
             />
-
             <div className="font-ddin">
               <p>Gender</p>
               <div className="flex flex-row gap-3 font-ddin">
@@ -306,7 +273,6 @@ function ReviewerStudentProfile() {
                 />
               </div>
             </div>
-
             <Input
               label="Date of Birth"
               type="date"
@@ -317,7 +283,6 @@ function ReviewerStudentProfile() {
               containerProps={{ className: "font-ddin" }}
               required
             />
-
             <Input
               label="Email"
               type="email"
@@ -328,7 +293,6 @@ function ReviewerStudentProfile() {
               containerProps={{ className: "font-ddin" }}
               required
             />
-
             <Input
               label="Phone"
               type="tel"
@@ -340,7 +304,6 @@ function ReviewerStudentProfile() {
               containerProps={{ className: "font-ddin" }}
               required
             />
-
             <Input
               label="City"
               type="text"
@@ -351,7 +314,6 @@ function ReviewerStudentProfile() {
               containerProps={{ className: "font-ddin" }}
               required
             />
-
             <Input
               label="District"
               type="text"
@@ -366,9 +328,9 @@ function ReviewerStudentProfile() {
 
           {/* Education Details */}
           <div className="shadow-md bg-white p-4 rounded-xl flex flex-col gap-3 h-fit">
-            <div className="font-ddin font-semibold text-lg mb-1">
+            <p className="font-ddin font-semibold text-lg mb-1">
               Education Details
-            </div>
+            </p>
             <div className="font-ddin">
               <p>Highest Education Completed</p>
               <div className="flex flex-row gap-3">
@@ -397,13 +359,11 @@ function ReviewerStudentProfile() {
             </div>
             <Input
               label="IQ Level"
-              // type="text"
               name="iq_level"
               value={formData.iq_level}
               onChange={(e) => handleInputChange(e.target.value, "iq_level")}
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
               containerProps={{ className: "font-ddin" }}
-              // required
             />
             <Input
               label="College Name"
@@ -415,7 +375,6 @@ function ReviewerStudentProfile() {
               containerProps={{ className: "font-ddin" }}
               required
             />
-
             <Input
               label="CGPA"
               type="number"
@@ -437,7 +396,6 @@ function ReviewerStudentProfile() {
               containerProps={{ className: "font-ddin" }}
               required
             />
-
             <Input
               label="GMAT Score"
               type="text"
@@ -459,9 +417,7 @@ function ReviewerStudentProfile() {
               value={formData.course_prep || ""}
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
               onChange={(e) => handleInputChange(e.target.value, "course_prep")}
-              containerProps={{
-                className: "font-ddin",
-              }}
+              containerProps={{ className: "font-ddin" }}
               required
             />
             <Input
@@ -470,9 +426,7 @@ function ReviewerStudentProfile() {
               value={formData.curnt_work || ""}
               onChange={(e) => handleInputChange(e.target.value, "curnt_work")}
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              containerProps={{
-                className: "font-ddin",
-              }}
+              containerProps={{ className: "font-ddin" }}
               required
             />
             <div className="text-left">
@@ -487,9 +441,7 @@ function ReviewerStudentProfile() {
                 value={formData.commit_ft || ""}
                 onChange={(e) => handleInputChange(e.target.value, "commit_ft")}
                 style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                containerProps={{
-                  className: "font-ddin",
-                }}
+                containerProps={{ className: "font-ddin" }}
               />
             </div>
 
@@ -505,9 +457,7 @@ function ReviewerStudentProfile() {
                 value={formData.hobbies || ""}
                 onChange={(e) => handleInputChange(e.target.value, "hobbies")}
                 style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                containerProps={{
-                  className: "font-ddin",
-                }}
+                containerProps={{ className: "font-ddin" }}
                 required
               />
               <Input
@@ -515,23 +465,18 @@ function ReviewerStudentProfile() {
                 label="LinkedIn profile URL"
                 name="linkedin_url"
                 style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                containerProps={{
-                  className: "font-ddin",
-                }}
+                containerProps={{ className: "font-ddin" }}
                 value={formData.linkedin_url || ""}
                 onChange={(e) =>
                   handleInputChange(e.target.value, "linkedin_url")
                 }
-                required
               />
               <Input
                 type="url"
                 label="Enter your GitHub or other source code URL"
                 name="github_url"
                 style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                containerProps={{
-                  className: "font-ddin",
-                }}
+                containerProps={{ className: "font-ddin" }}
                 value={formData.github_url || ""}
                 onChange={(e) =>
                   handleInputChange(e.target.value, "github_url")
@@ -594,9 +539,7 @@ function ReviewerStudentProfile() {
                   setFormData((prev) => ({ ...prev, has_laptop: value }))
                 }
                 style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                containerProps={{
-                  className: "font-ddin",
-                }}
+                containerProps={{ className: "font-ddin" }}
               >
                 <Option value="Yes" className="font-ddin">
                   Yes
@@ -613,30 +556,38 @@ function ReviewerStudentProfile() {
                 </label>
                 <Select
                   label="How did you know about the program?"
-                  value={formData.about_us || ""}
-                  onChange={(value) => handleInputChange(value, "about_us")}
-                  className="font-ddin"
+                  value={formData.got_to_know_from}
+                  onChange={(value) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      got_to_know_from: value,
+                      referedby: value !== "Referral" ? "" : prev.referedby,
+                    }))
+                  }
+                  style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                  containerProps={{ className: "font-ddin" }}
                 >
-                  <Option value="WhatsApp" className="font-ddin">
-                    WhatsApp
-                  </Option>
-                  <Option value="Social Media" className="font-ddin">
-                    Social Media
-                  </Option>
-                  <Option value="Paper Ad" className="font-ddin">
-                    Paper Ad
-                  </Option>
-                  <Option value="college" className="font-ddin">
-                    College
-                  </Option>
-                  <Option value="friends" className="font-ddin">
-                    Friends
-                  </Option>
-                  <Option value="email" className="font-ddin">
-                    Email
-                  </Option>
+                  {GOT_TO_KNOW_FROM.map(({ label, value }) => (
+                    <Option key={value} value={value} className="font-ddin">
+                      {label}
+                    </Option>
+                  ))}
                 </Select>
               </div>
+
+              {formData.got_to_know_from === "Referral" && (
+                <Input
+                  label="Referred by Volunteer"
+                  name="referedby"
+                  value={formData.referedby}
+                  onChange={(e) =>
+                    handleInputChange(e.target.value, "referedby")
+                  }
+                  style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                  containerProps={{ className: "font-ddin" }}
+                  required
+                />
+              )}
             </div>
           </div>
 
@@ -688,9 +639,7 @@ function ReviewerStudentProfile() {
               name="hckr_rnk"
               value={formData.hckr_rnk || ""}
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              containerProps={{
-                className: "font-ddin",
-              }}
+              containerProps={{ className: "font-ddin" }}
               onChange={(e) => handleInputChange(e.target.value, "hckr_rnk")}
               required
             />
@@ -706,9 +655,7 @@ function ReviewerStudentProfile() {
               value={formData.father_occ}
               onChange={(e) => handleInputChange(e.target.value, "father_occ")}
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              containerProps={{
-                className: "font-ddin",
-              }}
+              containerProps={{ className: "font-ddin" }}
               required
             />
             <Input
@@ -718,9 +665,7 @@ function ReviewerStudentProfile() {
               value={formData.mother_occ}
               onChange={(e) => handleInputChange(e.target.value, "mother_occ")}
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              containerProps={{
-                className: "font-ddin",
-              }}
+              containerProps={{ className: "font-ddin" }}
               required
             />
             <Input
@@ -730,9 +675,7 @@ function ReviewerStudentProfile() {
               value={formData.income}
               onChange={(e) => handleInputChange(e.target.value, "income")}
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              containerProps={{
-                className: "font-ddin",
-              }}
+              containerProps={{ className: "font-ddin" }}
               required
             />
           </div>
@@ -759,21 +702,18 @@ function ReviewerStudentProfile() {
             </Select>
 
             {Number(formData.review_status) !== 0 && (
-              <Select
-                label="Select a reviewer"
-                value={String(formData.reviewer) || ""}
-                onChange={(value) => handleInputChange(value, "reviewer")}
-              >
-                {reviewer_item.map((reviewer, i) => (
-                  <Option
-                    key={reviewer.account_id}
-                    value={String(reviewer.account_id)}
-                    style={{ fontFamily: "D-DIN" }}
-                  >
-                    {reviewer.name}
-                  </Option>
-                ))}
-              </Select>
+              <Input
+                key={`assigned-reviewer-${reviewer_item?.[0]?.name}`}
+                label="Assigned Reviewer"
+                value={
+                  reviewer_item?.[0]?.name ||
+                  location?.student?.reviewerInfo?.name ||
+                  ""
+                }
+                readOnly
+                style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                containerProps={{ className: "font-ddin" }}
+              />
             )}
 
             <div className="flex flex-col">
@@ -783,9 +723,7 @@ function ReviewerStudentProfile() {
                 style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                 value={formData.comment}
                 onChange={(e) => handleInputChange(e.target.value, "comment")}
-                containerProps={{
-                  className: "font-ddin",
-                }}
+                containerProps={{ className: "font-ddin" }}
                 maxLength={maxCharacterLimit}
               />
               <p className="text-right text-sm font-myriad font-light">
@@ -819,7 +757,6 @@ function ReviewerStudentProfile() {
               value={formData.date_exam}
               onChange={(e) => handleInputChange(e.target.value, "date_exam")}
             />
-
             <Input
               label="Exam Marks"
               type="number"
@@ -827,9 +764,7 @@ function ReviewerStudentProfile() {
               value={formData.exam_marks}
               onChange={(e) => handleInputChange(e.target.value, "exam_marks")}
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              containerProps={{
-                className: "font-ddin",
-              }}
+              containerProps={{ className: "font-ddin" }}
             />
             <Select
               label="Select a result"
@@ -856,9 +791,7 @@ function ReviewerStudentProfile() {
               type="date"
               name="date_interview"
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-              containerProps={{
-                className: "font-ddin",
-              }}
+              containerProps={{ className: "font-ddin" }}
               value={
                 formData.date_interview
                   ? new Date(formData.date_interview)
@@ -892,6 +825,7 @@ function ReviewerStudentProfile() {
             <div className="shadow-md bg-white p-4 rounded-xl flex flex-col gap-3 h-fit">
               <p className="font-ddin font-semibold text-lg">Assign batch</p>
               <Select
+                key={`batch-assigned-${formData.batch_assigned}`}
                 label="Is batch assigned?"
                 value={String(formData.batch_assigned)}
                 onChange={(value) => handleInputChange(value, "batch_assigned")}
@@ -908,6 +842,7 @@ function ReviewerStudentProfile() {
               </Select>
               {formData.batch_assigned == 2 && (
                 <Select
+                  key={`select-batch-${batch_items.length}-${formData.select_batch}`}
                   label="Select a batch"
                   value={String(formData.select_batch)}
                   onChange={(value) => handleInputChange(value, "select_batch")}
@@ -942,7 +877,7 @@ function ReviewerStudentProfile() {
               <p>
                 {location?.student?.examInfo[0]?.exam_datetime
                   ? moment(
-                      location?.student?.examInfo[0]?.exam_datetime
+                      location?.student?.examInfo[0]?.exam_datetime,
                     ).format("LL") || "-"
                   : "-"}
               </p>
@@ -952,7 +887,7 @@ function ReviewerStudentProfile() {
               <p>
                 {location?.student?.interviewInfo[0]?.int_datetime
                   ? moment(
-                      location?.student?.interviewInfo[0]?.int_datetime
+                      location?.student?.interviewInfo[0]?.int_datetime,
                     ).format("LL") || "-"
                   : "-"}
               </p>
@@ -967,6 +902,7 @@ function ReviewerStudentProfile() {
             </div>
           </div>
         </div>
+
         <div className="flex justify-end mt-4 mb-10 gap-4">
           <Button
             type="button"

@@ -1,6 +1,6 @@
-// export const base_url = "http://103.212.120.217:5932";
+export const base_url = "http://103.212.120.217:5932";
 // // export const base_url = "http://34.45.12.76:5932";
-export const base_url = "https://sethu.ai:5932";
+// export const base_url = "https://sethu.ai:5932";
 
 export const mailPattern =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -51,6 +51,18 @@ export const EXPERTISE_LEVELS = [
   { label: "Proficient", value: 3 },
   { label: "Advanced", value: 4 },
   { label: "Expert", value: 5 },
+];
+
+export const GOT_TO_KNOW_FROM = [
+  { label: "WhatsApp", value: "WhatsApp" },
+  { label: "Social Media", value: "Social Media" },
+  { label: "Paper Ad", value: "Paper Ad" },
+  { label: "College", value: "College" },
+  { label: "Friends", value: "Friends" },
+  { label: "Email", value: "Email" },
+  { label: "TASK", value: "TASK" },
+  { label: "Student Tribe", value: "Student Tribe" },
+  { label: "Referral", value: "Referral" },
 ];
 
 export const REVIEW_STATUS = [

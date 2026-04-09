@@ -48,12 +48,12 @@ function Login() {
     }
     if (!loginValid.password) {
       return toast.error(
-        "Password must have atleast 1 lowercase, number, special characters and minimum 8 characters."
+        "Password must have atleast 1 lowercase, number, special characters and minimum 8 characters.",
       );
     }
 
     const result = await dispatch(
-      login({ end_point: "/api/auth/login", login_data: loginData })
+      login({ end_point: "/api/auth/login", login_data: loginData }),
     ).unwrap();
 
     if (result.responseCode === 200) {
@@ -61,19 +61,19 @@ function Login() {
         navigate("/admin/dashboard");
         localStorage.setItem(
           "sethu_admin_access_token",
-          result.responseData.access_token
+          result.responseData.access_token,
         );
       } else if (result.responseData.role === 2) {
         navigate("/student/dashboard");
         localStorage.setItem(
           "sethu_student_access_token",
-          result.responseData.access_token
+          result.responseData.access_token,
         );
       } else if (result.responseData.role === 3) {
         navigate("/reviewer/students");
         localStorage.setItem(
           "sethu_reviewer_access_token",
-          result.responseData.access_token
+          result.responseData.access_token,
         );
       } else {
         toast.error("Unauthorized access.");

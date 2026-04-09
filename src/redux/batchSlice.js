@@ -9,7 +9,6 @@ const initialState = {
   selectedItems: [],
 };
 
-// fetch all items
 export const fetchBatchItems = createAsyncThunk(
   "batch/list",
   async ({ end_point, access_token }, { rejectWithValue }) => {
@@ -24,7 +23,6 @@ export const fetchBatchItems = createAsyncThunk(
   }
 );
 
-// fetch batch details
 export const fetchBatchSelectedItems = createAsyncThunk(
   "batch/select_batch",
   async ({ end_point, access_token }, { rejectWithValue }) => {
@@ -39,7 +37,6 @@ export const fetchBatchSelectedItems = createAsyncThunk(
   }
 );
 
-// add items
 export const postBatchItem = createAsyncThunk(
   "batch/add",
   async ({ end_point, access_token, item_data }, { rejectWithValue }) => {
@@ -54,7 +51,6 @@ export const postBatchItem = createAsyncThunk(
   }
 );
 
-//update batch items
 export const putBatchItem = createAsyncThunk(
   "batch/update",
   async ({ end_point, access_token, item_data }, { rejectWithValue }) => {
@@ -73,65 +69,76 @@ const batchSlice = createSlice({
   name: "batch",
   initialState,
   extraReducers: (builder) => {
-    // fetch batches
-    builder.addCase(fetchBatchItems.pending, (state, action) => {
+    builder.addCase(fetchBatchItems.pending, (state) => {
       state.loading = true;
       state.error = "";
     });
     builder.addCase(fetchBatchItems.fulfilled, (state, action) => {
       state.loading = false;
-      state.batch_items =
-        action.payload.responseCode === 200 ? action.payload.responseData : [];
+      if (action.payload.responseCode === 200) {
+        const data = action.payload.responseData;
+        state.batch_items = Array.isArray(data)
+          ? data[0]?.batchData || []
+          : data?.batchData || [];
+      } else {
+        state.batch_items = [];
+      }
     });
     builder.addCase(fetchBatchItems.rejected, (state, action) => {
-      state.error = action.payload.error;
       state.loading = false;
+      state.error = action.payload?.error || "";
     });
 
-    // fetch batch details
-    builder.addCase(fetchBatchSelectedItems.pending, (state, action) => {
+    builder.addCase(fetchBatchSelectedItems.pending, (state) => {
       state.loading = true;
       state.error = "";
     });
     builder.addCase(fetchBatchSelectedItems.fulfilled, (state, action) => {
       state.loading = false;
-      state.selectedItems =
-        action.payload.responseCode === 200 ? action.payload.responseData : [];
+      if (action.payload.responseCode === 200) {
+        const data = action.payload.responseData;
+        // FIXED: correct path for paginated API response
+        if (data?.batchData && Array.isArray(data.batchData)) {
+          state.selectedItems = data.batchData;
+        } else if (Array.isArray(data)) {
+          state.selectedItems = data;
+        } else {
+          state.selectedItems = [data];
+        }
+      } else {
+        state.selectedItems = [];
+      }
     });
     builder.addCase(fetchBatchSelectedItems.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.payload.error;
+      state.error = action.payload?.error || "";
     });
 
-    // add batches
-    builder.addCase(postBatchItem.pending, (state, action) => {
+    builder.addCase(postBatchItem.pending, (state) => {
       state.loading = true;
       state.error = "";
     });
-    builder.addCase(postBatchItem.fulfilled, (state, action) => {
+    builder.addCase(postBatchItem.fulfilled, (state) => {
       state.loading = false;
     });
     builder.addCase(postBatchItem.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.payload.error;
+      state.error = action.payload?.error || "";
     });
 
-    // update batches
-    builder.addCase(putBatchItem.pending, (state, action) => {
+    builder.addCase(putBatchItem.pending, (state) => {
       state.loading = true;
       state.error = "";
     });
-    builder.addCase(putBatchItem.fulfilled, (state, action) => {
+    builder.addCase(putBatchItem.fulfilled, (state) => {
       state.loading = false;
     });
     builder.addCase(putBatchItem.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.payload.error;
+      state.error = action.payload?.error || "";
     });
   },
 });
 
-// generate reducers
 const batchReducers = batchSlice.reducer;
-
 export default batchReducers;
