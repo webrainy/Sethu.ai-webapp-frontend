@@ -1,8 +1,15 @@
 import React, { useState } from "react";
-import { Button, Input, Radio, Textarea } from "@material-tailwind/react";
+import {
+  Button,
+  Checkbox,
+  Input,
+  Radio,
+  Textarea,
+} from "@material-tailwind/react";
 import { Select, Option } from "@material-tailwind/react";
 import {
   EXPERTISE_LEVELS,
+  GOT_TO_KNOW_FROM,
   mailPattern,
   phoneNumber,
   strongPwd,
@@ -56,12 +63,13 @@ function CourseRegister() {
     attitude: "",
     aspiration: "",
     laptop: "",
-    about_us: "",
     resume: "",
     coverletter: "",
     father_occ: "",
     mother_occ: "",
     income: "",
+    got_to_know_from: "", // was: course_source
+    referedby: "",
   });
 
   const navigate = useNavigate();
@@ -98,7 +106,7 @@ function CourseRegister() {
       !gender
     ) {
       toast.error(
-        "Please fill all fields in the Personal Information section."
+        "Please fill all fields in the Personal Information section.",
       );
       return;
     }
@@ -115,7 +123,7 @@ function CourseRegister() {
 
     if (!passwordRegex.test(password)) {
       toast.error(
-        "Password must have atleast 1 lowercase, number, special characters and minimum 8 characters."
+        "Password must have atleast 1 lowercase, number, special characters and minimum 8 characters.",
       );
       return;
     }
@@ -132,7 +140,7 @@ function CourseRegister() {
   };
 
   const handleEducationDetailButton = () => {
-    const { education, cgpa, year_passed, gmat, college, iq_level } = formData;
+    const { education, cgpa, year_passed, gmat, college } = formData;
     if (!education || !cgpa || !year_passed || !gmat || !college) {
       toast.error("Please fill all fields in the Educational Details section.");
       return;
@@ -151,7 +159,7 @@ function CourseRegister() {
   const handlePreferenceButton = () => {
     const { course_prep, curnt_work, commit_ft } = formData;
     if (!course_prep || !curnt_work || !commit_ft) {
-      toast.error("Please fill all fields in the  Preferences section.");
+      toast.error("Please fill all fields in the Preferences section.");
       return;
     }
     setVisibility({
@@ -185,7 +193,7 @@ function CourseRegister() {
       !hacker_rank
     ) {
       toast.error(
-        "Please fill all fields in the  Skills and Expertise section."
+        "Please fill all fields in the Skills and Expertise section.",
       );
       return;
     }
@@ -201,21 +209,11 @@ function CourseRegister() {
   };
 
   const handleAdditionalInformation = () => {
-    const {
-      hobbies,
-      linkedin_url,
-      github_url,
-      // coverletter,
-      // resume,
-      // attitude,
-      // aspiration,
-      // laptop,
-      // about_us,
-    } = formData;
+    const { hobbies, linkedin_url, github_url } = formData;
 
     if (!hobbies) {
       toast.error(
-        "Please fill all fields in the Additional Information section."
+        "Please fill all fields in the Additional Information section.",
       );
       return;
     }
@@ -243,6 +241,21 @@ function CourseRegister() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // CHANGED: course_source → got_to_know_from
+    const { father_occ, mother_occ, income, got_to_know_from, referedby } =
+      formData;
+
+    if (!father_occ || !mother_occ || !income || !got_to_know_from) {
+      toast.error("Please fill all fields.");
+      return;
+    }
+
+    // CHANGED: "3" → "Referral"
+    if (got_to_know_from === "Referral" && !referedby) {
+      toast.error("Please enter the Referred by Volunteer name.");
+      return;
+    }
 
     const form_data = new FormData();
 
@@ -274,7 +287,6 @@ function CourseRegister() {
     form_data.append("has_laptop", formData.laptop);
     form_data.append("attitude", formData.attitude);
     form_data.append("aspiration", formData.aspiration);
-    form_data.append("got_to_know_from", formData.about_us);
     form_data.append("linkedin_url", formData.linkedin_url);
     form_data.append("github_url", formData.github_url);
     form_data.append("resume", formData.resume);
@@ -284,24 +296,25 @@ function CourseRegister() {
     form_data.append("father_occ", formData.father_occ);
     form_data.append("mother_occ", formData.mother_occ);
     form_data.append("income", formData.income);
+    // CHANGED: course_source → got_to_know_from
+    form_data.append("got_to_know_from", formData.got_to_know_from);
+    // CHANGED: "3" → "Referral"
+    if (formData.got_to_know_from === "Referral") {
+      form_data.append("referedby", formData.referedby);
+    }
 
-    const { father_occ, mother_occ, income } = formData;
-    if (!father_occ || !mother_occ || !income) {
-      toast.error("Please fill all fields.");
+    const result = await dispatch(
+      register({ end_point: "/api/auth/register", register_data: form_data }),
+    ).unwrap();
+
+    if (result.responseCode === 200) {
+      toast.success("You're all set! Registration successful!");
+      navigate("/login");
     } else {
-      const result = await dispatch(
-        register({ end_point: "/api/auth/register", register_data: form_data })
-      ).unwrap();
-
-      if (result.responseCode === 200) {
-        toast.success("You're all set! Registration successful!");
-        navigate("/login");
-      } else {
-        toast.error(
-          result.responseMessage ||
-            "Oops! Registration failed. Give it another shot!"
-        );
-      }
+      toast.error(
+        result.responseMessage ||
+          "Oops! Registration failed. Give it another shot!",
+      );
     }
   };
 
@@ -336,17 +349,14 @@ function CourseRegister() {
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   value={formData.name}
                   onChange={handleChange}
-                  containerProps={{
-                    className: "font-ddin",
-                  }}
+                  containerProps={{ className: "font-ddin" }}
                   required
-                />{" "}
+                />
                 <fieldset className="flex flex-col gap-3">
                   <legend className="font-ddin">
                     Gender
                     <span className="text-red-600">*</span>
                   </legend>
-
                   <div className="flex flex-row gap-3 font-ddin">
                     <Radio
                       name="gender"
@@ -378,9 +388,7 @@ function CourseRegister() {
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   value={formData.dob}
                   onChange={handleChange}
-                  containerProps={{
-                    className: "font-ddin",
-                  }}
+                  containerProps={{ className: "font-ddin" }}
                   required
                 />
                 <Input
@@ -390,9 +398,7 @@ function CourseRegister() {
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   value={formData.email}
                   onChange={handleChange}
-                  containerProps={{
-                    className: "font-ddin",
-                  }}
+                  containerProps={{ className: "font-ddin" }}
                   required
                 />
                 <Input
@@ -408,9 +414,7 @@ function CourseRegister() {
                     }
                   }}
                   maxLength={10}
-                  containerProps={{
-                    className: "font-ddin",
-                  }}
+                  containerProps={{ className: "font-ddin" }}
                   required
                 />
                 <Input
@@ -420,9 +424,7 @@ function CourseRegister() {
                   size="lg"
                   placeholder="********"
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                  containerProps={{
-                    className: "font-ddin",
-                  }}
+                  containerProps={{ className: "font-ddin" }}
                   icon={
                     !passVisible ? (
                       <TbEyeOff
@@ -446,9 +448,7 @@ function CourseRegister() {
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   value={formData.city}
                   onChange={handleChange}
-                  containerProps={{
-                    className: "font-ddin",
-                  }}
+                  containerProps={{ className: "font-ddin" }}
                   required
                 />
                 <Input
@@ -457,9 +457,7 @@ function CourseRegister() {
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   value={formData.district}
                   onChange={handleChange}
-                  containerProps={{
-                    className: "font-ddin",
-                  }}
+                  containerProps={{ className: "font-ddin" }}
                   required
                 />
                 <div className="flex justify-end">
@@ -478,13 +476,11 @@ function CourseRegister() {
             {visibility.educationDetails && (
               <div className="space-y-3 font-ddin">
                 <h3 className="font-bold font-ddin">Education Details</h3>
-
                 <fieldset className="flex flex-col gap-3">
                   <legend className="">
                     Highest Education Completed{" "}
                     <span className="text-red-600">*</span>
                   </legend>
-
                   <div className="flex flex-row gap-3">
                     <Radio
                       name="education"
@@ -515,9 +511,7 @@ function CourseRegister() {
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   value={formData.iq_level}
                   onChange={handleChange}
-                  containerProps={{
-                    className: "font-ddin",
-                  }}
+                  containerProps={{ className: "font-ddin" }}
                 />
                 <Input
                   label="College Name"
@@ -525,9 +519,7 @@ function CourseRegister() {
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                   value={formData.college}
                   onChange={handleChange}
-                  containerProps={{
-                    className: "font-ddin",
-                  }}
+                  containerProps={{ className: "font-ddin" }}
                   required
                 />
                 <Input
@@ -537,19 +529,11 @@ function CourseRegister() {
                   value={formData.cgpa}
                   onChange={handleChange}
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                  containerProps={{
-                    className: "font-ddin",
-                  }}
+                  containerProps={{ className: "font-ddin" }}
                   className="appearance-none outline-none"
                   onKeyDown={(e) => {
-                    if (
-                      e.key === "e" ||
-                      e.key === "E" ||
-                      e.key === "-" ||
-                      e.key === "+"
-                    ) {
+                    if (["e", "E", "-", "+"].includes(e.key))
                       e.preventDefault();
-                    }
                   }}
                   onWheel={(e) => e.target.blur()}
                   maxLength={10}
@@ -562,54 +546,15 @@ function CourseRegister() {
                   value={formData.year_passed}
                   onChange={handleChange}
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                  containerProps={{
-                    className: "font-ddin",
-                  }}
+                  containerProps={{ className: "font-ddin" }}
                   onKeyDown={(e) => {
-                    if (
-                      e.key === "e" ||
-                      e.key === "E" ||
-                      e.key === "-" ||
-                      e.key === "+"
-                    ) {
+                    if (["e", "E", "-", "+"].includes(e.key))
                       e.preventDefault();
-                    }
                   }}
                   onWheel={(e) => e.target.blur()}
                   maxLength={10}
                   required
                 />
-                {/* <Input
-                  label="GMAT Score"
-                  type="text" // Changed to "text" to allow "NA"
-                  name="gmat"
-                  maxLength={10}
-                  value={formData.gmat}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    // Allow numbers or "NA" (case-insensitive)
-                    if (/^\d*$/.test(value) || value.toUpperCase() === "NA") {
-                      handleChange(e); // Call the existing handleChange function
-                    }
-                  }}
-                  style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                  containerProps={{
-                    className: "font-ddin",
-                  }}
-                  onKeyDown={(e) => {
-                    // Prevent "e", "E", "-", and "+" keys
-                    if (
-                      e.key === "e" ||
-                      e.key === "E" ||
-                      e.key === "-" ||
-                      e.key === "+"
-                    ) {
-                      e.preventDefault();
-                    }
-                  }}
-                  onWheel={(e) => e.target.blur()}
-                  required
-                /> */}
                 <Input
                   label="GMAT Score"
                   placeholder="Enter NA if not applicable"
@@ -618,18 +563,10 @@ function CourseRegister() {
                   value={formData.gmat}
                   onChange={handleChange}
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                  containerProps={{
-                    className: "font-ddin",
-                  }}
+                  containerProps={{ className: "font-ddin" }}
                   onKeyDown={(e) => {
-                    if (
-                      e.key === "e" ||
-                      e.key === "E" ||
-                      e.key === "-" ||
-                      e.key === "+"
-                    ) {
+                    if (["e", "E", "-", "+"].includes(e.key))
                       e.preventDefault();
-                    }
                   }}
                   onWheel={(e) => e.target.blur()}
                   required
@@ -671,9 +608,7 @@ function CourseRegister() {
                   value={formData.course_prep}
                   onChange={handleChange}
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                  containerProps={{
-                    className: "font-ddin",
-                  }}
+                  containerProps={{ className: "font-ddin" }}
                   required
                 />
                 <Input
@@ -682,9 +617,7 @@ function CourseRegister() {
                   value={formData.curnt_work}
                   onChange={handleChange}
                   style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                  containerProps={{
-                    className: "font-ddin",
-                  }}
+                  containerProps={{ className: "font-ddin" }}
                   required
                 />
                 <div className="text-left">
@@ -700,9 +633,7 @@ function CourseRegister() {
                       setFormData((prev) => ({ ...prev, commit_ft: value }))
                     }
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                    containerProps={{
-                      className: "font-ddin",
-                    }}
+                    containerProps={{ className: "font-ddin" }}
                   >
                     <Option value="Yes" style={{ fontFamily: "D-DIN" }}>
                       Yes
@@ -750,15 +681,9 @@ function CourseRegister() {
                   { name: "analytical_skill", label: "Analytical skill" },
                   { name: "english_proficiency", label: "English proficiency" },
                   { name: "problem_solving", label: "Problem solving" },
-                  // "sql",
-                  // "java",
-                  // "analytical_skill",
-                  // "english_proficiency",
-                  // "problem_solving",
                 ].map((skill, i) => (
                   <div key={i} className="text-left">
                     <label className="block text-gray-700 mt-2 mb-[5px] font-ddin capitalize">
-                      {/* {skill.replace(/([A-Z])/g, " $1")} */}
                       {skill.label}
                       <span className="text-red-600">*</span>
                     </label>
@@ -803,9 +728,7 @@ function CourseRegister() {
                     value={formData.hacker_rank}
                     onChange={handleChange}
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                    containerProps={{
-                      className: "font-ddin",
-                    }}
+                    containerProps={{ className: "font-ddin" }}
                     required
                   />
                 </div>
@@ -854,37 +777,32 @@ function CourseRegister() {
                       }))
                     }
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                    containerProps={{
-                      className: "font-ddin",
-                    }}
+                    containerProps={{ className: "font-ddin" }}
                     required
                   />
                 </div>
 
-                <div className="text-left ">
-                  <label className="block mb-1 font-medium">Linkdin Url</label>
+                <div className="text-left">
+                  <label className="block mb-1 font-medium">LinkedIn URL</label>
                   <Input
                     type="url"
                     label="Enter your linkedin url"
                     name="linkedin_url"
                     value={formData.linkedin_url}
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                    containerProps={{
-                      className: "font-ddin",
-                    }}
-                    onChange={(e) => {
+                    containerProps={{ className: "font-ddin" }}
+                    onChange={(e) =>
                       setFormData((prev) => ({
                         ...prev,
                         linkedin_url: e.target.value,
-                      }));
-                    }}
-                    // required
+                      }))
+                    }
                   />
                 </div>
 
                 <div className="text-left">
                   <label className="block mb-1 font-medium">
-                    GitHub Url or Other Source Code URL
+                    GitHub URL or Other Source Code URL
                   </label>
                   <Input
                     type="url"
@@ -892,15 +810,13 @@ function CourseRegister() {
                     name="github_url"
                     value={formData.github_url}
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                    containerProps={{
-                      className: "font-ddin",
-                    }}
-                    onChange={(e) => {
+                    containerProps={{ className: "font-ddin" }}
+                    onChange={(e) =>
                       setFormData((prev) => ({
                         ...prev,
                         github_url: e.target.value,
-                      }));
-                    }}
+                      }))
+                    }
                   />
                 </div>
 
@@ -918,32 +834,21 @@ function CourseRegister() {
                           "application/msword",
                           "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                         ];
-                        const maxSize = 5 * 1024 * 1024; // 5MB in bytes
-
-                        // Check file type
+                        const maxSize = 5 * 1024 * 1024;
                         if (!allowedTypes.includes(file.type)) {
                           alert("Only PDF and DOC/DOCX files are allowed.");
-                          e.target.value = ""; // Clear the input
-                        }
-                        // Check file size
-                        else if (file.size > maxSize) {
+                          e.target.value = "";
+                        } else if (file.size > maxSize) {
                           alert("File size must be less than 5MB.");
-                          e.target.value = ""; // Clear the input
-                        }
-                        // If valid, update form data
-                        else {
-                          setFormData((prev) => ({
-                            ...prev,
-                            resume: file,
-                          }));
+                          e.target.value = "";
+                        } else {
+                          setFormData((prev) => ({ ...prev, resume: file }));
                         }
                       }
                     }}
                     accept=".pdf,.doc,.docx"
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                    containerProps={{
-                      className: "font-ddin",
-                    }}
+                    containerProps={{ className: "font-ddin" }}
                   />
                   <span className="font-ddin text-xs text-red-500">
                     Only PDF files are allowed.
@@ -962,17 +867,12 @@ function CourseRegister() {
                         alert("File size must be less than 5MB");
                         e.target.value = "";
                       } else {
-                        setFormData((prev) => ({
-                          ...prev,
-                          coverletter: file,
-                        }));
+                        setFormData((prev) => ({ ...prev, coverletter: file }));
                       }
                     }}
-                    accept=".jpg, .jpeg, .png, .bmp, .webp"
+                    accept=".jpg,.jpeg,.png,.bmp,.webp"
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                    containerProps={{
-                      className: "font-ddin",
-                    }}
+                    containerProps={{ className: "font-ddin" }}
                   />
                   <span className="font-ddin text-xs text-red-500">
                     Only images are allowed.
@@ -986,9 +886,7 @@ function CourseRegister() {
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                     value={formData.attitude}
                     onChange={handleChange}
-                    containerProps={{
-                      className: "font-ddin",
-                    }}
+                    containerProps={{ className: "font-ddin" }}
                   />
                 </div>
 
@@ -999,17 +897,11 @@ function CourseRegister() {
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
                     value={formData.aspiration}
                     onChange={handleChange}
-                    containerProps={{
-                      className: "font-ddin",
-                    }}
+                    containerProps={{ className: "font-ddin" }}
                   />
                 </div>
 
                 <div className="text-left">
-                  {/* <label className="block mb-2">
-                    Can you commit 3 months full-time (8 hours/day) in
-                    Hyderabad? <span className="text-red-600">*</span>
-                  </label> */}
                   <Select
                     name="laptop"
                     label="Has Laptop"
@@ -1018,55 +910,13 @@ function CourseRegister() {
                       setFormData((prev) => ({ ...prev, laptop: value }))
                     }
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                    containerProps={{
-                      className: "font-ddin",
-                    }}
+                    containerProps={{ className: "font-ddin" }}
                   >
                     <Option value="Yes" style={{ fontFamily: "D-DIN" }}>
                       Yes
                     </Option>
                     <Option value="No" style={{ fontFamily: "D-DIN" }}>
                       No
-                    </Option>
-                  </Select>
-                </div>
-
-                <div className="text-left">
-                  <label className="block mb-2">
-                    How did you know about the program?
-                  </label>
-                  <Select
-                    name="about_us"
-                    label="How did you know about the program?"
-                    value={formData.about_us}
-                    onChange={(value) =>
-                      setFormData((prev) => ({ ...prev, about_us: value }))
-                    }
-                    style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                    containerProps={{
-                      className: "font-ddin",
-                    }}
-                  >
-                    <Option value="WhatsApp" style={{ fontFamily: "D-DIN" }}>
-                      WhatsApp
-                    </Option>
-                    <Option
-                      value="Social Media"
-                      style={{ fontFamily: "D-DIN" }}
-                    >
-                      Social Media
-                    </Option>
-                    <Option value="Paper Ad" style={{ fontFamily: "D-DIN" }}>
-                      Paper Ad
-                    </Option>
-                    <Option value="college" style={{ fontFamily: "D-DIN" }}>
-                      College
-                    </Option>
-                    <Option value="friends" style={{ fontFamily: "D-DIN" }}>
-                      Friends
-                    </Option>
-                    <Option value="email" style={{ fontFamily: "D-DIN" }}>
-                      Email
                     </Option>
                   </Select>
                 </div>
@@ -1102,6 +952,8 @@ function CourseRegister() {
             {/* Family Details */}
             {visibility.family_details && (
               <div className="space-y-3 font-ddin">
+                <h3 className="font-bold font-ddin">Family Details</h3>
+
                 <div className="text-left">
                   <label className="block text-gray-700 mb-2">
                     Father's Occupation
@@ -1121,9 +973,7 @@ function CourseRegister() {
                       }))
                     }
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                    containerProps={{
-                      className: "font-ddin",
-                    }}
+                    containerProps={{ className: "font-ddin" }}
                     required
                   />
                 </div>
@@ -1147,9 +997,7 @@ function CourseRegister() {
                       }))
                     }
                     style={{ fontFamily: "D-DIN", fontWeight: 500 }}
-                    containerProps={{
-                      className: "font-ddin",
-                    }}
+                    containerProps={{ className: "font-ddin" }}
                     required
                   />
                 </div>
@@ -1163,28 +1011,75 @@ function CourseRegister() {
                     label="Select Household Income"
                     value={formData.income}
                     onChange={(value) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        income: value,
-                      }))
+                      setFormData((prev) => ({ ...prev, income: value }))
                     }
+                    style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                    containerProps={{ className: "font-ddin" }}
                   >
                     {[
                       "Less than 5 Lakhs",
                       "5-10 Lakhs",
                       "10-15 Lakhs",
                       "15+ Lakhs",
-                    ].map((income) => (
+                    ].map((inc) => (
                       <Option
-                        key={income}
-                        value={income}
+                        key={inc}
+                        value={inc}
                         style={{ fontFamily: "D-DIN" }}
                       >
-                        {income}
+                        {inc}
                       </Option>
                     ))}
                   </Select>
                 </div>
+
+                {/* CHANGED: course_source → got_to_know_from, now uses GOT_TO_KNOW_FROM constant (all 9 options) */}
+                <div className="text-left">
+                  <label className="block text-gray-700 mb-2">
+                    How did you know about the program?{" "}
+                    <span className="text-red-600">*</span>
+                  </label>
+                  <Select
+                    name="got_to_know_from"
+                    label="How did you know about the program?"
+                    value={formData.got_to_know_from}
+                    onChange={(value) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        got_to_know_from: value,
+                        referedby: value !== "Referral" ? "" : prev.referedby,
+                      }))
+                    }
+                    style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                    containerProps={{ className: "font-ddin" }}
+                  >
+                    {GOT_TO_KNOW_FROM.map(({ label, value }) => (
+                      <Option
+                        key={value}
+                        value={value}
+                        style={{ fontFamily: "D-DIN" }}
+                      >
+                        {label}
+                      </Option>
+                    ))}
+                  </Select>
+                </div>
+
+                {/* CHANGED: "3" → "Referral" */}
+                {formData.got_to_know_from === "Referral" && (
+                  <div className="text-left">
+                    <Input
+                      label="Referred by Volunteer"
+                      name="referedby"
+                      value={formData.referedby}
+                      onChange={handleChange}
+                      style={{ fontFamily: "D-DIN", fontWeight: 500 }}
+                      containerProps={{ className: "font-ddin" }}
+                      required
+                    />
+                  </div>
+                )}
+
                 <div className="flex justify-between">
                   <Button
                     type="button"

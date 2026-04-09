@@ -31,6 +31,14 @@ import AdminResetPassword from "./pages/admin/AdminResetPassword";
 import AdminManageReviewer from "./pages/admin/AdminManageReviewers";
 import AdminManageAttendance from "./pages/admin/AdminManageAttendance";
 import AdminViewAttendance from "./pages/admin/AdminViewAttendance";
+import AdminMissedHomeworkReport from "./pages/admin/AdminMissedHomeworkReport";
+import AdminBatchExams from "./pages/admin/AdminBatchExams";
+import AdminCreateExam from "./pages/admin/AdminCreateExam";
+import AdminExamDetails from "./pages/admin/AdminExamDetails";
+import StudentExams from "./pages/student/StudentExams";
+import AdminBatchFeedback from "./pages/admin/AdminBatchFeedback";
+import AdminFeedbackDetails from "./pages/admin/AdminFeedbackDetails";
+import AdminCreateFeedback from "./pages/admin/AdminCreateFeedback";
 
 function App() {
   return (
@@ -54,6 +62,10 @@ function App() {
             <Route
               path="/admin/student/profile"
               element={<AdminStudentProfile />}
+            />
+            <Route
+              path="/admin/missed-homework-report"
+              element={<AdminMissedHomeworkReport />}
             />
             <Route
               path="/admin/batch/details"
@@ -91,6 +103,27 @@ function App() {
               path="/admin/attendance/view_attendance"
               element={<AdminViewAttendance />}
             />
+            <Route path="/admin/batch/exams" element={<AdminBatchExams />} />
+            <Route
+              path="/admin/batch/exam/create"
+              element={<AdminCreateExam />}
+            />
+            <Route
+              path="/admin/batch/exam/details"
+              element={<AdminExamDetails />}
+            />
+            <Route
+              path="/admin/batch/feedback"
+              element={<AdminBatchFeedback />}
+            />
+            <Route
+              path="/admin/batch/feedback/create"
+              element={<AdminCreateFeedback />}
+            />
+            <Route
+              path="/admin/batch/feedback/details"
+              element={<AdminFeedbackDetails />}
+            />
           </Route>
 
           {/* student route */}
@@ -104,6 +137,7 @@ function App() {
               path="/student/notification"
               element={<StudentNotification />}
             />
+            <Route path="/student/exams" element={<StudentExams />} />
             <Route path="/student/events" element={<StudentEvents />} />
             <Route path="/student/interviews" element={<StudentInterviews />} />
             <Route path="/student/profile" element={<StudentProfile />} />

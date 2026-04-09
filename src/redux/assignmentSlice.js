@@ -22,7 +22,7 @@ export const fetchAssignment = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data || "Fetch failed.");
     }
-  }
+  },
 );
 
 // assign assignment
@@ -37,7 +37,7 @@ export const postAssignmentToStudent = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data || "Something went wrong!");
     }
-  }
+  },
 );
 
 // update assignment
@@ -52,7 +52,24 @@ export const updateAssignmentStatus = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data || "Connection failed.");
     }
-  }
+  },
+);
+
+export const submitStudentAssignment = createAsyncThunk(
+  "student/assignment/create",
+  async ({ end_point, access_token, data }, { rejectWithValue }) => {
+    try {
+      const res = await axios.post(`${base_url + end_point}`, data, {
+        headers: {
+          Authorization: access_token,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data || "Something went wrong.");
+    }
+  },
 );
 
 const assignmentSlice = createSlice({
@@ -108,6 +125,16 @@ const assignmentSlice = createSlice({
     builder.addCase(updateAssignmentStatus.rejected, (state, action) => {
       state.assgn_loading = false;
       state.error = action.payload || action.error.message;
+    });
+    builder.addCase(submitStudentAssignment.pending, (state) => {
+      state.assgn_loading = true;
+    });
+    builder.addCase(submitStudentAssignment.fulfilled, (state) => {
+      state.assgn_loading = false;
+    });
+    builder.addCase(submitStudentAssignment.rejected, (state, action) => {
+      state.assgn_loading = false;
+      state.error = action.payload?.error || "";
     });
   },
 });

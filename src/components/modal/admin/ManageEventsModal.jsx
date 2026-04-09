@@ -37,9 +37,7 @@ function ManageEventsModal({
               variant="text"
               className="rounded-full hover:text-red-900 hover:bg-red-100"
               onClick={close}
-            >
-              <RiCloseCircleLine className="h-6 w-6 rounded-full" />
-            </IconButton>
+            ></IconButton>
           </div>
 
           <form
@@ -63,15 +61,26 @@ function ManageEventsModal({
               label="Event URL"
               className="p-3"
               name="url"
-              type="url"
               style={{ fontFamily: "D-DIN", fontWeight: 500 }}
               containerProps={{
                 className: "font-ddin",
               }}
               value={data.url}
               onChange={handleChange}
-              required
             />
+            <div className="relative w-full">
+              <textarea
+                name="description"
+                rows={3}
+                placeholder=" "
+                value={data?.description}
+                onChange={handleChange}
+                className="peer w-full border border-blue-gray-200 rounded-[7px] px-3 pt-4 pb-2 font-ddin text-sm resize-none focus:outline-none focus:border-gray-900 transition-all"
+              />
+              <label className="absolute left-3 top-2 text-xs text-gray-500 peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-xs transition-all font-ddin">
+                Description
+              </label>
+            </div>
             <Input
               label="Event start Date"
               type="date"

@@ -30,14 +30,14 @@ function AdminManageAttendance() {
     batch: "",
     student: "",
     attendance_value: 0,
-    date: moment().format("YYYY-MM-DD"), // Default to today's date
+    date: moment().format("YYYY-MM-DD"),
   });
   const [activeTab, setActiveTab] = useState("1");
   const [attendanceStatus, setAttendanceStatus] = useState({});
   const dispatch = useDispatch();
   const access_token = localStorage.getItem("sethu_admin_access_token");
   const { batch_items, selectedItems, loading } = useSelector(
-    (state) => state.batch
+    (state) => state.batch,
   );
   const navigate = useNavigate();
 
@@ -46,18 +46,20 @@ function AdminManageAttendance() {
       fetchBatchItems({
         end_point: "/api/batch/list",
         access_token: access_token,
-      })
+      }),
     ).unwrap();
   }, [dispatch]);
 
+  // FIXED: updated response path to match paginated API structure
   const fetchBatchStudentList = (batch) => {
     dispatch(
       fetchBatchSelectedItems({
         end_point: `/api/batch/list?batch_id=${batch}`,
         access_token: access_token,
-      })
+      }),
     ).then((response) => {
-      const students = response.payload?.responseData?.[0]?.students || [];
+      const students =
+        response.payload?.responseData?.batchData?.[0]?.students || [];
       const defaultAttendanceStatus = students.reduce((acc, student) => {
         acc[student.student_id] = 0;
         return acc;
@@ -69,13 +71,11 @@ function AdminManageAttendance() {
   const handleSelectAllAttendance = () => {
     const newAttendanceStatus = { ...attendanceStatus };
     const allSelected = Object.values(newAttendanceStatus).every(
-      (value) => value === 1
+      (value) => value === 1,
     );
-
     Object.keys(newAttendanceStatus).forEach((student_id) => {
       newAttendanceStatus[student_id] = allSelected ? 0 : 1;
     });
-
     setAttendanceStatus(newAttendanceStatus);
   };
 
@@ -93,14 +93,13 @@ function AdminManageAttendance() {
     }));
 
     const urlencoded = new URLSearchParams();
-
     urlencoded.append("attendance_type", activeTab);
     urlencoded.append("batch_id", data.batch);
-    urlencoded.append("attendance_date", data.date); // Add selected date to the request
+    urlencoded.append("attendance_date", data.date);
     for (let i = 0; i < attendanceData.length; i++) {
       urlencoded.append(
         "attendance_status",
-        attendanceData[i].attendance_value
+        attendanceData[i].attendance_value,
       );
       urlencoded.append("student_id", attendanceData[i].student_id);
     }
@@ -111,7 +110,7 @@ function AdminManageAttendance() {
           end_point: `/api/attendance/create`,
           access_token: access_token,
           data: urlencoded,
-        })
+        }),
       ).unwrap();
 
       if (result.responseCode === 200) {
@@ -119,7 +118,7 @@ function AdminManageAttendance() {
         fetchBatchStudentList(data.batch);
       } else {
         toast.error(
-          result.responseMessage || "Connection failed. Please try again."
+          result.responseMessage || "Connection failed. Please try again.",
         );
       }
     } catch (error) {
@@ -140,7 +139,6 @@ function AdminManageAttendance() {
       <div className="p-3">
         <div className="flex justify-between items-center">
           <p className="text-3xl font-ddin font-semibold">Manage Attendance</p>
-
           <Button
             onClick={handleViewAttendance}
             className="shadow-none hover:shadow-none py-2 capitalize font-ddin font-normal text-base border-[#DD4633] border bg-transparent text-[#DD4633] hover:text-white hover:bg-[#DD4633]"
@@ -152,16 +150,14 @@ function AdminManageAttendance() {
         <div className="mt-3 grid md:grid-cols-3 gap-4">
           <Select
             label="Select a Batch"
-            containerProps={{
-              className: "font-ddin",
-            }}
+            containerProps={{ className: "font-ddin" }}
             style={{ fontFamily: "D-DIN", fontWeight: 500 }}
             onChange={(value) => {
               fetchBatchStudentList(value);
               setData({ ...data, batch: value });
             }}
           >
-            {batch_items.map((batch, i) => (
+            {batch_items.map((batch) => (
               <Option
                 key={batch.batch_id}
                 style={{ fontFamily: "D-DIN" }}
@@ -177,9 +173,7 @@ function AdminManageAttendance() {
             label="Select Date"
             value={data.date}
             onChange={handleDateChange}
-            containerProps={{
-              className: "font-ddin",
-            }}
+            containerProps={{ className: "font-ddin" }}
             style={{ fontFamily: "D-DIN", fontWeight: 500 }}
           />
         </div>
@@ -208,7 +202,7 @@ function AdminManageAttendance() {
                 ))}
               </TabsHeader>
               <TabsBody>
-                {ATTENDANCE_TAB_DATA.map(({ value, desc }) => (
+                {ATTENDANCE_TAB_DATA.map(({ value }) => (
                   <TabPanel key={value} value={value} className="px-0">
                     <div className="!flex justify-end items-center font-ddin">
                       {moment(data.date).format("ll")}
@@ -224,15 +218,13 @@ function AdminManageAttendance() {
                           onClick={handleSelectAllAttendance}
                           className={`shadow-none hover:shadow-none normal-case font-ddin text-sm outline-none ${
                             Object.values(attendanceStatus).every(
-                              (value) => value === 1
+                              (v) => v === 1,
                             )
                               ? "bg-red-600"
                               : "bg-blue-600"
                           }`}
                         >
-                          {Object.values(attendanceStatus).every(
-                            (value) => value === 1
-                          )
+                          {Object.values(attendanceStatus).every((v) => v === 1)
                             ? "Deselect all"
                             : "Select all"}
                         </Button>
@@ -254,7 +246,7 @@ function AdminManageAttendance() {
                                     ].map((head) => (
                                       <th
                                         key={head}
-                                        className=" bg-[#e9e6e6] p-4"
+                                        className="bg-[#e9e6e6] p-4"
                                       >
                                         <Typography
                                           variant="small"
@@ -272,14 +264,13 @@ function AdminManageAttendance() {
                                     (student, index) => {
                                       const isLast =
                                         index ===
-                                        selectedItems?.[0]?.student?.length - 1;
+                                        selectedItems[0].students.length - 1;
                                       const classes = isLast
                                         ? "px-4 py-1 font-ddin"
                                         : "px-4 py-1 border-b border-blue-gray-50 font-ddin";
-
                                       return (
                                         <tr
-                                          key={index}
+                                          key={student.student_id}
                                           className="hover:bg-[#f0eeee]"
                                         >
                                           <td className={classes}>
@@ -311,14 +302,14 @@ function AdminManageAttendance() {
                                               onChange={(e) =>
                                                 handleCheckboxChange(
                                                   student.student_id,
-                                                  e.target.checked
+                                                  e.target.checked,
                                                 )
                                               }
                                             />
                                           </td>
                                         </tr>
                                       );
-                                    }
+                                    },
                                   )}
                                 </tbody>
                               </table>

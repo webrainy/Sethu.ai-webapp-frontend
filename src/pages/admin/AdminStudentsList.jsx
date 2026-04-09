@@ -97,7 +97,7 @@ function AdminStudentsList() {
         fetchStudentProfile({
           end_point: `/api/student/list?${queryParams}`,
           access_token: access_token,
-        })
+        }),
       );
     };
 
@@ -120,14 +120,14 @@ function AdminStudentsList() {
       fetchBatchItems({
         end_point: "/api/batch/list",
         access_token: access_token,
-      })
+      }),
     );
 
     dispatch(
       listReviewerItem({
         end_point: "/api/account/list_rev",
         access_token: access_token,
-      })
+      }),
     );
   }, [dispatch, access_token]);
 
@@ -137,7 +137,7 @@ function AdminStudentsList() {
         `${base_url}/api/student/list?limit=99999999`,
         {
           headers: { Authorization: access_token },
-        }
+        },
       );
       if (res.data.responseCode === 200) {
         const formattedData = res.data.responseData?.studentData.map(
@@ -149,7 +149,7 @@ function AdminStudentsList() {
             Batch: student?.batchInfo?.batch_name || "N/A",
             Reviewer_Status: getReviewerStatus(student?.current_state),
             Comment: student?.comment || "",
-          })
+          }),
         );
 
         const worksheet = XLSX.utils.json_to_sheet(formattedData);
@@ -449,22 +449,22 @@ function AdminStudentsList() {
                                 student.current_state === 0
                                   ? "text-gray-600"
                                   : student.current_state === 1
-                                  ? "text-blue-500"
-                                  : student.current_state === 2
-                                  ? "text-green-500"
-                                  : student.current_state === 3
-                                  ? "text-orange-500"
-                                  : student.current_state === 4
-                                  ? "text-red-500"
-                                  : student.current_state === 5
-                                  ? "text-purple-500"
-                                  : student.current_state === 6
-                                  ? "text-orange-600"
-                                  : student.current_state === 7
-                                  ? "text-green-700"
-                                  : student.current_state === 8
-                                  ? "text-indigo-500"
-                                  : "text-black"
+                                    ? "text-blue-500"
+                                    : student.current_state === 2
+                                      ? "text-green-500"
+                                      : student.current_state === 3
+                                        ? "text-orange-500"
+                                        : student.current_state === 4
+                                          ? "text-red-500"
+                                          : student.current_state === 5
+                                            ? "text-purple-500"
+                                            : student.current_state === 6
+                                              ? "text-orange-600"
+                                              : student.current_state === 7
+                                                ? "text-green-700"
+                                                : student.current_state === 8
+                                                  ? "text-indigo-500"
+                                                  : "text-black"
                               }`}
                             >
                               <div
@@ -472,43 +472,43 @@ function AdminStudentsList() {
                                   student.current_state === 0
                                     ? "bg-gray-600"
                                     : student.current_state === 1
-                                    ? "bg-blue-500"
-                                    : student.current_state === 2
-                                    ? "bg-green-500"
-                                    : student.current_state === 3
-                                    ? "bg-orange-500"
-                                    : student.current_state === 4
-                                    ? "bg-red-500"
-                                    : student.current_state === 5
-                                    ? "bg-purple-500"
-                                    : student.current_state === 6
-                                    ? "bg-orange-600"
-                                    : student.current_state === 7
-                                    ? "bg-green-700"
-                                    : student.current_state === 8
-                                    ? "bg-indigo-500"
-                                    : "bg-black"
+                                      ? "bg-blue-500"
+                                      : student.current_state === 2
+                                        ? "bg-green-500"
+                                        : student.current_state === 3
+                                          ? "bg-orange-500"
+                                          : student.current_state === 4
+                                            ? "bg-red-500"
+                                            : student.current_state === 5
+                                              ? "bg-purple-500"
+                                              : student.current_state === 6
+                                                ? "bg-orange-600"
+                                                : student.current_state === 7
+                                                  ? "bg-green-700"
+                                                  : student.current_state === 8
+                                                    ? "bg-indigo-500"
+                                                    : "bg-black"
                                 }`}
                               ></div>
                               {student.current_state === 0
                                 ? "Not Started"
                                 : student.current_state === 1
-                                ? "In Progress"
-                                : student.current_state === 2
-                                ? "Accepted"
-                                : student.current_state === 3
-                                ? "Follow Up"
-                                : student.current_state === 4
-                                ? "Rejected"
-                                : student.current_state === 5
-                                ? "Unable to Decide"
-                                : student.current_state === 6
-                                ? "Exam Scheduled"
-                                : student.current_state === 7
-                                ? "Exam Passed"
-                                : student.current_state === 8
-                                ? "Assigned"
-                                : "-"}
+                                  ? "In Progress"
+                                  : student.current_state === 2
+                                    ? "Accepted"
+                                    : student.current_state === 3
+                                      ? "Follow Up"
+                                      : student.current_state === 4
+                                        ? "Rejected"
+                                        : student.current_state === 5
+                                          ? "Unable to Decide"
+                                          : student.current_state === 6
+                                            ? "Exam Scheduled"
+                                            : student.current_state === 7
+                                              ? "Exam Passed"
+                                              : student.current_state === 8
+                                                ? "Assigned"
+                                                : "-"}
                             </Typography>
                           </td>
                           <td className={classes}>
@@ -520,8 +520,8 @@ function AdminStudentsList() {
                               {student.batch_state === 1
                                 ? "Not Assigned"
                                 : student.batch_state === 2
-                                ? "Assigned"
-                                : "-"}
+                                  ? "Assigned"
+                                  : "-"}
                             </Typography>
                           </td>
                           <td className={classes}>

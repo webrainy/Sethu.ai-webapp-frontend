@@ -42,7 +42,7 @@ function AdminDashboard() {
       listEventItem({
         end_point: `/api/event/list?order=1&limit=10`,
         access_token: access_token,
-      })
+      }),
     );
   }, [dispatch]);
 
@@ -65,7 +65,7 @@ function AdminDashboard() {
                       </p>
                       <p className="font-myriad text-sm font-light text-gray-600">
                         {/* Feb, 08 2025 12.00pm */}
-                        {moment(event.datetime).format("LLL")}
+                        {moment(event.datetime).format("LL")}
                       </p>
                     </div>
                     <div className="flex justify-between items-end gap-4">
@@ -76,12 +76,12 @@ function AdminDashboard() {
                             {event.batchInfo?.name}
                           </span>
                         </p>
-                        <p>
+                        {/* <p>
                           Students name:{" "}
                           {event?.eventInfo
                             .map((info) => info.studentInfo?.name || "-")
                             .join(", ")}
-                        </p>
+                        </p> */}
                       </div>
                       <Button
                         onClick={() => window.open(event.url)}
